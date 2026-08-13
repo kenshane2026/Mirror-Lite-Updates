@@ -3,23 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.5.1</title>
-            <pubDate>Fri, 14 Aug 2026 05:00:08 +0800</pubDate>
-            <sparkle:version>47</sparkle:version>
-            <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
+            <title>1.5.2</title>
+            <pubDate>Fri, 14 Aug 2026 05:14:38 +0800</pubDate>
+            <sparkle:version>48</sparkle:version>
+            <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.5.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.5.2
 
-- 修复 Mac 上引用媒体改名后被误判为离线的问题；不需要设置托管区。
-- 原路径失效时，先在原文件夹查找，再在同一块已登记硬盘中按文件大小与内容指纹寻找同一原片。
-- 找到后自动更新文件路径，并完整保留原视频记录、标签、片段、Love、Reject、备注和同步身份，不会创建重复视频。
-- 自动搜索只针对当前选中的离线视频，在后台低优先级执行，不会同时扫描整个离线资料库，避免外接硬盘扫描再次造成 Mac 卡顿。
-- 如果存在多个无法区分的相同副本，软件不会擅自选择，仍保留“重新定位媒体”供用户确认。
-
-验收建议：在 Mac mini 上将一个已收录的测试视频改名，再回到镜藏 Lite 选择它；软件应自动恢复播放并显示新文件名，原有标签与片段保持不变。
+- 修复软件运行期间在 Finder 改名后，播放器仍使用旧路径并显示“The operation could not be completed”的问题。
+- 用户选择视频时会重新核实实际文件，不再错误相信改名前缓存的“本机可用”状态。
+- 原路径失效后显示“正在寻找改名后的原片”，避免先显示永久离线造成误解。
+- 找到同一原片后自动更新路径并重新建立播放器，无需退出或重启镜藏 Lite即可恢复播放。
+- 自动恢复仍使用文件大小和内容指纹确认身份；标签、片段、Love、Reject、备注和同步身份保持不变。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3965709" type="application/octet-stream" sparkle:edSignature="blzNndov+0jOmuUyXtoHXonBmHNk0X2oVmwmfEWYSop0bkPQJ3YNKABCddW00UvtkswuhqBICsZ7BA7tmuR1Bw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3968745" type="application/octet-stream" sparkle:edSignature="g7SE/GHGANC1fRRWxWnG4lRcwmgfqpZgjPBwLuAa7tDdZ7y8ilnxMMfWWlQcFua9A9PSlTwiBue2ptM6YR8oBg=="/>
         </item>
     </channel>
 </rss>
