@@ -11,13 +11,19 @@
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
             <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.5.2
 
+- 主要设备现在可以明确移交给另一台已登记 Mac；移交后本机立即恢复为普通设备。
+- 每次接管或移交都会提高中心版本，并能识别两台 Mac 同版本各自声明主要身份的冲突。
+- 移交只改变数据中心协调身份，不删除标签、片段、Love、Reject、备注或媒体记录。
+- 修复 iPhone 新增片段或标签后，增量同步因变更编号格式不同而被 Mac 拒绝的问题。
+- Mac 现在兼容手机中已经存在的旧变更记录；无需删除刚添加的片段、标签，也无需重建资料库。
+- iPhone 后续发出的变更编号统一为标准格式，避免同类同步错误再次出现。
 - 修复软件运行期间在 Finder 改名后，播放器仍使用旧路径并显示“The operation could not be completed”的问题。
 - 用户选择视频时会重新核实实际文件，不再错误相信改名前缓存的“本机可用”状态。
 - 原路径失效后显示“正在寻找改名后的原片”，避免先显示永久离线造成误解。
 - 找到同一原片后自动更新路径并重新建立播放器，无需退出或重启镜藏 Lite即可恢复播放。
 - 自动恢复仍使用文件大小和内容指纹确认身份；标签、片段、Love、Reject、备注和同步身份保持不变。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3968745" type="application/octet-stream" sparkle:edSignature="g7SE/GHGANC1fRRWxWnG4lRcwmgfqpZgjPBwLuAa7tDdZ7y8ilnxMMfWWlQcFua9A9PSlTwiBue2ptM6YR8oBg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3984530" type="application/octet-stream" sparkle:edSignature="Nv5oTiakKufX12MQozk6ACLjjkPyhxU6MIx0gdaiS73SSNGOauHeYIxzG+1kg9OaLJVdG1K8NpvkuUjf7PQ0BQ=="/>
         </item>
     </channel>
 </rss>
