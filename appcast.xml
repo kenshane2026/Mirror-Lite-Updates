@@ -3,27 +3,35 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.5.2</title>
-            <pubDate>Fri, 14 Aug 2026 05:14:38 +0800</pubDate>
-            <sparkle:version>48</sparkle:version>
-            <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
+            <title>1.6.0</title>
+            <pubDate>Fri, 14 Aug 2026 07:40:34 +0800</pubDate>
+            <sparkle:version>49</sparkle:version>
+            <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.5.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.6.0
 
-- 主要设备现在可以明确移交给另一台已登记 Mac；移交后本机立即恢复为普通设备。
-- 每次接管或移交都会提高中心版本，并能识别两台 Mac 同版本各自声明主要身份的冲突。
-- 移交只改变数据中心协调身份，不删除标签、片段、Love、Reject、备注或媒体记录。
-- 修复 iPhone 新增片段或标签后，增量同步因变更编号格式不同而被 Mac 拒绝的问题。
-- Mac 现在兼容手机中已经存在的旧变更记录；无需删除刚添加的片段、标签，也无需重建资料库。
-- iPhone 后续发出的变更编号统一为标准格式，避免同类同步错误再次出现。
-- 修复软件运行期间在 Finder 改名后，播放器仍使用旧路径并显示“The operation could not be completed”的问题。
-- 用户选择视频时会重新核实实际文件，不再错误相信改名前缓存的“本机可用”状态。
-- 原路径失效后显示“正在寻找改名后的原片”，避免先显示永久离线造成误解。
-- 找到同一原片后自动更新路径并重新建立播放器，无需退出或重启镜藏 Lite即可恢复播放。
-- 自动恢复仍使用文件大小和内容指纹确认身份；标签、片段、Love、Reject、备注和同步身份保持不变。
+- 第一阶段本地数据中心基础补齐：性能、固定身份、多设备增量同步、主要设备接管、局域网媒体能力形成完整闭环。
+- Mini、Air 等同一资料库的 Mac 会在局域网自动发现并双向交换变化；不再依赖手机在两台 Mac 之间手工搬运资料。
+- 每台设备拥有独立身份、发送进度和接收进度；离线修改重新上线后继续同步，重复变化只合并一次，删除记录不会被旧设备复活。
+- 手机可保存并管理多台 Mac 配对，Mini、Air 可以同时在线；以后新增 iPad 或更多设备沿用相同的独立设备机制。
+- 手机从 Mini 收到的变化可以继续安全转发给 Air；超过一批的长期离线变化会按游标继续下一批，不会永远卡在前 5000 条。
+- 播放、缩略图、按需下载和手机上传会优先选择真正持有原片的在线设备，而不是固定绑定某一台 Mac。
+- 普通 Mac 可以直接播放主要 Mac 硬盘上的局域网原片；界面区分“本机原片”“局域网原片”和“媒体离线”。
+- 普通 Mac 新增“下载到本机”，支持暂停后继续、长度校验和内容身份校验；不再只有手机能够按需保存原片。
+- 每条媒体可查看当前由哪些在线设备持有；删除本机副本会保留资料库与其他设备原片，删除中心原片需要主要设备单独确认。
+- 手机下载副本和删除副本会同步更新媒体位置，其他设备能够知道该原片实际还存在哪些设备。
+- 主要设备支持接管、移交和取消本机主要身份；所有动作提高中心版本，旧中心重新上线后自动接受更新状态。
+- 文件继续使用资料库、设备、硬盘、媒体和位置的稳定身份；同步不再传递其他 Mac 的绝对挂载路径。
+- 快速指纹继续用于改名和移动恢复，小文件增加完整指纹作为冲突确认；改名、换电脑或硬盘改接后保留标签与片段。
+- 新导入在已设置托管区时默认进入托管区域，未设置时保持引用模式；迁移校验成功前不删除原件。
+- 现有引用媒体可单条或批量“复制到托管区”，复制完成会核对大小和快速指纹，且绝不自动删除原位置文件；身份迁移报告也可直接查看。
+- 数据中心检查点保留历史、写入后立即反向解码校验，并新增检查点恢复入口；设置位置后每天自动建立一份，保留最近 12 份。
+- 检查点位于第二块硬盘时，会在后台增量备份托管原片，覆盖前保存历史版本并逐项校验；新增“核对并恢复第二硬盘原片”。同一块硬盘不会建立伪备份。
+- 真实建立 1500、5000、20000 条资料性能基线；本机 20000 条首次保存约 0.11 秒、打开约 0.10 秒、单次增量保存约 0.05 秒。
+- 本版本没有加入 Tailscale 远程访问，也没有加入照片、文档、音频或 ZIP 类型，严格停留在既定第一阶段范围。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3984530" type="application/octet-stream" sparkle:edSignature="Nv5oTiakKufX12MQozk6ACLjjkPyhxU6MIx0gdaiS73SSNGOauHeYIxzG+1kg9OaLJVdG1K8NpvkuUjf7PQ0BQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4098176" type="application/octet-stream" sparkle:edSignature="uZXyMxbDG/P/tXroJ67RT4f5d9XjQXsT+2WuxyKj9lFi86V8zKw/Z3EQ9b5cv21RHMudjItIFhBjo/KCWC46Ag=="/>
         </item>
     </channel>
 </rss>
