@@ -3,24 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.4.2</title>
-            <pubDate>Thu, 13 Aug 2026 14:22:51 +0800</pubDate>
-            <sparkle:version>41</sparkle:version>
-            <sparkle:shortVersionString>1.4.2</sparkle:shortVersionString>
+            <title>1.4.3</title>
+            <pubDate>Thu, 13 Aug 2026 14:54:17 +0800</pubDate>
+            <sparkle:version>42</sparkle:version>
+            <sparkle:shortVersionString>1.4.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[镜藏 Lite 1.4.2 重点改善大资料库的流畅度：
+            <description sparkle:format="markdown"><![CDATA[镜藏 Lite 1.4.3
 
-- 同步匹配改为索引查找，避免大量离线记录逐条重复扫描整个资料库。
-- 媒体状态排序改为后台检查，不再在主界面一次访问全部外接硬盘文件。
-- 标签、收藏、Reject 等小修改只保存真正变化的数据，不再重写全部媒体记录。
-- 缩略图缓存统计移出视频打开流程，减少首次打开和切换媒体时的等待。
-- 优化快捷标签面板的结果计算，降低输入和方向键选择时的重复工作。
-- 新增可转移中心、多端增量同步和通用资料库的分阶段实施方案。
+- 修复手机端保留 Mac 已经删除的视频记录的问题。首次完成新版局域网同步后，手机会清理这些旧的远程引用，同时保留真正存放在 iPhone 上的原片和下载文件。
+- 修复从标签结果、全部片段、收藏片段和 Reject 片段进入播放器后，上一个/下一个视频脱离当前列表的问题。
+- 升级局域网同步协议，避免手机端旧引用重新生成 Mac 端离线媒体。
 
-本版本不会迁移或删除现有资料库，已有标签、片段、收藏、Reject 和智能文件夹保持不变。
+请先把 Mac 更新到 1.4.3，再使用 iPhone 1.3.18 进行局域网同步。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3844085" type="application/octet-stream" sparkle:edSignature="lts14sL8/Bb9gKy0V7tt5NNJIKge/2xPyU4gGIERMXqoDUi+vHGd5TZuMZpllbsg6aDPjggTpnC9wil0RBSSAA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3844603" type="application/octet-stream" sparkle:edSignature="BPPiEALEiD+zWrvhwNV9d+nyV199VRBs3cQvJWySNPQO3NGAKLfMshla86bAdYqcGboyxUh7y87rdNm/+YHPCw=="/>
         </item>
     </channel>
 </rss>
