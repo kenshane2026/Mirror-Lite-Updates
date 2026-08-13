@@ -1,0 +1,25 @@
+<?xml version="1.0" standalone="yes"?>
+<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" version="2.0">
+    <channel>
+        <title>镜藏 Lite</title>
+        <item>
+            <title>1.4.0</title>
+            <pubDate>Thu, 13 Aug 2026 12:58:51 +0800</pubDate>
+            <sparkle:version>39</sparkle:version>
+            <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.4.0
+
+- 新增应用内自动检查更新；以后 Air 和 mini 都能直接收到新版本。
+- 资料库“媒体状态”列恢复排序，支持可用与离线状态正序、倒序排列。
+- 资料库缩略图与列表支持鼠标拖框批量选择，不再必须逐个按住 Command 点选。
+- 新增批量修复 iPhone 离线媒体：自动扫描原片、合并重复记录并保留标签与片段。
+- 修复跨 Mac 迁移后，同一原片因内部编号不同被重复创建为离线媒体的问题。
+
+首次安装 1.4.0 后，未来版本可通过“镜藏 Lite → 检查更新…”完成更新。
+]]></description>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3820433" type="application/octet-stream" sparkle:edSignature="s4AylZg8B77SSRssuNGHYDEpPo7HHwBatvrAbtBEzgGT7aT+oUaRcY5k/t17ZQAcn+7UovClkpL3GCG1jQ6QDg=="/>
+        </item>
+    </channel>
+</rss>
