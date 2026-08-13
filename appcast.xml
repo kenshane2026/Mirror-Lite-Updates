@@ -3,23 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.4.1</title>
-            <pubDate>Thu, 13 Aug 2026 13:04:04 +0800</pubDate>
-            <sparkle:version>40</sparkle:version>
-            <sparkle:shortVersionString>1.4.1</sparkle:shortVersionString>
+            <title>1.4.2</title>
+            <pubDate>Thu, 13 Aug 2026 14:22:51 +0800</pubDate>
+            <sparkle:version>41</sparkle:version>
+            <sparkle:shortVersionString>1.4.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.4.1
+            <description sparkle:format="markdown"><![CDATA[镜藏 Lite 1.4.2 重点改善大资料库的流畅度：
 
-- 新增应用内自动检查更新；以后 Air 和 mini 都能直接收到新版本。
-- 资料库“媒体状态”列支持可用与离线状态正序、倒序排列，并完整核对全部媒体状态。
-- 资料库缩略图与列表支持鼠标拖框批量选择，不再必须逐个按住 Command 点选。
-- 新增批量修复 iPhone 离线媒体：自动扫描原片、合并重复记录并保留标签与片段。
-- 修复跨 Mac 迁移后，同一原片因内部编号不同被重复创建为离线媒体的问题。
+- 同步匹配改为索引查找，避免大量离线记录逐条重复扫描整个资料库。
+- 媒体状态排序改为后台检查，不再在主界面一次访问全部外接硬盘文件。
+- 标签、收藏、Reject 等小修改只保存真正变化的数据，不再重写全部媒体记录。
+- 缩略图缓存统计移出视频打开流程，减少首次打开和切换媒体时的等待。
+- 优化快捷标签面板的结果计算，降低输入和方向键选择时的重复工作。
+- 新增可转移中心、多端增量同步和通用资料库的分阶段实施方案。
 
-首次安装本版本后，未来版本可通过“镜藏 Lite → 检查更新…”完成更新。
+本版本不会迁移或删除现有资料库，已有标签、片段、收藏、Reject 和智能文件夹保持不变。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3823869" type="application/octet-stream" sparkle:edSignature="t2QfgAFddBYPzxShO5suKV79EPD79dUcggHqPBBjDVMNUctZJ+zXb1teu7I8kj0iNaQFuo9wUX0iIoWzr8W8BA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3844085" type="application/octet-stream" sparkle:edSignature="lts14sL8/Bb9gKy0V7tt5NNJIKge/2xPyU4gGIERMXqoDUi+vHGd5TZuMZpllbsg6aDPjggTpnC9wil0RBSSAA=="/>
         </item>
     </channel>
 </rss>
