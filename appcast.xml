@@ -3,39 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.5.0</title>
-            <pubDate>Fri, 14 Aug 2026 00:30:05 +0800</pubDate>
-            <sparkle:version>46</sparkle:version>
-            <sparkle:shortVersionString>1.5.0</sparkle:shortVersionString>
+            <title>1.5.1</title>
+            <pubDate>Fri, 14 Aug 2026 05:00:08 +0800</pubDate>
+            <sparkle:version>47</sparkle:version>
+            <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.5.0 / iPhone 1.4.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.5.1
 
-- 完成第一阶段本地数据中心基础：资料库、设备、硬盘、媒体位置均拥有稳定身份；外接硬盘从 mini 换接 Air 后，可按硬盘身份与相对位置重新找到原片，不再只依赖某台电脑的绝对路径。
-- 新增“引用兼容、托管为主”的混合存储：现有媒体原地引用，新上传媒体进入用户选择的托管区；迁移与定位不改变视频、标签和片段身份。
-- 同步升级为变化记录、待发送队列和双向游标；首次连接及故障恢复保留完整快照，后续只发送发生变化的标签、片段、评价、智能文件夹及删除记录，断线后从进度继续。
-- 新增主要设备身份、中心版本和一键接管；另一台 Mac 接管后中心版本递增，旧中心再次上线会识别新中心，不会同时争抢写入。
-- 修正旧版手机可能把自己登记为主要设备的历史状态；连接 Mac 后会自动恢复正确中心归属，Mac 之间仍只能通过一键接管切换。
-- 新增外接硬盘数据中心检查点：写入后立即解码校验，保留最近 12 个历史版本，便于新 Mac 接管或本地资料损坏后恢复。
-- 完成本地云媒体链路：局域网在线播放与 Range 拖动、按需下载、删除手机本地副本、手机上传、上传/下载断点续传及 SHA-256 完整性校验；删除本地副本不会删除主要设备原片。
-- Mac 大资料库写入改为逐条差异保存，小修改不再重写整库；新增 1,500、5,000、20,000 条媒体性能基线与旧数据库迁移测试。
-- 手机设置新增本地数据中心状态，可查看当前主要设备、已登记设备数、媒体位置和本机离线副本数量。
+- 修复 Mac 上引用媒体改名后被误判为离线的问题；不需要设置托管区。
+- 原路径失效时，先在原文件夹查找，再在同一块已登记硬盘中按文件大小与内容指纹寻找同一原片。
+- 找到后自动更新文件路径，并完整保留原视频记录、标签、片段、Love、Reject、备注和同步身份，不会创建重复视频。
+- 自动搜索只针对当前选中的离线视频，在后台低优先级执行，不会同时扫描整个离线资料库，避免外接硬盘扫描再次造成 Mac 卡顿。
+- 如果存在多个无法区分的相同副本，软件不会擅自选择，仍保留“重新定位媒体”供用户确认。
 
-- 建立 Mac 与 iPhone 共用的基础视觉规则，统一主色、字体层级、图标尺寸、按钮点按区域、卡片、圆角、输入框、标签、弹窗和底部导航样式。
-- 全端将“收藏”的界面名称统一为 Love，将五角星统一替换为空心/实心爱心；原有数据、快捷键、筛选、同步和互斥逻辑保持不变。
-- Love 操作使用柔和粉色进行状态强调；缩略图上的原有绿色和红色状态线的颜色、粗细和判断逻辑均未改动。
-- 优化手机高频控件的最小点按范围与小屏布局，统一 Mac 工具栏图标的反馈与留白，不增加模糊、重动画或额外资料库读取。
-
-- 按新的高频操作布局重排 iPhone 视频页控制区：第一行只保留快退 5 秒、上一条、放大的播放/暂停、下一条和快进 5 秒；第二行按“入点微调、重置/选区循环、出点微调、播放顺序”分成四个清晰区域。
-- 保持播放器、胶片、时间显示、收藏、Reject、底部导航及搜索标签/片段页面现有功能和位置不变。
-- iPhone 当前视频的“片段”页改为“整条视频 / 局部片段”分组：即使没有划选片段，也能看到整条视频已添加的标签、收藏和 Reject 状态；局部片段仍保留原有标签、收藏/Reject、删除、排序和导出功能。
-- 移除已经完成使命的 Mac“批量修复 iPhone 离线媒体”菜单、离线页入口、硬盘扫描器和修复进度状态，软件中不再显示这项一次性修复功能。
-- 保留普通媒体重新定位，以及同步所需的旧虚拟路径识别、重复记录合并和防止无效记录复活能力，避免影响现有资料和正常同步。
-- 修复本机验收和正式发布脚本把文件执行权限变化误判为代码变化的问题；现在只比较文件真实内容，确有变化时会列出具体文件。
-
-本版本完成代码与自动检查后，先运行“本机验收.command”安装到 Mac 和 iPhone；实际使用确认无误后，再运行“正式发布.command”。
+验收建议：在 Mac mini 上将一个已收录的测试视频改名，再回到镜藏 Lite 选择它；软件应自动恢复播放并显示新文件名，原有标签与片段保持不变。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3950150" type="application/octet-stream" sparkle:edSignature="bJRNaEHChAJ7vdI667e4aFvfmN6+044LxMMsQZh2HMmgQ39JOkieRV/wTOmisbFlNlIi/RR4iJJOHL/yBrWiBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="3965709" type="application/octet-stream" sparkle:edSignature="blzNndov+0jOmuUyXtoHXonBmHNk0X2oVmwmfEWYSop0bkPQJ3YNKABCddW00UvtkswuhqBICsZ7BA7tmuR1Bw=="/>
         </item>
     </channel>
 </rss>
