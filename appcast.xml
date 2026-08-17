@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.7.1</title>
-            <pubDate>Sun, 16 Aug 2026 10:01:54 +0800</pubDate>
-            <sparkle:version>53</sparkle:version>
-            <sparkle:shortVersionString>1.7.1</sparkle:shortVersionString>
+            <title>1.8.0</title>
+            <pubDate>Mon, 17 Aug 2026 22:56:47 +0800</pubDate>
+            <sparkle:version>55</sparkle:version>
+            <sparkle:shortVersionString>1.8.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.7.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.8.0
+
+- Mac 主窗口关闭后不再退出应用，而是常驻菜单栏；点击菜单栏图标可重新打开主窗口，也可从菜单中明确完全退出。
+- 局域网同步服务和 Mac 间设备发现改为应用级常驻；即使主窗口已关闭，手机和其他 Mac 仍能发现、连接和同步这台 Mac mini。
+- 按既定的 Tailscale/WireGuard 方案开始远程加密网络第一阶段：Mac 同步面板和菜单栏现在显示可复制的 Tailscale 地址；iPhone 可明确选择“Tailscale 远程加密连接”并使用原有六位码与可撤销令牌授权。
+- 同一台 Mac 可同时保存局域网和 Tailscale 两个端点；连接时始终先尝试局域网，离家后再自动回退到远程加密地址，同步、播放、下载和归档共用同一选路结果。
+- 安全边界改为两端强制：iPhone 拒绝保存公网地址，Mac 即使收到有效配对令牌也会拒绝公网来源；只允许私有局域网、链路本地和 Tailscale 100.64.0.0/10 / fd7a:115c:a1e0::/48 加密网段。
+- 未检测到 Tailscale 时会明确显示未就绪，不会将普通 HTTPS 或公网 IP 误标为远程加密连接。
+- Mac 版本更新为 1.8.0（55），iPhone 版本更新为 1.7.0（47）；同步协议和资料结构不升级，现有资无需迁移。
+
+# 镜藏 Lite 1.7.1
 
 - 修复 Mac 打开第一个视频时整个资料库列表被重新创建的问题：资料库列表现在常驻，只更新右侧播放器与当前选中状态，已显示的缩略图和滚动位置不会因打开播放器而全部刷新。
 - 优化大资料库的视频切换：预载上一个、下一个视频时不再同步检查当前列表内的全部原片，只按当前顺序逐项寻找相邻可播放媒体，降低外接硬盘和大型资料库的点击等待。
@@ -34,7 +44,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4201046" type="application/octet-stream" sparkle:edSignature="pDLl4yxURjuE1wxbFuFOjWZcB7Y59uLXjAJsfEZKg52wEaaac116ttnQS4bbvG+fLItoNop7jpAnrT3wDwGXDQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4210645" type="application/octet-stream" sparkle:edSignature="Ezh3duX707aG+lsxF9PNPxSt3MGgs6QH02WifxyA633PyMK+TcDf+ylXM6+IT1gIvxUvW0io4q3A8YPjUqAZCQ=="/>
         </item>
     </channel>
 </rss>
