@@ -3,13 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.8.1</title>
-            <pubDate>Tue, 18 Aug 2026 17:22:28 +0800</pubDate>
-            <sparkle:version>56</sparkle:version>
-            <sparkle:shortVersionString>1.8.1</sparkle:shortVersionString>
+            <title>1.8.2</title>
+            <pubDate>Tue, 18 Aug 2026 22:41:37 +0800</pubDate>
+            <sparkle:version>57</sparkle:version>
+            <sparkle:shortVersionString>1.8.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.8.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.8.2
+
+- iPhone 新建资料库后会立即继承原资料库已经信任的 Mac、局域网地址、Tailscale 地址和授权令牌，继续保持连接状态，不需要重新输入地址或配对码。
+- 新资料库第一次手动同步时才确认它对应的 Mac 资料库；确认前不会自动后台同步，既保留连接，又避免把旧资料库内容串入新资料库。
+- 本机验收时若 iPhone 在构建期间断开，会明确提示并按不可用设备跳过手机安装，Mac 验收仍可完成，不再只显示没有原因的失败。
+- 正式发布对 GitHub Keychain 登录检查和 API 访问加入自动重试，避免偶发超时、EOF 或 503 让发布在网络预检阶段直接停止。
+- Mac 版本更新为 1.8.2（57），iPhone 版本更新为 1.7.2（49）；同步协议和资料结构不升级，现有资料无需迁移。
+
+# 镜藏 Lite 1.8.1
 
 - 新增可双击运行的 `iPhone续签.command`：即使复制到桌面等其他位置，也能自动定位镜藏项目；脚本会检查已连接的 iPhone、请求 Xcode 更新开发签名和描述文件、覆盖安装并启动镜藏，同时保留可定位问题的日志。
 - 修复 Mac 窗口缩小后顶部资料库入口被挤出画面的问题；工具栏会自动切换为紧凑布局，并始终保留资料库、侧栏、同步、导入和更多操作。
@@ -53,7 +61,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4231168" type="application/octet-stream" sparkle:edSignature="Lz3kCItX/jkP6vqJJu2ng+x1eqGI2ICq5gCS+vJmpn3y254Hi1RMTOAj7FGP92n+Kty83sReDuevl8ROAuAgDw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4231171" type="application/octet-stream" sparkle:edSignature="tp7Puuxpudzv37HXSnq5CU5R3NeZ9/QTSiabs52sV4CHd5g7tOj9Q91jG8wiRUeLcLc23B5JdLucIWNDqa4zDA=="/>
         </item>
     </channel>
 </rss>
