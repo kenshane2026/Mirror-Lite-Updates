@@ -3,13 +3,30 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.8.2</title>
-            <pubDate>Tue, 18 Aug 2026 22:41:37 +0800</pubDate>
-            <sparkle:version>57</sparkle:version>
-            <sparkle:shortVersionString>1.8.2</sparkle:shortVersionString>
+            <title>1.9.0</title>
+            <pubDate>Wed, 19 Aug 2026 17:58:40 +0800</pubDate>
+            <sparkle:version>58</sparkle:version>
+            <sparkle:shortVersionString>1.9.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.8.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.9.0
+
+- 完成统一设备信任与多资料库身份：同一设备只需首次配对一次，新资料库自动沿用可信设备；首次建立资料库关系时明确选择“连接现有资料库”或“在主要设备后台新建”，身份不同且已有内容时绝不自动合并。
+- 新增手机与 Mac 资料库管理：显示全局 UUID、主要设备、设备/媒体位置、视频数量和远端建立状态，支持重命名；资料库名称按最后修改时间同步到其他设备。
+- 删除资料库明确区分“只删除本机”与“从所有设备删除”。全部删除仅允许该资料库主要设备执行并要求输入完整名称，离线设备重连后应用删除标记；两种方式均默认保留原片。
+- 主要设备改为每个资料库独立的角色，可由 Mini 或 Air 承担。主要设备后台服务可同时为所有资料库提供同步、缩略图、原片播放、下载与归档，不受窗口当前打开资料库限制。
+- Mac 关闭主窗口后继续在菜单栏运行，点击图标可恢复窗口；主要设备会启用登录后后台运行。⌘Q/菜单栏退出会明确提示完全退出后其他设备将无法连接。
+- Air 与 Mini 的 Mac 间同步增加 Tailscale 远程备用地址；局域网优先，离开局域网后使用同一 Tailnet 的加密线路，并在界面准确显示局域网或远程加密状态。
+- 手机连接流程改为完整分步页面，修复键盘遮挡、地址与六位码无法点击的问题并移除“清除全部配对”。取消配对必须二次确认，只停止通信，不删除资料库和统一身份历史；重新配对会识别原设备关系。
+- 六位配对码十分钟有效、成功使用一次即更换；连续输错五次会临时锁定。同步前后均强制核对资料库 UUID，协议层拒绝串库。
+- 顶部连接状态只负责打开设备、线路和资料库详情；独立同步按钮显示进行中动画。媒体卡片与播放器按实际线路显示“局域网连接”或“远程加密连接”。
+- Wi-Fi 与蜂窝网络播放均默认原片画质，并分别记忆“自动画质/流畅预览”选择；蜂窝播放、原片上传和离线下载分别确认，互不越权。Wi-Fi 可分批自动把手机原片归档到主要设备，校验完成后仍保留手机原片。
+- 离线下载可选原片或流畅预览，支持暂停、断点续传和持久保存。远程缩略图/胶片帧增加 2 GB 有界磁盘缓存，胶片帧不再每次打开重复生成。
+- 播放器改为单实例复用，连续点击视频不会堆叠多个页面或播放器；网络播放保留用户播放意图并显示缓冲，超过七秒提供继续等待、重试和流畅预览。顺序播放在全屏中继续下一条视频。
+- 可见播放队列只预热相邻两个视频，每个目标约五秒，并主动释放离开队列的预热资源，在提升点播速度的同时限制内存占用。
+- Mac 版本更新为 1.9.0（58），iPhone 版本更新为 1.8.0（50）；同步协议升级为 5，数据库结构版本不变，旧资料库身份会按已确认的历史配对安全迁移。
+
+# 镜藏 Lite 1.8.2
 
 - iPhone 新建资料库后会立即继承原资料库已经信任的 Mac、局域网地址、Tailscale 地址和授权令牌，继续保持连接状态，不需要重新输入地址或配对码。
 - 新资料库第一次手动同步时才确认它对应的 Mac 资料库；确认前不会自动后台同步，既保留连接，又避免把旧资料库内容串入新资料库。
@@ -61,7 +78,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4231171" type="application/octet-stream" sparkle:edSignature="tp7Puuxpudzv37HXSnq5CU5R3NeZ9/QTSiabs52sV4CHd5g7tOj9Q91jG8wiRUeLcLc23B5JdLucIWNDqa4zDA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4339563" type="application/octet-stream" sparkle:edSignature="AP7hdKBZla3wbMhsJBG8JCxsIiJGhbS+230G0sFzAU+TCstQB448rX/cv4/7mDanrbWf1llpQCZO9tyzJVA0Cg=="/>
         </item>
     </channel>
 </rss>
