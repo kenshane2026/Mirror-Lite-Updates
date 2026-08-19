@@ -17,6 +17,10 @@
 - 扫描使用分段读取、快速候选指纹和完整指纹两级确认，支持暂停和取消，不会把整部视频读入内存；iPhone 与 Mac 指纹规则保持一致。
 - 用户需要明确选择保留版本，再合并标签、片段和 Love/Reject 评价。Mac 副本移入系统废纸篓，iPhone 副本移入应用回收站并支持恢复或二次确认后永久删除。
 - 跨设备可查看完全重复结果，但不会远程删除其他设备上的原片；需在持有原片的主要设备中完成整理。“疑似重复”保留为后续阶段，本版不做高风险相似度删除。
+- 重复媒体结果中的每一条本机原片都可直接打开播放检查，再决定保留哪一份；不在本机的原片会明确提示前往其所在设备查看。
+- 手机和 Mac 的“设备连接状态”新增远程资料库列表：已信任设备可列出其全部资料库；相同 UUID 直接打开，本机没有该 UUID 时会先建立轻量资料库、同步元数据后打开。原片仍在远程设备，且不会切换远程 Mac 当前窗口。
+- 同名但 UUID 不同的资料库保持完全分离；只有首次建立远程资料库关系时需要明确确认，远程离线后仍可打开本机已经同步的元数据。
+- 修复手机与 Mac 标签不一致及父子层级散乱：标签增量会携带完整父子树，手机可识别既有父标签；检测到旧版遗留的缺父级或跨分类数据时，下次同步会自动获取完整标签树并按 UUID 修复。
 - Mac 版本更新为 1.10.0（59），iPhone 版本更新为 1.9.0（52）；iPhone 数据库结构升级为 17，同步协议保持 5。
 
 # 镜藏 Lite 1.9.0
@@ -88,7 +92,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4417517" type="application/octet-stream" sparkle:edSignature="Zn6Gpocj58+dDT/d4FkSQGnDA+Q19llC9zHqh97Lk8JgjWaq3zH1Axn/b1vOwtivDzhy7NmsrITZ5GOhSv6bAA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4473405" type="application/octet-stream" sparkle:edSignature="P5EmC/nQWOZmTdBU/jv7MxHqp8R8B6RWlij/LXRJK1JbeITKqUhYltG6rDCmLrqcEjcrhb24P/1lL1bOjaHOBA=="/>
         </item>
     </channel>
 </rss>
