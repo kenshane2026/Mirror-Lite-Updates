@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.9.0</title>
-            <pubDate>Wed, 19 Aug 2026 17:58:40 +0800</pubDate>
-            <sparkle:version>58</sparkle:version>
-            <sparkle:shortVersionString>1.9.0</sparkle:shortVersionString>
+            <title>1.10.0</title>
+            <pubDate>Wed, 19 Aug 2026 20:54:50 +0800</pubDate>
+            <sparkle:version>59</sparkle:version>
+            <sparkle:shortVersionString>1.10.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.9.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.10.0
+
+- 修复 iPhone 在播放器中点击上一个或下一个视频时闪退的问题：预热播放器不再把同一个 `AVPlayerItem` 转移给前台播放器，并防止连续快速点击导致重入切换。
+- iPhone 和 Mac 新增“重复媒体管理”，入口位于设置/资料库菜单，不会默认创建智能文件夹。
+- 第一阶段只处理完整 SHA-256 指纹相同的精确重复文件；文件名相同、压缩、改分辨率或画面相似都不会自动删除。
+- 扫描使用分段读取、快速候选指纹和完整指纹两级确认，支持暂停和取消，不会把整部视频读入内存；iPhone 与 Mac 指纹规则保持一致。
+- 用户需要明确选择保留版本，再合并标签、片段和 Love/Reject 评价。Mac 副本移入系统废纸篓，iPhone 副本移入应用回收站并支持恢复或二次确认后永久删除。
+- 跨设备可查看完全重复结果，但不会远程删除其他设备上的原片；需在持有原片的主要设备中完成整理。“疑似重复”保留为后续阶段，本版不做高风险相似度删除。
+- Mac 版本更新为 1.10.0（59），iPhone 版本更新为 1.9.0（52）；iPhone 数据库结构升级为 17，同步协议保持 5。
+
+# 镜藏 Lite 1.9.0
 
 - 完成统一设备信任与多资料库身份：同一设备只需首次配对一次，新资料库自动沿用可信设备；首次建立资料库关系时明确选择“连接现有资料库”或“在主要设备后台新建”，身份不同且已有内容时绝不自动合并。
 - 新增手机与 Mac 资料库管理：显示全局 UUID、主要设备、设备/媒体位置、视频数量和远端建立状态，支持重命名；资料库名称按最后修改时间同步到其他设备。
@@ -78,7 +88,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4339563" type="application/octet-stream" sparkle:edSignature="AP7hdKBZla3wbMhsJBG8JCxsIiJGhbS+230G0sFzAU+TCstQB448rX/cv4/7mDanrbWf1llpQCZO9tyzJVA0Cg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4417517" type="application/octet-stream" sparkle:edSignature="Zn6Gpocj58+dDT/d4FkSQGnDA+Q19llC9zHqh97Lk8JgjWaq3zH1Axn/b1vOwtivDzhy7NmsrITZ5GOhSv6bAA=="/>
         </item>
     </channel>
 </rss>
