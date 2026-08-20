@@ -3,13 +3,33 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.11.0</title>
-            <pubDate>Thu, 20 Aug 2026 16:24:33 +0800</pubDate>
-            <sparkle:version>63</sparkle:version>
-            <sparkle:shortVersionString>1.11.0</sparkle:shortVersionString>
+            <title>1.12.0</title>
+            <pubDate>Thu, 20 Aug 2026 20:54:58 +0800</pubDate>
+            <sparkle:version>64</sparkle:version>
+            <sparkle:shortVersionString>1.12.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.11.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 iPhone 1.10.1
+
+- 修复手机端删除资料库时被旧标签外键阻止的问题：现在在同一事务中按依赖顺序清理整套标签关系和数据库记录，原片文件仍不在删除范围内。
+- 修复多个本机资料库占用同一历史分类或标签 UUID 时，Mac 同步反复触发 `tag_categories.id` 主键冲突的问题；不同资料库现在使用隔离的本地映射，重复同步保持幂等且不会改坏另一资料库。
+- 自动同步遇到确定性的本地数据库错误后会停止后台重试，等待用户手动重试或重新打开 App；网络中断仍使用有上限的退避重试。后台同步只执行一轮节点交换，手动同步才执行用于多 Mac 中继的第二轮。
+- iPhone 版本更新为 1.10.1（57）；数据库结构保持 19，同步协议保持 5。
+
+# 镜藏 Lite 1.12.0
+
+- 文件管理改为以“一个资料项、多个文件位置、一个当前首选位置”为统一入口：本机优先选择可用托管副本，其次使用可用引用原片；首选位置不可读时会继续尝试其他本机副本，不再因为一个位置失效就把整条资料误判离线。
+- 新增独立“文件管理”页面，集中显示资料项、文件位置、引用、托管、下载、离线和多位置数量；每条资料可展开查看所有设备、硬盘、完整本机路径、位置类型、可用状态和当前使用位置。
+- 资料库列表新增“当前文件位置”列，缩略图卡片也显示“托管/引用 · 硬盘与相对目录”；来源侧栏只按当前首选位置统计，每条资料只计算一次。
+- 修复同名来源文件夹持续换位和计数看似跳动的问题：同名节点现在使用完整路径作为身份，以名称和路径形成稳定排序，并显示硬盘/相对目录用于区分。
+- 老文件可按单项、多选、来源文件夹、整块硬盘或整个资料库批量纳入托管。托管任务禁止并发重复启动，完成前原文件始终保留。
+- 更换托管区位置改为应用内正式批量迁移：先检查目标空间，逐项复制、校验并登记新位置，成功后才切换托管根目录；旧托管文件继续保留并可在文件管理页逐项核验清理，不依赖 Finder 手动搬动。
+- 新导入和老文件纳入托管统一使用临时文件、文件大小和快速内容指纹校验，校验完成后再原子切换为正式托管文件；失败会清理临时文件，不登记错误副本。
+- 托管副本存在后，文件管理页可独立“清理原位置”；操作前会再次比较原文件与托管副本的大小和内容指纹，完全一致才把原文件移入废纸篓，资料、标签和片段保持不变。
+- 删除资料时同步清理其文件位置；启动时会在自动备份保护下修复历史孤立位置，保存层拒绝再次写入不存在资料或存储根的文件位置，Mac 间同步也不会接收孤立位置。
+- Mac 版本更新为 1.12.0（64）；数据结构标识保持 7，同步协议保持 5，iPhone 版本不变。
+
+# 镜藏 Lite 1.11.0
 
 - 完成“通用资料库核心”：Mac 与 iPhone 可建立视频、照片、文档或混合资料库，并统一管理视频、照片、文档、音频、压缩包和其他文件；现有资料库无损保持为视频资料库。
 - 文件导入不再局限于视频。照片可在应用内查看，文档、音频、压缩包和其他文件可调用系统预览或原应用打开；远端原片仍可通过局域网或 Tailscale 加密线路按需访问和下载。
@@ -119,7 +139,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4572338" type="application/octet-stream" sparkle:edSignature="Ghjx5m7jmh+jbzlOT/crM8UVAUSymsNXKqQHV3tLacYuxj2UZtiWHMey1KlTvz/GsUaf8fOm0j5qzCbtXXKHDw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4692946" type="application/octet-stream" sparkle:edSignature="EK3vRgtzQTS3qjGlcTGeXY8INeOgBP6n1v3lAfIoYZvoRnXvQqUqwR/M8CUkw0jiPVvHwuJR2E2X5JmIsXc3AQ=="/>
         </item>
     </channel>
 </rss>
