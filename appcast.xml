@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.10.2</title>
-            <pubDate>Thu, 20 Aug 2026 08:42:06 +0800</pubDate>
-            <sparkle:version>61</sparkle:version>
-            <sparkle:shortVersionString>1.10.2</sparkle:shortVersionString>
+            <title>1.10.3</title>
+            <pubDate>Thu, 20 Aug 2026 15:49:05 +0800</pubDate>
+            <sparkle:version>62</sparkle:version>
+            <sparkle:shortVersionString>1.10.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.10.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.10.3
+
+- 彻底修复 macOS 恢复异常窗口尺寸后主界面只剩顶部细条的问题：除 SwiftUI 内容约束外，原生 `NSWindow` 现在也强制执行 980×640 最小内容尺寸；启动、重新打开和系统恢复历史窗口状态时都会自动纠正损坏的高度。
+- 修复 iPhone 添加 Air 时复用“同步当前资料库”操作的问题：添加设备现在只完成设备信任、线路保存和资料库关系确认，不再触发完整同步，也不会因为顶部/后台同步正在进行而立刻弹出重复的“正在同步”提示；需要传输资料时仍由顶部同步按钮明确启动。
+- iPhone 数据库升级到结构 18，升级后强制获取一次完整标签树；同名分类或标签若保留了旧手机 UUID，会安全转换为主要设备的统一 UUID，并迁移整条视频标签、片段标签、子标签和智能文件夹引用，避免连接 Air 时再次触发同级名称唯一约束。
+- Mini 与 Air 的 Mac 间同步也会以当前主要设备为统一标签身份来源；普通 Mac 会把旧分类/标签 UUID 及其全部引用迁移到主要设备 UUID，避免手机通过 Air 连接后再次看到另一套同名标签。
+- 手机标签页改进分类统计排版，明确显示“媒体数 · 父级组数”，不再把两个数字挤成容易误解的“00 组”；统一 UUID 后手机和 Mac 使用同一分类、父级和子标签身份。
+- 启动“通用资料库核心”第一层：Mac 与 iPhone 共同支持视频、照片、文档、混合四种资料库模板，以及视频、照片、文档、音频、压缩包和未知文件能力分类；模板随资料库身份同步，现有资料库无损默认保持视频模板。
+- Mac 版本更新为 1.10.3（62）；iPhone 版本更新为 1.9.3（55），手机数据库结构升级为 18，同步协议保持 5。
+
+# 镜藏 Lite 1.10.2
 
 - Mac 新增“批量重新定位离线原片”：更换硬盘、盘符或外层目录后只需选择新硬盘/文件夹一次，应用会递归扫描，并按原相对路径、文件名、大小和内容指纹安全恢复全部可确认的原片；无法唯一确认的文件不会猜测关联，标签、文件夹、片段、Love 与 Reject 均保持不变。
 - 进一步修复 iPhone 标签层级的历史异常：同名冲突标签恰好是统一 UUID 标签的旧父级时，会先安全脱离损坏层级再合并，避免上一版仍可能触发同级名称唯一约束。
@@ -103,7 +113,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4484780" type="application/octet-stream" sparkle:edSignature="zmjzfToDXad+ZqYwO39rNCaMaAZxIUq7qiVd4JplNPSf4UKAOOnVIKvvwnbJAhxHcCdex8H6l2PUyayi1uU9Cw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4505435" type="application/octet-stream" sparkle:edSignature="ZMzQ4S+5sEjHahF4/FdRRS7fWEdTvQEDepSzxRhPfPjlvsEk2d2doBpKs8mtasEwUGjoPHIxsYb53lp5Tni3Bg=="/>
         </item>
     </channel>
 </rss>
