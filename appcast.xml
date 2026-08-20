@@ -3,21 +3,27 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.10.3</title>
-            <pubDate>Thu, 20 Aug 2026 15:49:05 +0800</pubDate>
-            <sparkle:version>62</sparkle:version>
-            <sparkle:shortVersionString>1.10.3</sparkle:shortVersionString>
+            <title>1.11.0</title>
+            <pubDate>Thu, 20 Aug 2026 16:24:33 +0800</pubDate>
+            <sparkle:version>63</sparkle:version>
+            <sparkle:shortVersionString>1.11.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.10.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.11.0
+
+- 完成“通用资料库核心”：Mac 与 iPhone 可建立视频、照片、文档或混合资料库，并统一管理视频、照片、文档、音频、压缩包和其他文件；现有资料库无损保持为视频资料库。
+- 文件导入不再局限于视频。照片可在应用内查看，文档、音频、压缩包和其他文件可调用系统预览或原应用打开；远端原片仍可通过局域网或 Tailscale 加密线路按需访问和下载。
+- 通用媒体拥有独立备注、Love/Reject 和整项标签；文件名、类型、备注、文本类文件内容与标签都可参与搜索，媒体类型也可作为普通筛选和智能文件夹规则。
+- 通用媒体的资料库模板、类型、备注、标签、智能文件夹规则及修改时间会在手机、Mini 与 Air 间同步；旧设备缺少新增字段时仍可安全读取，不会覆盖已有视频信息。
+- iPhone 数据库升级到结构 19，新增字段采用原地迁移和默认值回填；视频播放器和片段能力只在视频类型启用，其他文件不会误触发视频探测、缩略图或播放器创建。
+- 照片解码限制预览尺寸，Mac 非视频缩略图按需使用 Quick Look，手机文本索引限制为 256 KB；大文件仍使用流式指纹和范围读取，避免通用资料库重新引入高内存占用。
 
 - 彻底修复 macOS 恢复异常窗口尺寸后主界面只剩顶部细条的问题：除 SwiftUI 内容约束外，原生 `NSWindow` 现在也强制执行 980×640 最小内容尺寸；启动、重新打开和系统恢复历史窗口状态时都会自动纠正损坏的高度。
 - 修复 iPhone 添加 Air 时复用“同步当前资料库”操作的问题：添加设备现在只完成设备信任、线路保存和资料库关系确认，不再触发完整同步，也不会因为顶部/后台同步正在进行而立刻弹出重复的“正在同步”提示；需要传输资料时仍由顶部同步按钮明确启动。
 - iPhone 数据库升级到结构 18，升级后强制获取一次完整标签树；同名分类或标签若保留了旧手机 UUID，会安全转换为主要设备的统一 UUID，并迁移整条视频标签、片段标签、子标签和智能文件夹引用，避免连接 Air 时再次触发同级名称唯一约束。
 - Mini 与 Air 的 Mac 间同步也会以当前主要设备为统一标签身份来源；普通 Mac 会把旧分类/标签 UUID 及其全部引用迁移到主要设备 UUID，避免手机通过 Air 连接后再次看到另一套同名标签。
 - 手机标签页改进分类统计排版，明确显示“媒体数 · 父级组数”，不再把两个数字挤成容易误解的“00 组”；统一 UUID 后手机和 Mac 使用同一分类、父级和子标签身份。
-- 启动“通用资料库核心”第一层：Mac 与 iPhone 共同支持视频、照片、文档、混合四种资料库模板，以及视频、照片、文档、音频、压缩包和未知文件能力分类；模板随资料库身份同步，现有资料库无损默认保持视频模板。
-- Mac 版本更新为 1.10.3（62）；iPhone 版本更新为 1.9.3（55），手机数据库结构升级为 18，同步协议保持 5。
+- Mac 版本更新为 1.11.0（63）；iPhone 版本更新为 1.10.0（56），手机数据库结构升级为 19、Mac 数据结构标识升级为 7，同步协议保持 5。
 
 # 镜藏 Lite 1.10.2
 
@@ -113,7 +119,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4505435" type="application/octet-stream" sparkle:edSignature="ZMzQ4S+5sEjHahF4/FdRRS7fWEdTvQEDepSzxRhPfPjlvsEk2d2doBpKs8mtasEwUGjoPHIxsYb53lp5Tni3Bg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4572338" type="application/octet-stream" sparkle:edSignature="Ghjx5m7jmh+jbzlOT/crM8UVAUSymsNXKqQHV3tLacYuxj2UZtiWHMey1KlTvz/GsUaf8fOm0j5qzCbtXXKHDw=="/>
         </item>
     </channel>
 </rss>
