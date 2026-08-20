@@ -3,20 +3,26 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.10.1</title>
-            <pubDate>Wed, 19 Aug 2026 22:17:16 +0800</pubDate>
-            <sparkle:version>60</sparkle:version>
-            <sparkle:shortVersionString>1.10.1</sparkle:shortVersionString>
+            <title>1.10.2</title>
+            <pubDate>Thu, 20 Aug 2026 08:42:06 +0800</pubDate>
+            <sparkle:version>61</sparkle:version>
+            <sparkle:shortVersionString>1.10.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.10.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.10.2
 
-- 修复 Mac 1.10.0（59）的更新身份被重复使用、导致已经见过 build 59 的 Mac mini 无法识别最终安装包的问题；本版提升为全新的 1.10.1（60）。
+- Mac 新增“批量重新定位离线原片”：更换硬盘、盘符或外层目录后只需选择新硬盘/文件夹一次，应用会递归扫描，并按原相对路径、文件名、大小和内容指纹安全恢复全部可确认的原片；无法唯一确认的文件不会猜测关联，标签、文件夹、片段、Love 与 Reject 均保持不变。
+- 进一步修复 iPhone 标签层级的历史异常：同名冲突标签恰好是统一 UUID 标签的旧父级时，会先安全脱离损坏层级再合并，避免上一版仍可能触发同级名称唯一约束。
+- 修复 iPhone 与第二台 Mac（例如 Air）同步标签层级时，旧版本遗留的同名兄弟标签触发数据库唯一约束、导致“合并 Mac 返回资料失败”的问题；现在会保留远端统一 UUID，并把旧标签关联的视频、片段、子标签和智能文件夹完整迁移后再清理重复项。
+- 手机同步失败提示不再直接覆盖整屏显示 SQLite 技术堆栈；若仍检测到旧标签冲突，会明确说明资料未丢失并提示更新后重试。
+- 修复主要设备扫描重复媒体或校验大型原片时内存瞬间冲到十几 GB 的问题：SHA-256 改为真正的分块流式处理，每个 1 MB 块计算后立即释放；手机服务、Mac 间同步和资料库管理也会复用同一套有界资料库服务，不再每 12 秒重复创建资料库副本或重复启动媒体指纹扫描。
+- 修复内存和后台扫描竞争主线程时，Mac 打开标签工作区可能长时间卡死的问题；标签面板现在不会再被重复资料库加载与指纹任务阻塞。
+- 修复 Mac 1.10.0（59）的更新身份被重复使用、导致已经见过 build 59 的 Mac mini 无法识别最终安装包的问题；本版提升为全新的 1.10.2（61）。
 - 重复媒体结果中的每一条本机原片都可直接打开播放检查，再决定保留哪一份；不在本机的原片会明确提示前往其所在设备查看。
 - 手机和 Mac 的“设备连接状态”新增远程资料库列表：已信任设备可列出其全部资料库；相同 UUID 直接打开，本机没有该 UUID 时会先建立轻量资料库、同步元数据后打开。原片仍在远程设备，且不会切换远程 Mac 当前窗口。
 - 同名但 UUID 不同的资料库保持完全分离；只有首次建立远程资料库关系时需要明确确认，远程离线后仍可打开本机已经同步的元数据。
 - 修复手机与 Mac 标签不一致及父子层级散乱：标签增量会携带完整父子树，手机可识别既有父标签；检测到旧版遗留的缺父级或跨分类数据时，下次同步会自动获取完整标签树并按 UUID 修复。
-- Mac 版本更新为 1.10.1（60）；iPhone 仍为已经验收的 1.9.0（52），数据库结构 17、同步协议 5 均不变。
+- Mac 版本更新为 1.10.2（61）；iPhone 版本更新为 1.9.2（54），数据库结构 17、同步协议 5 均不变。
 
 # 镜藏 Lite 1.10.0
 
@@ -97,7 +103,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4473404" type="application/octet-stream" sparkle:edSignature="I0CE4daZlmGRIhkKrSbigLQynCQHp0+qYy8w8TGYAoGlg9wsDrCK+5fHFpKou5v9I/OZ6xmza6+ELiMYqTeFDw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4484780" type="application/octet-stream" sparkle:edSignature="zmjzfToDXad+ZqYwO39rNCaMaAZxIUq7qiVd4JplNPSf4UKAOOnVIKvvwnbJAhxHcCdex8H6l2PUyayi1uU9Cw=="/>
         </item>
     </channel>
 </rss>
