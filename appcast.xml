@@ -3,13 +3,50 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.12.0</title>
-            <pubDate>Thu, 20 Aug 2026 20:54:58 +0800</pubDate>
-            <sparkle:version>64</sparkle:version>
-            <sparkle:shortVersionString>1.12.0</sparkle:shortVersionString>
+            <title>1.13.0</title>
+            <pubDate>Fri, 21 Aug 2026 15:53:32 +0800</pubDate>
+            <sparkle:version>66</sparkle:version>
+            <sparkle:shortVersionString>1.13.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 iPhone 1.10.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.0 / iPhone 1.11.0
+
+- 新增跨平台独立“设备连接”：Mac 与 iPhone 都能列出具体设备、真实在线状态、局域网/Tailscale 连接方式、当前使用地址和所属资料库。在线状态来自即时健康检查，不再把“保存过地址”或“某个资料库同步失败”误当成设备在线/离线。
+- 修复 Air 无法通过 Tailscale 加密连接 Mini 的底层入站识别：兼容 Network.framework 返回的 `IPv4(...)`、方括号 IPv6 和 IPv4-mapped IPv6，同时继续拒绝裸公网地址。远程配对令牌先落盘再探测，设备健康与资料库凭据分开验证。
+- 资料库管理在两端显示明确类型与具体设备名称、平台和主要设备；类型可直接修改，并以独立修改时间进行最后写入胜出同步。远程创建或打开资料库会继承照片/视频/文档/混合类型，不再默认变回视频资料库。
+- 照片新增完整元数据实体：拍摄、数字化、文件创建、文件修改、添加到资料库五类时间严格区分；读取 GPS 经纬度/海拔、相机、镜头、光圈、曝光、ISO、焦距、方向、色彩配置及 ImageIO 原始属性表。Mac 与 iPhone 都从原文件读取并同步，历史照片会在后台补全。
+- 修复 iPhone 点击视频后长时间没有页面反馈：播放器路由立即出现，失效的局域网和 Tailscale 地址改为后台并行竞速，远端身份和片源在播放器内部异步准备；单个坏地址不再依次阻塞页面跳转。
+- 按“资料库 → 文件管理 → 标签 → 播放器 → 同步”固化领域边界：新增资料库应用服务和播放器连接解析器，设备连接、照片元数据、同步传输分别独立；补充 `DOMAIN_MODULES.md`，明确每个节点的代码归属、数据所有权与禁止跨层规则。
+- iPhone 数据库原地升级到 21，新增照片修改时间和元数据 JSON；旧数据库先检查表/列再迁移，不删除媒体、标签或资料库。Mac 新字段均为可选解码，继续兼容旧快照；同步协议保持 5。
+- Mac 版本更新为 1.13.0（66），iPhone 版本更新为 1.11.0（60）。
+
+# 镜藏 Lite 1.12.1
+
+- 删除未投入使用的 Flutter macOS Runner；Mac 唯一正式客户端固定为 `NativeMirror` 原生 SwiftUI，iPhone 继续使用 Flutter。新增平台架构约束，资料库身份、实体归属与同步事务必须由两端共同协议统一定义。
+- Mac 间自动同步从每 12 秒遍历所有资料库改为资料变更驱动：短时间内的多次修改合并为一轮，只打开待同步资料库，并在用户停止点击、滚动或播放后执行；120 秒安全拉取仅检查当前资料库。
+- 同步请求和响应的大型 JSON 编码、解码移出主线程；手机读取资料库列表、资料库管理统计和登录项检查也改为后台读取 SQLite 摘要，不再偷偷在主线程创建多个完整 `LibraryStore`。
+- 资料库保存只计算一次实体变更摘要，SQLite 增量写入、同步日志和派生索引共同复用；标签等局部修改不再重复比较全库，也不再重建媒体位置、存储根、标记等无关索引或发送重复的全局刷新。
+- 文件可用性改为后台解析并缓存实际本机路径；媒体列表、预览、播放器状态和重复媒体卡片只读取缓存，SwiftUI 刷新期间不再逐条访问本机或外接硬盘。Quick Look 缩略图的可读性检查也移到后台。
+- 自动备份增加五分钟快速节流，普通小修改不再每次扫描整个备份目录；新增超过 20ms 的资料库保存诊断，便于实机继续定位残余主线程阻塞。
+- 原生回归测试增至 73 项，并新增局部标签变更、预计算增量保存、只读资料库摘要和标记增量同步测试。性能样本中，20,000 条媒体完整保存约 0.28 秒、读取约 0.24 秒、增量保存约 0.10 秒。
+- Mac 版本更新为 1.12.1（65）；数据结构标识和同步协议保持不变，iPhone 版本保持 1.10.3（59）。
+
+# 镜藏 iPhone 1.10.3
+
+- 彻底修复多个手机资料库之间的标签父级串库：新增资料库级同步身份映射，Mac 的统一分类/标签 UUID 与手机本地冲突 UUID 会持久对应，增量同步不再因为未重复携带父标签而丢失归属。
+- 手机数据库升级时会自动识别指向其他资料库的父标签，并按本资料库的分类与父标签名称恢复层级；正确位置已有同名历史副本时，会合并视频标签、片段标签、子标签和智能文件夹引用，不再触发同级名称唯一约束。
+- 手机向 Mac 回传分类、标签、父级、视频标签、片段标签及智能文件夹规则时统一还原为 Mac UUID，手机本地别名不会污染两台 Mac 的正确标签树；删除同步也会先经过同一映射，避免误删另一资料库记录。
+- 修正标签层级健康检查的查询范围：父标签必须以精确 ID 存在于同一资料库、同一分类，大小写相近或另一资料库中的记录不再被误判为合法父级。
+- 使用真实 iPhone 数据库只读副本完成升级演练：`main` 中跨资料库、缺父级或跨分类的父级异常归零，并验证“亲吻 → 嘴👄”“ktv → 室内”“1v1视频通话 → 业余”等实际关系恢复。
+- iPhone 版本更新为 1.10.3（59）；数据库结构升级为 20，同步协议保持 5。
+
+# 镜藏 iPhone 1.10.2
+
+- 继续修复手机历史数据库中的同级同名标签：即使旧孤立记录占用了 Mac 返回的标签 UUID，`INSERT` 也不再中断整个同步事务；系统会恢复并复用已经存在的同名标签，把本次及后续关系稳定映射到该记录。
+- 针对截图中的根级标签“手”和 `tags_sibling_name_unique` 增加连续两次同步回归测试，确保旧数据不需要用户手工清库。
+- iPhone 版本更新为 1.10.2（58）；数据库结构保持 19，同步协议保持 5。
+
+# 镜藏 iPhone 1.10.1
 
 - 修复手机端删除资料库时被旧标签外键阻止的问题：现在在同一事务中按依赖顺序清理整套标签关系和数据库记录，原片文件仍不在删除范围内。
 - 修复多个本机资料库占用同一历史分类或标签 UUID 时，Mac 同步反复触发 `tag_categories.id` 主键冲突的问题；不同资料库现在使用隔离的本地映射，重复同步保持幂等且不会改坏另一资料库。
@@ -139,7 +176,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4692946" type="application/octet-stream" sparkle:edSignature="EK3vRgtzQTS3qjGlcTGeXY8INeOgBP6n1v3lAfIoYZvoRnXvQqUqwR/M8CUkw0jiPVvHwuJR2E2X5JmIsXc3AQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4803807" type="application/octet-stream" sparkle:edSignature="oRROm3Vpd9wa1vhgTujqGBsCDdDth12zuOgdJUzrFEqvWWC67iUSeQ+TxY4/PKeRPOGygme394SAEaHUja1ADA=="/>
         </item>
     </channel>
 </rss>
