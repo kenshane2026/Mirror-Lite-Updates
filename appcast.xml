@@ -3,19 +3,28 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.8</title>
-            <pubDate>Sat, 22 Aug 2026 16:39:44 +0800</pubDate>
-            <sparkle:version>74</sparkle:version>
-            <sparkle:shortVersionString>1.13.8</sparkle:shortVersionString>
+            <title>1.13.9</title>
+            <pubDate>Sat, 22 Aug 2026 18:02:27 +0800</pubDate>
+            <sparkle:version>75</sparkle:version>
+            <sparkle:shortVersionString>1.13.9</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.8 / iPhone 1.11.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.9 / iPhone 1.11.3
 
+- 修复 macOS 14 及以后 Air 通过 Tailscale `100.x` 地址连接 Mini 时仍被 ATS 拦截的问题：移除会覆盖全局授权的 `NSAllowsLocalNetworking` 细粒度键，使 `NSAllowsArbitraryLoads` 对直接 IP 地址真正生效；应用层继续只接受局域网、Tailscale、MagicDNS 与 `ts.net` 端点，公网 IP 和普通公网域名仍会被拒绝。
+- 本次只修复 Mac 设备连接，不改变资料库、文件管理、数据库结构、同步协议或 iPhone 代码。Mac 版本更新为 1.13.9（75），iPhone 保持 1.11.3（63）。
+
+# 镜藏 Lite 1.13.8 / iPhone 1.11.3
+
+- 文件管理新增“扫描并修复已有托管副本”：会检查当前托管目录以及重装前设备身份留下的历史位置，校验文件大小与内容指纹，把旧 `媒体 UUID-原文件名` 原子恢复为 `媒体 UUID/原文件名`，并通过一次资料库事务重新登记为当前 Mac 的首选托管位置；引用原片不删除，跨库结果不能提交。
+- 修复托管区已有文件但“纳入托管”无反馈、媒体仍显示离线或仍优先使用引用位置的问题。旧设备位置的文件名更新会同步写回原设备记录，避免下一轮同步重新产生失效路径；托管修复过程、数量和失败原因在文件管理页可见。
+- Mac 新增统一“设备管理”页，集中显示本机局域网/Tailscale 地址、配对码、Bonjour 在线 Mac、可信远程端点、实际线路、当前资料库具体成员与同步诊断；原先散落的两个连接窗口已退役。
+- 修复 Air 通过 Tailscale 访问 Mini 被 macOS ATS 拦截的问题；应用只允许局域网、Tailscale 100.x/IPv6、MagicDNS 和 `ts.net` 端点，继续拒绝公网 IP 与普通公网域名。设备 ID 同时保存在 macOS 钥匙串，重新安装后可恢复原身份，避免重复设备成员。
 - 完成同步引擎物理拆分：Mac 的快照生成、游标推进、标签/媒体/拓扑冲突合并迁入 `SyncFeature`，LAN 服务只能通过专用合并 Repository 和 Use Case 进入；iPhone 的游标协商、快照交换、身份校验、确认和有界重试从 `LanSyncClient` 迁入独立 `LanSyncEngine`。
 - Mac 标签树、分类、墓碑、片段及历史标签修复从 `LibraryStore.swift` 主文件迁入 `TaggingFeature/Data`；现有界面继续只通过 `TagManagementActions` 写入，不增加第二条可写路径。
 - `PlayerModel` 拆为独立播放会话、AVPlayer 传输控制和最多两项的预加载控制器，公共播放器接口与播放模式保持不变；切换、释放与预加载不再共享一组散落状态。
 - 建立 Mini、Air、iPhone 性能稳定性基线：缓存首屏 300 ms、重复启动 1,500 ms、标签反馈 100 ms、本机视频切换 800 ms、轻量增量同步 3,000 ms。Mac 会记录标签、预滚完成的视频切换和同步耗时，iPhone 设置页显示启动是否达标；记录不包含文件名与路径。
-- 架构门禁禁止标签/同步实现回流巨型 Store、播放器重新拥有预加载缓存，以及 iPhone LAN 客户端重新直接操作同步游标和数据库快照。Mac 自动测试增至 119 项，iPhone 自动测试增至 91 项。
+- 架构门禁禁止标签/同步实现回流巨型 Store、播放器重新拥有预加载缓存、设备管理界面回流 `ContentView`/LAN 服务，以及 iPhone LAN 客户端重新直接操作同步游标和数据库快照。Mac 自动测试增至 123 项，iPhone 自动测试保持 91 项。
 - 数据库结构保持 21，实体 ID、文件路径和同步协议 5 均不变。Mac 版本更新为 1.13.8（74），iPhone 版本更新为 1.11.3（63）。
 
 # 镜藏 Lite 1.13.7 / iPhone 1.11.2
@@ -258,7 +267,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5045831" type="application/octet-stream" sparkle:edSignature="3ai6NSeJrtM1fj7A2A+baKdg5WaeUC+VCtU1GC13sjIhf6c6dy1SEUDCkFWuo3LH5zFOxvF1ExnoWXMvUxr4BA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5103549" type="application/octet-stream" sparkle:edSignature="ZA/9ta6GQDhqwWwBzenfmiqfdLB4DLDoChODaLN5uma9sM9h0rzGUbgJp29VLWJ762itTkEGsgwa/O9945nYBg=="/>
         </item>
     </channel>
 </rss>
