@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.9</title>
-            <pubDate>Sat, 22 Aug 2026 18:02:27 +0800</pubDate>
-            <sparkle:version>75</sparkle:version>
-            <sparkle:shortVersionString>1.13.9</sparkle:shortVersionString>
+            <title>1.13.10</title>
+            <pubDate>Sat, 22 Aug 2026 18:59:48 +0800</pubDate>
+            <sparkle:version>76</sparkle:version>
+            <sparkle:shortVersionString>1.13.10</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.9 / iPhone 1.11.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.10 / iPhone 1.11.4
+
+- 完成双端物理收口：Mac 的资料库、文件管理、重复项、设备连接、导出和媒体浏览界面从 `ContentView` 移入各自领域目录；iPhone 主入口拆为设备连接、资料库主页、资料库管理、媒体浏览和整理播放器五个文件。
+- iPhone SQLite 持久化按资料库、标签、媒体、数据中心/片段和同步事务拆为五个实现文件，继续共用同一数据库连接和事务；数据库版本仍为 21，同步协议仍为 5。
+- 删除资料库查询、资料库命令和标签命令的临时转发器；标签归属校验由 `ManageTags` 用例统一负责，SQLite 只执行已验证的写入。
+- 删除编译器确认无调用的旧视频浏览器、旧移动编辑控件和旧标签选择器，并取消全局忽略未使用代码。以后同类残留会直接被静态检查发现。
+- 托管旧文件恢复只保留“文件管理 → 扫描并修复”一个入口；启动、切库和后台恢复不再自动重复扫描旧 UUID 文件名。
+- LAN 服务不再直接读取 `LibraryStore` 或取得完整工作区，只通过 `LibraryServiceRegistry` 的窄服务操作访问资料库。
+- 不移动媒体文件、不改变资料库/媒体/标签 ID，不迁移数据库，不改变同步协议。Mac 更新为 1.13.10（76），iPhone 更新为 1.11.4（64）。
+
+# 镜藏 Lite 1.13.9 / iPhone 1.11.3
 
 - 修复 macOS 14 及以后 Air 通过 Tailscale `100.x` 地址连接 Mini 时仍被 ATS 拦截的问题：移除会覆盖全局授权的 `NSAllowsLocalNetworking` 细粒度键，使 `NSAllowsArbitraryLoads` 对直接 IP 地址真正生效；应用层继续只接受局域网、Tailscale、MagicDNS 与 `ts.net` 端点，公网 IP 和普通公网域名仍会被拒绝。
 - 本次只修复 Mac 设备连接，不改变资料库、文件管理、数据库结构、同步协议或 iPhone 代码。Mac 版本更新为 1.13.9（75），iPhone 保持 1.11.3（63）。
@@ -267,7 +277,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5103549" type="application/octet-stream" sparkle:edSignature="ZA/9ta6GQDhqwWwBzenfmiqfdLB4DLDoChODaLN5uma9sM9h0rzGUbgJp29VLWJ762itTkEGsgwa/O9945nYBg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5111903" type="application/octet-stream" sparkle:edSignature="yodbFC85c+bDUFGIysv+cPFIPuH0hsaqjyIX7VpyYx9p6M9r1D+59qm2zGnlB2OFvbngmslqOwqyqPz8YB2eAw=="/>
         </item>
     </channel>
 </rss>
