@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.14.0</title>
-            <pubDate>Sat, 22 Aug 2026 22:12:47 +0800</pubDate>
-            <sparkle:version>79</sparkle:version>
-            <sparkle:shortVersionString>1.14.0</sparkle:shortVersionString>
+            <title>1.14.1</title>
+            <pubDate>Sat, 22 Aug 2026 23:16:56 +0800</pubDate>
+            <sparkle:version>80</sparkle:version>
+            <sparkle:shortVersionString>1.14.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.14.0 / iPhone 1.12.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.14.1 / iPhone 1.12.1
+
+- 重新定义“重复媒体组”为独立领域实体，整理必须经过“人工选择或用户规则 → 生成方案 → 集中复核 → 执行”四步；删除旧的系统推荐保留项、批量自动选取和“一键整理”入口，不再让隐藏算法替用户决定。
+- Mac 新增三栏重复媒体审阅台：左侧批量选择重复组，中间每组只预览一次完全相同的内容，右侧比较文件名、引用/托管、本机/离线、首选位置、资料完整度、大小和分辨率并明确选择保留项。
+- Mac 与 iPhone 都支持按用户选择顺序应用“干净文件名、托管、本机可用、资料完整、最早添加”等规则，Mac 还可选择首选位置规则；规则并列时保持未决定，人工决定优先且不会被规则覆盖。草稿按资料库保存在本机，未执行决定不会跨设备传播。
+- 执行前显示逐组整理方案和未决定数量；执行时重新读取成员、校验完整内容指纹和本机可用性，变化、离线、远程或回收失败的组会安全跳过。只有已明确决定且重新校验通过的组才合并资料并处理本机副本，远程文件不会被删除。
+- iPhone 将组内容预览从每个副本逐一打开改为每组一次预览，再以单独列表选择保留版本；重复媒体预览组件与主流程物理分离，规则、决定和方案归入独立领域文件，完整指纹复核、回收与数据库合并归入独立执行服务。
+- 架构门禁新增重复媒体约束：禁止恢复隐藏推荐算法和旧一键整理入口，Mac 界面不得直接观察总资料库 Store，并固定两端决策计划、独立 Store 与预览组件的物理归属。
+- 本次不主动移动或删除任何用户媒体；只有用户在复核页确认后才执行整理。不改变资料库/媒体/标签/设备 ID，不升级数据库结构或同步协议。Mac 更新为 1.14.1（80），iPhone 更新为 1.12.1（66），iPhone DB 21、同步协议 5 保持不变。
+
+# 镜藏 Lite 1.14.0 / iPhone 1.12.0
 
 - 按当前对话确认的“文件管理 → 标签 → 播放器 → 同步与设备连接”完成逐领域细磨。文件管理页面只通过独立 Store 和九类窄 Repository 工作；通用媒体预览、照片元数据读取、托管与重复项都归入文件领域，不再堆回窗口总入口。
 - 文件管理继续坚持“一个媒体实体、多个物理位置、一个首选位置”：引用、托管、下载、远程和离线状态统一显示；托管保留原始文件名，批量迁移使用有界并发、校验后登记、进度/取消/重试；原位置和重复内容可以批量处理，离线位置不会删除媒体实体。
@@ -305,7 +315,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5166561" type="application/octet-stream" sparkle:edSignature="ioNicHIKyv0+4Gbz0Wd5YeetDTro6lY/LFTQFnmJOU3SSVJNfbugWj363QvKQVm7WSr31x53RIaodw/F9p2hCQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5240151" type="application/octet-stream" sparkle:edSignature="sHERoYh4Xq410yl7igjF6Lz2rHm4H+SJvLmJTnZPs0nEgQYCjd6gY55/ppFm48pNqe+0Cf6i1xccBSlwkBLrBQ=="/>
         </item>
     </channel>
 </rss>
