@@ -3,13 +3,25 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.2</title>
-            <pubDate>Sat, 22 Aug 2026 09:13:58 +0800</pubDate>
-            <sparkle:version>68</sparkle:version>
-            <sparkle:shortVersionString>1.13.2</sparkle:shortVersionString>
+            <title>1.13.3</title>
+            <pubDate>Sat, 22 Aug 2026 10:54:44 +0800</pubDate>
+            <sparkle:version>69</sparkle:version>
+            <sparkle:shortVersionString>1.13.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.2 / iPhone 1.11.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.3 / iPhone 1.11.1
+
+- 重做 Mac 可见工作区启动链路：`LibraryStore` 构造阶段只读取小型资料库目录，不再在 `@MainActor` 初始化器中同步迁移 SQLite、读取整个资料库、修复记录和启动硬盘扫描；窗口、资料库侧栏与智能文件夹入口可以先绘制。
+- 新增 `shellReady → openingLibrary → interactive/failed` 启动状态机，以及独立 `OpenInitialLibrary` 用例和 SQLite adapter。旧资料库结果必须同时匹配 `LibraryID` 与当前 `LibraryContext`，失败只显示可重试状态，不覆盖当前工作区或删除资料。
+- 元数据补全、位置指纹、托管旧命名修复、文件可用性和 Mac/iPhone 同步全部推迟到资料库进入可操作状态后；性能诊断现在分别记录“启动外壳”“资料库读取”和“启动至可操作”，便于继续定位实机残余卡顿。
+- 顶部资料库菜单、资料库管理页和远程资料库入口改为后台切换：当前资料在目标 SQLite 读取与身份验证成功前保持不变；快速连续请求只允许最后一个 `LibraryContext` 提交，失败继续停留在原资料库。LAN 与 Mac 同步服务只在新资料库成功提交后重绑定一次，性能诊断新增“资料库切换读取”。
+- 资料库生命周期操作继续瘦身：修改未打开资料库的名称或类型不再创建并完整加载后台 `LibraryStore`；本机删除使用独立文件 adapter，把 SQLite/WAL/SHM/旧 JSON 可恢复地归档到 `DeletedLibraries`，目录提交失败会原路回滚。
+- 删除当前资料库前先在后台读取并验证替代资料库，成功归档后一次提交新的 `LibraryContext`；删除非当前资料库不改变当前工作区，最后一个本机资料库和存在迁移、扫描、导出或下载任务的资料库会被明确拒绝删除。
+- 固化发布身份门：任何可发布改动，包括纯性能优化，都必须同时使用从未发布过的 Mac 版本号和构建号；正式发布继续拒绝用不同源码覆盖相同版本。
+- 自动验证现为 Mac 104 项、iPhone 90 项；数据库结构、Mac 数据结构和同步协议保持不变。
+- Mac 版本更新为 1.13.3（69），iPhone 版本保持 1.11.1（61）。
+
+# 镜藏 Lite 1.13.2 / iPhone 1.11.1
 
 - 修复正式发布脚本：本地差异检查改在联网和提交之前执行，GitHub 登录只读取钥匙串凭证并以 API 请求确认网络，连续失败会明确停止，不再把 `gh auth status` 的瞬时 `EOF` 当成可继续状态。
 - GitHub Release 以后同时发布带版本号的英文 DMG 和固定名称 `Mirror-Lite-Mac.dmg`；仓库首页新增永久“最新版安装包”入口，正式发布最后会强制核对 DMG 附件是否真实存在。
@@ -198,7 +210,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4914596" type="application/octet-stream" sparkle:edSignature="oGudNB4F8J0bogkaP7FPZEP/q+f7uaOvmaQVJ3QhLj0NQLkvogd6yDzXhtO9uVPG7fhU/z38IWs7pY3NpYsSCw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4977990" type="application/octet-stream" sparkle:edSignature="zQAJx5X7QJrth+5JLKz5WnF4h+sn1grSnIAwgD9k2PoAIhpOYmiLmGNft0VS02wTvs797rnnzoGZR5lYaIVQDQ=="/>
         </item>
     </channel>
 </rss>
