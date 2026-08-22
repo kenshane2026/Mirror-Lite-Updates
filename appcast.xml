@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.7</title>
-            <pubDate>Sat, 22 Aug 2026 14:34:08 +0800</pubDate>
-            <sparkle:version>73</sparkle:version>
-            <sparkle:shortVersionString>1.13.7</sparkle:shortVersionString>
+            <title>1.13.8</title>
+            <pubDate>Sat, 22 Aug 2026 16:39:44 +0800</pubDate>
+            <sparkle:version>74</sparkle:version>
+            <sparkle:shortVersionString>1.13.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.7 / iPhone 1.11.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.8 / iPhone 1.11.3
+
+- 完成同步引擎物理拆分：Mac 的快照生成、游标推进、标签/媒体/拓扑冲突合并迁入 `SyncFeature`，LAN 服务只能通过专用合并 Repository 和 Use Case 进入；iPhone 的游标协商、快照交换、身份校验、确认和有界重试从 `LanSyncClient` 迁入独立 `LanSyncEngine`。
+- Mac 标签树、分类、墓碑、片段及历史标签修复从 `LibraryStore.swift` 主文件迁入 `TaggingFeature/Data`；现有界面继续只通过 `TagManagementActions` 写入，不增加第二条可写路径。
+- `PlayerModel` 拆为独立播放会话、AVPlayer 传输控制和最多两项的预加载控制器，公共播放器接口与播放模式保持不变；切换、释放与预加载不再共享一组散落状态。
+- 建立 Mini、Air、iPhone 性能稳定性基线：缓存首屏 300 ms、重复启动 1,500 ms、标签反馈 100 ms、本机视频切换 800 ms、轻量增量同步 3,000 ms。Mac 会记录标签、预滚完成的视频切换和同步耗时，iPhone 设置页显示启动是否达标；记录不包含文件名与路径。
+- 架构门禁禁止标签/同步实现回流巨型 Store、播放器重新拥有预加载缓存，以及 iPhone LAN 客户端重新直接操作同步游标和数据库快照。Mac 自动测试增至 119 项，iPhone 自动测试增至 91 项。
+- 数据库结构保持 21，实体 ID、文件路径和同步协议 5 均不变。Mac 版本更新为 1.13.8（74），iPhone 版本更新为 1.11.3（63）。
+
+# 镜藏 Lite 1.13.7 / iPhone 1.11.2
 
 - 完成标签、播放器和同步连接的领域收口：Mac 标签分配与片源解析的生产实现分别物理归入 `TaggingFeature/Data`、`PlaybackFeature/Data`；标签创建、重命名、移动、删除、样式和片段写入全部通过 `TagManagementActions`；同步协调器只依赖 `PeerSyncWorkspace`，不再持有或读取具体 `LibraryStore` 内部状态。
 - iPhone 标签命令改为资料库作用域 Repository，只能访问 `TagPersistence`；同步客户端只依赖 `SyncRepository`，播放器线路竞速不依赖任何 Repository，不再获得资料库、文件、标签或同步写入能力。
@@ -249,7 +258,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5037158" type="application/octet-stream" sparkle:edSignature="GGT0QUUw0kh0yxo+NsUvZk09d+Mo3MLJosVzvYzch47vTiNnWL12aLTnSq20+DOD5JPyLz7Yydv2vN7Y22bCAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5045831" type="application/octet-stream" sparkle:edSignature="3ai6NSeJrtM1fj7A2A+baKdg5WaeUC+VCtU1GC13sjIhf6c6dy1SEUDCkFWuo3LH5zFOxvF1ExnoWXMvUxr4BA=="/>
         </item>
     </channel>
 </rss>
