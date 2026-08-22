@@ -3,13 +3,30 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.10</title>
-            <pubDate>Sat, 22 Aug 2026 18:59:48 +0800</pubDate>
-            <sparkle:version>76</sparkle:version>
-            <sparkle:shortVersionString>1.13.10</sparkle:shortVersionString>
+            <title>1.13.12</title>
+            <pubDate>Sat, 22 Aug 2026 20:51:56 +0800</pubDate>
+            <sparkle:version>78</sparkle:version>
+            <sparkle:shortVersionString>1.13.12</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.10 / iPhone 1.11.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.12 / iPhone 1.11.4
+
+- 修复纳入托管后侧栏出现大量媒体 UUID 文件夹的问题：磁盘上继续用媒体身份目录安全隔离同名原片，但来源列表现在只显示一个“托管区”，选择它会一次展示其中的全部媒体。
+- 修复 Mini 重新安装后点击“纳入全部可用引用”没有反应的问题：即使本机偏好设置丢失，也会从资料库已登记的托管位置恢复原托管根目录，并继续复用已经校验的副本。
+- 当资料库无法可靠恢复托管根目录时，批量托管会明确停用并提示重新指定；此时允许重新选择现有托管区，不再被“已经存在托管文件”的旧保护逻辑卡住。托管和修复失败信息改为醒目显示。
+- 本次不移动、重命名或删除任何现有媒体；不改变资料库/媒体/标签 ID，不升级数据库或同步协议。Mac 更新为 1.13.12（78），iPhone 保持 1.11.4（64）。
+
+# 镜藏 Lite 1.13.11 / iPhone 1.11.4
+
+- 完成资料库细磨第一批：窗口和侧栏不再被资料库读取遮罩锁住；首次打开和切换时继续显示当前界面，只在右上角显示不拦截点击的进度提示，读取失败仍保留明确重试入口。
+- 把旧资料库的位置补全、资料库身份/设备、来源文件夹和历史标签兼容整理合并到后台初始读取事务；千条媒体不再在主界面线程逐条检查硬盘，也不再进行多次同步保存。
+- 删除旧的同步 `switchLibrary`、同步本机删除和三套主线程 migration/repair 入口。创建、打开、切换和删除资料库分别只保留已经验证的用例路径，避免以后再次走回卡顿分支。
+- 后台同步资料库改为按需异步读取；同一资料库的并发请求共享一个读取任务，目录、凭据和身份查询不会创建完整工作区，切到前台前会先取消并清理后台副本，避免同一 SQLite 被两套工作区同时持有。
+- LAN 媒体、归档和同步请求改为等待异步资料库服务，不再通过同步主线程等待打开其他资料库；资料库摘要 SQLite adapter 也从服务注册表中物理拆出。
+- 新增千条旧资料位置整理、旧标签整理、快速切库、失败回退、后台请求去重和防串库测试；架构门禁禁止恢复同步打开、旧删除与主线程迁移路径。
+- 不移动媒体文件，不改变资料库/媒体/标签 ID，不升级数据库或同步协议。Mac 更新为 1.13.11（77），iPhone 保持 1.11.4（64）。
+
+# 镜藏 Lite 1.13.10 / iPhone 1.11.4
 
 - 完成双端物理收口：Mac 的资料库、文件管理、重复项、设备连接、导出和媒体浏览界面从 `ContentView` 移入各自领域目录；iPhone 主入口拆为设备连接、资料库主页、资料库管理、媒体浏览和整理播放器五个文件。
 - iPhone SQLite 持久化按资料库、标签、媒体、数据中心/片段和同步事务拆为五个实现文件，继续共用同一数据库连接和事务；数据库版本仍为 21，同步协议仍为 5。
@@ -277,7 +294,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5111903" type="application/octet-stream" sparkle:edSignature="yodbFC85c+bDUFGIysv+cPFIPuH0hsaqjyIX7VpyYx9p6M9r1D+59qm2zGnlB2OFvbngmslqOwqyqPz8YB2eAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5150333" type="application/octet-stream" sparkle:edSignature="KStWXPoX1O5xj7x77A2CMWN/hdp0Oku/mYG5CL57dgkgOxUdSTBGW10Ht7eJjPFvyzL9Z1zfZTJDwveRZCe/Bw=="/>
         </item>
     </channel>
 </rss>
