@@ -3,13 +3,34 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.1</title>
-            <pubDate>Fri, 21 Aug 2026 16:35:17 +0800</pubDate>
-            <sparkle:version>67</sparkle:version>
-            <sparkle:shortVersionString>1.13.1</sparkle:shortVersionString>
+            <title>1.13.2</title>
+            <pubDate>Sat, 22 Aug 2026 09:13:58 +0800</pubDate>
+            <sparkle:version>68</sparkle:version>
+            <sparkle:shortVersionString>1.13.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.1 / iPhone 1.11.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.2 / iPhone 1.11.1
+
+- 修复正式发布脚本：本地差异检查改在联网和提交之前执行，GitHub 登录只读取钥匙串凭证并以 API 请求确认网络，连续失败会明确停止，不再把 `gh auth status` 的瞬时 `EOF` 当成可继续状态。
+- GitHub Release 以后同时发布带版本号的英文 DMG 和固定名称 `Mirror-Lite-Mac.dmg`；仓库首页新增永久“最新版安装包”入口，正式发布最后会强制核对 DMG 附件是否真实存在。
+- 修复“纳入托管”擅自把文件改成 `媒体UUID-原文件名` 的问题：媒体 UUID 改放在独立父目录，真实文件名逐字保持不变；资料库打开后会自动识别历史旧命名，并用同盘原子移动恢复原文件名，不重新复制大型视频。
+- 重做大批量托管执行链：复制时使用两个有界 worker，复制过程完成大小与快速指纹校验，登记阶段复用已有媒体身份和校验结果，不再为每个文件重新打开 AVAsset、读取照片元数据或重复计算指纹；界面显示复制/登记阶段和完成数量。
+- 文件管理新增“迁移后的原位置”集中页面：完整保留迁移前路径，可多选或全选；清理前逐项重新比较原片和托管副本，只有完全一致的文件才会批量移入 macOS 废纸篓，失败项原样保留。
+- Mac 与 iPhone 的重复媒体结果新增多选、全选和一键整理。Mac 将所选组一次移入系统废纸篓并一次提交资料库；iPhone 使用可恢复的镜藏回收站。每组自动保留本机/托管、资料更完整且更早导入的版本，并合并标签、片段、评价与备注。
+- 完成分阶段架构整治的阶段 0：固化资料库、文件管理、标签、播放器、同步与设备连接的领域边界，新增依赖方向守卫并接入本机验收流程，后续切片不得重新把数据库、界面和同步逻辑堆回一个 Store。
+- 完成资料库 L1“只读摘要”切片。Mac 资料库目录与局域网资料库列表不再从活动 `LibraryStore` 取目录，也不会为其他资料库创建完整后台 Store；只读取 catalog 与 SQLite 摘要。
+- iPhone 资料库管理页改用独立 `LibraryQueryRepository`，一次批量读取资料库、媒体数、待同步数、设备、主要设备和媒体位置，不再逐库解码全部媒体，也不再因为打开列表而写入设备记录。
+- 远程设备资料库探测从手机页面首屏加载链路中移除：本地摘要先显示，局域网/Tailscale 探测随后异步更新，坏地址或离线设备不再阻塞资料库管理页出现。
+- 完成资料库 L2“打开与切换”切片：Mac 和 iPhone 每次打开资料库都会建立新的 `LibraryContext` 世代令牌；旧资料库的媒体加载、文件可用性、元数据、指纹、托管任务、下载、同步结果和线路探测只有在令牌仍有效时才能更新当前工作区。
+- 修复手机快速连续切换资料库时“先点的慢请求最后覆盖后点资料库”的竞态；旧请求现在明确返回 `superseded`，目标资料库不存在或打开失败也不会留下半切换状态。手机会恢复上次真正打开的资料库，不再始终回到列表第一项。
+- 新增双端只读契约与 100 个资料库边界测试；手机测试明确验证查询前后设备表完全一致，防止“查看列表”再次制造错误设备归属。
+- 完成资料库 L3–L6 写入边界：Mac 资料库页面只调用 `LibraryManagementStore` 和创建/重命名/改类型/本机删除/全部设备删除用例；iPhone 对应操作只调用独立 `LibraryCommandRepository`。具体设备成员来自只读投影，实时在线线路没有被保存成资料库成员状态。
+- 文件管理、标签、播放器与同步分别建立 Domain / Application / Data 边界：托管复制只在文件 adapter 访问文件系统；标签批量写入拒绝混合资料库；播放器只消费带 libraryID/mediaID 的 `PlayableSource`；同步在解码后、导入前统一验证资料库身份与协议版本。
+- iPhone 同步新增返回方向的强制资料库身份校验：即使健康检查通过，只要同步响应头属于另一资料库，也会在导入数据库前停止，避免错误线路或旧绑定造成串库。
+- 自动验证现为 Mac 89 项、iPhone 90 项；两端全量测试、Dart 静态分析、架构依赖守卫和差异检查通过。数据库结构保持 21，Mac 数据结构与同步协议保持不变。
+- Mac 版本更新为 1.13.2（68），iPhone 版本更新为 1.11.1（61）；数据库结构与同步协议均保持不变。
+
+# 镜藏 Lite 1.13.1 / iPhone 1.11.0
 
 - 彻底修复 Mac 大资料库点击后长时间转圈：真实进程采样确认，SwiftUI 在构建每一条视频的右键菜单时都会重新扫描全部媒体并解析文件路径，形成“可见行 × 1,390 条媒体”的平方级主线程工作。来源文件夹现改为随资料变更维护的内存索引，列表刷新只做常数时间读取，目录名称与路径分组也不再访问本机或外接硬盘。
 - 新增跨平台独立“设备连接”：Mac 与 iPhone 都能列出具体设备、真实在线状态、局域网/Tailscale 连接方式、当前使用地址和所属资料库。在线状态来自即时健康检查，不再把“保存过地址”或“某个资料库同步失败”误当成设备在线/离线。
@@ -177,7 +198,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4808234" type="application/octet-stream" sparkle:edSignature="fywmXKPEcG8MXRJkWKXU6f0RRzwZjH5Hn9ygiYMqzJl7yy1ci6yybWCt57T3XVU0hCD7iHpb89W0tKaIm5sJCQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4914596" type="application/octet-stream" sparkle:edSignature="oGudNB4F8J0bogkaP7FPZEP/q+f7uaOvmaQVJ3QhLj0NQLkvogd6yDzXhtO9uVPG7fhU/z38IWs7pY3NpYsSCw=="/>
         </item>
     </channel>
 </rss>
