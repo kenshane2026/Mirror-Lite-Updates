@@ -3,13 +3,41 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.3</title>
-            <pubDate>Sat, 22 Aug 2026 10:54:44 +0800</pubDate>
-            <sparkle:version>69</sparkle:version>
-            <sparkle:shortVersionString>1.13.3</sparkle:shortVersionString>
+            <title>1.13.6</title>
+            <pubDate>Sat, 22 Aug 2026 14:03:41 +0800</pubDate>
+            <sparkle:version>72</sparkle:version>
+            <sparkle:shortVersionString>1.13.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.3 / iPhone 1.11.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.6 / iPhone 1.11.1
+
+- 完成文件管理最终收口：删除 `LegacyFileManagementAdapter` 与 `LegacyManagedStorageWorkspaceAdapter`，九类文件管理 Repository 和托管 Workspace 由 `LibraryStore` 在 `MediaFilesFeature/Data` 的专属实现直接满足，不再存在兼容转发链或两套可写入口。
+- 将总览、可用性、原位置清理、重新定位、托管根目录、导入、远端副本、元数据和完全重复整理等约一千行具体实现从巨型 `LibraryStore.swift` 物理迁出；以后修改文件管理集中在 MediaFiles 模块，不需要继续改动主 Store 文件。
+- 清除已经没有调用方的旧统计、来源硬盘和旧托管候选投影；文件管理继续使用激活时才建立的一次线性快照，不恢复逐来源或逐位置的平方级扫描。
+- 新增生产 Workspace 契约测试和双重架构守卫：界面不得绕过 `FileManagementStore`，主 `LibraryStore.swift` 不得重新承载文件管理 Repository 实现，也禁止恢复任何旧 adapter 或旧命令名称。
+- 原始文件名、托管目录、媒体与位置 ID、SQLite 结构、同步协议和用户可见操作保持不变；Mac 自动测试增至 117 项。
+- Mac 版本更新为 1.13.6（72），iPhone 版本保持 1.11.1（61）。
+
+# 镜藏 Lite 1.13.5 / iPhone 1.11.1
+
+- 文件管理完成九个独立功能切片：总览读取、可用性刷新、原位置清理、重新定位、托管根目录、文件导入、远端副本、元数据重析和完全重复整理，分别拥有明确的 Repository 端口与 Application Use Case。
+- 新增独立 `FileManagementStore`；文件管理页面的导入、刷新、清理、重定位、托管区、下载、元数据和重复整理操作不再直接调用巨型 `LibraryStore`。架构守卫会拒绝今后把这些命令重新写回界面。
+- 文件管理总览改为一次建立只读快照，并预计算资料位置、来源硬盘、来源文件夹、可清理原位置和本机托管候选；列表关闭时不再因资料或可用性变化反复重建总览，避免大型资料库把刷新放大为平方级主线程工作。
+- “纳入托管”继续使用独立复制事务，逐字保留原始文件名，批量复制、校验后一次登记；本轮其他八类旧实现只允许通过单一 `LegacyFileManagementAdapter` 进入，待用户实机验收后再物理删除兼容入口，避免验证前同时保留两套可写路径。
+- 新增九项文件管理边界契约测试，覆盖每类用户意图的身份、范围和批次语义；数据库结构、媒体/位置 ID、磁盘路径和同步协议均保持不变。
+- Mac 版本更新为 1.13.5（71），iPhone 版本保持 1.11.1（61）。
+
+# 镜藏 Lite 1.13.4 / iPhone 1.11.1
+
+- 将“纳入托管”从巨型 `LibraryStore` 抽成独立文件管理纵向链路：`ManagedStorageWorkspaceRepository` 只负责读取与登记文件位置，`MoveMediaToManaged` 用例统一负责计划、复制、校验和提交，`ManagedStorageStore` 只保存进度、取消、错误与批次结果。
+- 托管文件继续使用媒体 UUID 作为隔离目录，并逐字保留原始文件名；复制通过临时文件、大小和快速内容指纹校验后才成为正式副本，失败项不会登记，原位置永远不会被自动删除。
+- 批量复制保持两个有界 worker，并在后台预先生成安全书签；全部成功结果只进行一次增量数据库提交，不再逐文件保存或重新分析 AV/照片元数据，减少千条媒体迁移时的主线程和数据库开销。
+- 文件管理托管区新增明确的阶段进度、取消、成功/失败汇总和“重试失败项”；取消后已完成但未登记的副本会在重试时重新校验并复用，不会制造错误资料位置。
+- 托管提交携带当前 `LibraryContext` 世代令牌；复制期间切换资料库会取消旧任务，旧结果不能写入新资料库，也不能用旧任务的提示覆盖新工作区。
+- 数据库结构、媒体 ID、文件位置模型和同步协议保持不变；新增托管事务、千条批次单次提交和串库防护测试，Mac 自动测试增至 107 项。
+- Mac 版本更新为 1.13.4（70），iPhone 版本保持 1.11.1（61）。
+
+# 镜藏 Lite 1.13.3 / iPhone 1.11.1
 
 - 重做 Mac 可见工作区启动链路：`LibraryStore` 构造阶段只读取小型资料库目录，不再在 `@MainActor` 初始化器中同步迁移 SQLite、读取整个资料库、修复记录和启动硬盘扫描；窗口、资料库侧栏与智能文件夹入口可以先绘制。
 - 新增 `shellReady → openingLibrary → interactive/failed` 启动状态机，以及独立 `OpenInitialLibrary` 用例和 SQLite adapter。旧资料库结果必须同时匹配 `LibraryID` 与当前 `LibraryContext`，失败只显示可重试状态，不覆盖当前工作区或删除资料。
@@ -210,7 +238,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="4977990" type="application/octet-stream" sparkle:edSignature="zQAJx5X7QJrth+5JLKz5WnF4h+sn1grSnIAwgD9k2PoAIhpOYmiLmGNft0VS02wTvs797rnnzoGZR5lYaIVQDQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5036203" type="application/octet-stream" sparkle:edSignature="DVdGP3H5izUgAD+gqKC1YdvVRTlq5zxveB/eVHR/PtDIcBY8/YoZAq7DH96s3JH3gnz/cOyYZhWM6dOKFsvUBw=="/>
         </item>
     </channel>
 </rss>
