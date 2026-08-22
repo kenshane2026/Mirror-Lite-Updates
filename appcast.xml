@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.6</title>
-            <pubDate>Sat, 22 Aug 2026 14:03:41 +0800</pubDate>
-            <sparkle:version>72</sparkle:version>
-            <sparkle:shortVersionString>1.13.6</sparkle:shortVersionString>
+            <title>1.13.7</title>
+            <pubDate>Sat, 22 Aug 2026 14:34:08 +0800</pubDate>
+            <sparkle:version>73</sparkle:version>
+            <sparkle:shortVersionString>1.13.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.6 / iPhone 1.11.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.7 / iPhone 1.11.2
+
+- 完成标签、播放器和同步连接的领域收口：Mac 标签分配与片源解析的生产实现分别物理归入 `TaggingFeature/Data`、`PlaybackFeature/Data`；标签创建、重命名、移动、删除、样式和片段写入全部通过 `TagManagementActions`；同步协调器只依赖 `PeerSyncWorkspace`，不再持有或读取具体 `LibraryStore` 内部状态。
+- iPhone 标签命令改为资料库作用域 Repository，只能访问 `TagPersistence`；同步客户端只依赖 `SyncRepository`，播放器线路竞速不依赖任何 Repository，不再获得资料库、文件、标签或同步写入能力。
+- 所有实际播放器启动入口统一消费带 `libraryID`、`mediaID` 和线路类型的 `PlayableSource`；本地、局域网与 Tailscale 的选择仍由播放器片源用例完成，界面不再绕过片源边界直接加载媒体路径。
+- Mac 间同步新增准备与接收快照用例；设备发现、在线状态和重试仍由连接协调器维护，资料库快照、游标与合并只由同步工作区端口处理。`LANSyncServer` 初始化也不再接收整个 Store。
+- 删除 Mac/iPhone 所有生产 `Legacy...Repository` 转发适配器，包括资料库、标签和播放器旧路径；历史标签、旧托管命名等数据修复逻辑继续保留，避免破坏旧资料。
+- 新增架构守卫：禁止恢复 Legacy Repository、禁止同步协调器读取 `LibraryStore.data/serviceRegistry`、禁止标签/片源实现回到巨型 Store 主文件，以及禁止 Flutter 同步与播放线路重新依赖全能 Repository。
+- 数据库结构保持 21，Mac 数据格式与同步协议 5 均不变；Mac 117 项测试、iPhone 90 项测试、两端静态检查和架构边界检查通过。
+- Mac 版本更新为 1.13.7（73），iPhone 版本更新为 1.11.2（62）。
+
+# 镜藏 Lite 1.13.6 / iPhone 1.11.1
 
 - 完成文件管理最终收口：删除 `LegacyFileManagementAdapter` 与 `LegacyManagedStorageWorkspaceAdapter`，九类文件管理 Repository 和托管 Workspace 由 `LibraryStore` 在 `MediaFilesFeature/Data` 的专属实现直接满足，不再存在兼容转发链或两套可写入口。
 - 将总览、可用性、原位置清理、重新定位、托管根目录、导入、远端副本、元数据和完全重复整理等约一千行具体实现从巨型 `LibraryStore.swift` 物理迁出；以后修改文件管理集中在 MediaFiles 模块，不需要继续改动主 Store 文件。
@@ -238,7 +249,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5036203" type="application/octet-stream" sparkle:edSignature="DVdGP3H5izUgAD+gqKC1YdvVRTlq5zxveB/eVHR/PtDIcBY8/YoZAq7DH96s3JH3gnz/cOyYZhWM6dOKFsvUBw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5037158" type="application/octet-stream" sparkle:edSignature="GGT0QUUw0kh0yxo+NsUvZk09d+Mo3MLJosVzvYzch47vTiNnWL12aLTnSq20+DOD5JPyLz7Yydv2vN7Y22bCAw=="/>
         </item>
     </channel>
 </rss>
