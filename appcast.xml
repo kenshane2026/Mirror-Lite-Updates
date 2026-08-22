@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.13.12</title>
-            <pubDate>Sat, 22 Aug 2026 20:51:56 +0800</pubDate>
-            <sparkle:version>78</sparkle:version>
-            <sparkle:shortVersionString>1.13.12</sparkle:shortVersionString>
+            <title>1.14.0</title>
+            <pubDate>Sat, 22 Aug 2026 22:12:47 +0800</pubDate>
+            <sparkle:version>79</sparkle:version>
+            <sparkle:shortVersionString>1.14.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.13.12 / iPhone 1.11.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.14.0 / iPhone 1.12.0
+
+- 按当前对话确认的“文件管理 → 标签 → 播放器 → 同步与设备连接”完成逐领域细磨。文件管理页面只通过独立 Store 和九类窄 Repository 工作；通用媒体预览、照片元数据读取、托管与重复项都归入文件领域，不再堆回窗口总入口。
+- 文件管理继续坚持“一个媒体实体、多个物理位置、一个首选位置”：引用、托管、下载、远程和离线状态统一显示；托管保留原始文件名，批量迁移使用有界并发、校验后登记、进度/取消/重试；原位置和重复内容可以批量处理，离线位置不会删除媒体实体。
+- 标签界面从播放器工作区物理拆出，快捷标签、标签搜索和完整标签面板全部归入标签领域；删除没有调用方的旧标签管理页，所有标签和片段写入继续经过统一命令边界，跨资料库归属仍在写入与同步前拒绝。
+- 播放器状态、工作区、胶片条、范围浏览、键盘命令、兼容预览和播放模式全部归入播放器领域；会话、传输和预加载继续独立，播放器入口只消费带资料库与媒体身份的片源，不恢复直接读取文件路径的旧入口。
+- 同步协调器、LAN 传输、同步快照、资料库后台服务和连接展示状态分别归入 Sync、Library 与 Connectivity。设备信任、在线状态、实际线路、资料库成员和同步结果保持分离；重复同步幂等，跨库响应在导入前整笔拒绝。
+- 完成两端共享视觉规范升级：Mac 统一页面标题、分区卡片、指标、窗口表面、状态色和空/错/加载表达；iPhone 统一导航、卡片、输入、搜索、按钮、分割线和平台原生页面转场，减少重复描边与嵌套卡片，同时保留原功能位置和术语。
+- 清理根目录中已经迁移的播放器、标签、同步、照片元数据和资料库服务旧文件；架构门禁要求这些实体保持物理归属，并限制总入口文件规模，防止后续再次扎堆。
+- 本次不移动、删除或重命名用户媒体，不改变资料库/媒体/标签/设备 ID，不升级数据库结构或同步协议。Mac 更新为 1.14.0（79），iPhone 更新为 1.12.0（65），iPhone DB 21、同步协议 5 保持不变。
+
+# 镜藏 Lite 1.13.12 / iPhone 1.11.4
 
 - 修复纳入托管后侧栏出现大量媒体 UUID 文件夹的问题：磁盘上继续用媒体身份目录安全隔离同名原片，但来源列表现在只显示一个“托管区”，选择它会一次展示其中的全部媒体。
 - 修复 Mini 重新安装后点击“纳入全部可用引用”没有反应的问题：即使本机偏好设置丢失，也会从资料库已登记的托管位置恢复原托管根目录，并继续复用已经校验的副本。
@@ -294,7 +305,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5150333" type="application/octet-stream" sparkle:edSignature="KStWXPoX1O5xj7x77A2CMWN/hdp0Oku/mYG5CL57dgkgOxUdSTBGW10Ht7eJjPFvyzL9Z1zfZTJDwveRZCe/Bw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5166561" type="application/octet-stream" sparkle:edSignature="ioNicHIKyv0+4Gbz0Wd5YeetDTro6lY/LFTQFnmJOU3SSVJNfbugWj363QvKQVm7WSr31x53RIaodw/F9p2hCQ=="/>
         </item>
     </channel>
 </rss>
