@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.15.1</title>
-            <pubDate>Sun, 23 Aug 2026 15:18:05 +0800</pubDate>
-            <sparkle:version>85</sparkle:version>
-            <sparkle:shortVersionString>1.15.1</sparkle:shortVersionString>
+            <title>1.15.2</title>
+            <pubDate>Sun, 23 Aug 2026 15:42:42 +0800</pubDate>
+            <sparkle:version>86</sparkle:version>
+            <sparkle:shortVersionString>1.15.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.1 / iPhone 1.12.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.2 / iPhone 1.12.4
+
+- 两端建立统一的“安静专业媒体工作台”视觉语言：继续使用镜藏蓝与 Love、Reject、在线等语义色，统一页面底色、内容表面、字体层级、圆角、间距、工具按钮、状态反馈和减少动态效果支持。
+- iPhone 顶部把品牌、当前资料库、连接状态和同步入口合并为紧凑工作栏；正常连接不再长期占用整条横幅，只有同步暂停或存在待同步项目时才显示说明和恢复入口。
+- iPhone 保留媒体、标签、智能、片段、设置五个稳定入口，并改为悬浮圆角导航；小屏幕与较大字体仍保持完整触控区域和明确选中状态。
+- 媒体首页打开后直接显示媒体缩略图或列表，不再先停留在分类中心；所有媒体、未整理、无标签、Love、Reject 和片段导出状态改为筛选面板，搜索、文件位置、媒体类型、排序与显示方式都能随时调整而不修改资料。
+- 标签、片段和设置开始共用页面标题与操作层级；现有资料库、智能文件夹、设备、同步、重复媒体和播放器界面通过公共主题获得一致卡片、弹窗、输入、空状态和错误状态，不改变原有功能入口。
+- Mac 保持专业三栏和高信息密度，只整理顶部工具栏、品牌区、资料库选择、侧边栏选中状态、表面层次和圆角；继续保留键盘、悬停、多选、拖动、检查器和播放器工作流，不套用手机式大卡片。
+- UI 改造不增加数据库读取、不使用滚动区域实时模糊，也不改变资料库/媒体/标签 ID、文件位置、播放器会话和同步协议。Mac 更新为 1.15.2（86），iPhone 更新为 1.12.4（69），iPhone DB 21、同步协议 5 保持不变。
+
+# 镜藏 Lite 1.15.1 / iPhone 1.12.3
 
 - 播放器正式使用本机会话模型：进入播放器时固定当前可见队列，之后改变浏览筛选或排序不会扰动正在播放的顺序；队列到末尾停止，不再回绕，无法播放的项目会被跳过并提示原因。
 - Mac 与 iPhone 统一片段规则：打开已保存片段会定位到入点并保持暂停，播放到出点停止；只有用户明确开启“片段循环”才会重复。iPhone 循环按钮默认关闭，未设置出入点时会说明操作方法，开启与关闭都会立即变色、震动并提示。
@@ -354,7 +364,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5389945" type="application/octet-stream" sparkle:edSignature="b49NY2AeyWYs2dSFZGb3kT3T2OmyhHgAALtD5PXoKEWIQWxWgePQ2F/pPeZeLXg898PyDiRmczLSAZRA+H8SAQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5389448" type="application/octet-stream" sparkle:edSignature="bxR0HuleAN/195thJvShc7y3GpWTLWucqs/Q/T/j80KhlLs5VecYWhkxPhUxz0xJPjsg5Bn1VBOuTStkVrmSCg=="/>
         </item>
     </channel>
 </rss>
