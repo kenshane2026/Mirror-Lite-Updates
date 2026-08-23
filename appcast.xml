@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.15.2</title>
-            <pubDate>Sun, 23 Aug 2026 15:42:42 +0800</pubDate>
-            <sparkle:version>86</sparkle:version>
-            <sparkle:shortVersionString>1.15.2</sparkle:shortVersionString>
+            <title>1.15.3</title>
+            <pubDate>Sun, 23 Aug 2026 16:18:27 +0800</pubDate>
+            <sparkle:version>87</sparkle:version>
+            <sparkle:shortVersionString>1.15.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.2 / iPhone 1.12.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.3 / iPhone 1.12.5
+
+- 设备连接改为以稳定设备 ID 为核心：同一台 Mac 的局域网、Tailscale 100.x 与 MagicDNS 地址会合并为一台设备，不再把每个地址误当作不同设备；可信设备离线后仍保留在“我的可信设备”列表。
+- Mac 设备管理重新分成“本机连接服务、我的可信设备、附近可连接设备、连接新设备和同步状态”，明确显示在线状态、当前实际线路、全部已知线路、最近检查、最近在线、所属资料库与设备身份。
+- 连接状态每 15 秒轻量刷新，局域网和 Tailscale 线路并行检查并优先选择局域网；现在能区分连接超时、Mini 应用未响应、MagicDNS 解析失败、信任凭证失效和协议版本不兼容，不再统一显示模糊的“离线”。
+- 远程信任凭证从偏好设置迁移到 macOS 钥匙串；新配对按客户端设备发放独立凭证，旧地址与旧凭证会尽量自动识别并升级。取消信任只清除本机连接记录，不删除资料库或媒体；仍可统一撤销所有访问本机的设备。
+- iPhone 配对时开始发送稳定设备身份和设备名称，使 Mini 能为每台 iPhone 建立独立信任；旧版客户端仍可兼容连接，不升级同步协议或资料库结构。
+- Mac 主窗口恢复原生标题栏，彻底避开红黄绿窗口按钮；播放器和浏览器改为响应式分配宽度，播放器画面不再被列表挤出，控制栏在窄空间自动切换紧凑版，表格行与表头填满浏览区域，不再留下大片无意义空白。
+- Mac 更新为 1.15.3（87），iPhone 更新为 1.12.5（70）；iPhone DB 21、Mac 数据结构 7、同步协议 5 保持不变，现有资料库无需迁移。
+
+# 镜藏 Lite 1.15.2 / iPhone 1.12.4
 
 - 两端建立统一的“安静专业媒体工作台”视觉语言：继续使用镜藏蓝与 Love、Reject、在线等语义色，统一页面底色、内容表面、字体层级、圆角、间距、工具按钮、状态反馈和减少动态效果支持。
 - iPhone 顶部把品牌、当前资料库、连接状态和同步入口合并为紧凑工作栏；正常连接不再长期占用整条横幅，只有同步暂停或存在待同步项目时才显示说明和恢复入口。
@@ -364,7 +374,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5389448" type="application/octet-stream" sparkle:edSignature="bxR0HuleAN/195thJvShc7y3GpWTLWucqs/Q/T/j80KhlLs5VecYWhkxPhUxz0xJPjsg5Bn1VBOuTStkVrmSCg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5509308" type="application/octet-stream" sparkle:edSignature="XulqWitEqVGJ7ns4VgIlCfHbgTjwX0bJrY15TYdmbaI2YqYWY/uiQBqNEYO9NiOXVJdd2mtPBi6ccDBIiIjiBg=="/>
         </item>
     </channel>
 </rss>
