@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.14.1</title>
-            <pubDate>Sat, 22 Aug 2026 23:16:56 +0800</pubDate>
-            <sparkle:version>80</sparkle:version>
-            <sparkle:shortVersionString>1.14.1</sparkle:shortVersionString>
+            <title>1.14.2</title>
+            <pubDate>Sun, 23 Aug 2026 10:08:15 +0800</pubDate>
+            <sparkle:version>81</sparkle:version>
+            <sparkle:shortVersionString>1.14.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.14.1 / iPhone 1.12.1
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.14.2 / iPhone 1.12.2
+
+- 重复媒体方案确认后立即显示真实整理进度：明确展示准备、完整指纹复核、移入回收站、合并资料和完成状态，并显示当前文件、已完成组数与百分比，不再让长时间整理表现为“点击后无反应”。
+- Mac 新增独立重复媒体任务中心，任务不再依赖审阅窗口生命周期；选择“转到后台”或关闭窗口后会继续执行，完成时主动显示整理结果报告。重新打开审阅台可重新查看仍在执行的进度。
+- iPhone 新增独立后台任务控制器，进度可以折叠为后台状态而不阻塞继续使用页面；任务完成后显示结果报告，离开页面时结果会保留到再次进入，不会丢失完成状态。
+- 整理结果按资料库报告成功组、合并副本、跳过组、耗时及具体跳过原因。只有真正重新校验并成功提交的组才从用户草稿中移除；文件变化、离线或回收失败的组继续保留原决定，便于用户修复后重试。
+- 重复媒体任务、进度和报告成为独立运行时领域实体；执行用例、后台任务中心、进度视图与审阅 Store 保持分层。架构门禁要求两端持续保留独立任务组件，避免执行生命周期重新堆回界面。
+- 本次不主动扫描、移动或删除任何媒体；仍只有用户复核并确认方案后才会执行，不改变资料库/媒体/标签/设备 ID，不升级数据库结构或同步协议。Mac 更新为 1.14.2（81），iPhone 更新为 1.12.2（67），iPhone DB 21、同步协议 5 保持不变。
+
+# 镜藏 Lite 1.14.1 / iPhone 1.12.1
 
 - 重新定义“重复媒体组”为独立领域实体，整理必须经过“人工选择或用户规则 → 生成方案 → 集中复核 → 执行”四步；删除旧的系统推荐保留项、批量自动选取和“一键整理”入口，不再让隐藏算法替用户决定。
 - Mac 新增三栏重复媒体审阅台：左侧批量选择重复组，中间每组只预览一次完全相同的内容，右侧比较文件名、引用/托管、本机/离线、首选位置、资料完整度、大小和分辨率并明确选择保留项。
@@ -315,7 +324,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5240151" type="application/octet-stream" sparkle:edSignature="sHERoYh4Xq410yl7igjF6Lz2rHm4H+SJvLmJTnZPs0nEgQYCjd6gY55/ppFm48pNqe+0Cf6i1xccBSlwkBLrBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5273896" type="application/octet-stream" sparkle:edSignature="ErJb56jK/h/RL73D/lYdUdJyWxKKESyF511U2bfV+GLm6IVl6709NbqNWPwD4EPrted8CsviX8m88eJYD978Cw=="/>
         </item>
     </channel>
 </rss>
