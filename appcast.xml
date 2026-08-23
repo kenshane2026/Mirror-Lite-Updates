@@ -3,13 +3,34 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.14.2</title>
-            <pubDate>Sun, 23 Aug 2026 10:08:15 +0800</pubDate>
-            <sparkle:version>81</sparkle:version>
-            <sparkle:shortVersionString>1.14.2</sparkle:shortVersionString>
+            <title>1.15.0</title>
+            <pubDate>Sun, 23 Aug 2026 11:51:59 +0800</pubDate>
+            <sparkle:version>84</sparkle:version>
+            <sparkle:shortVersionString>1.15.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.14.2 / iPhone 1.12.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.0 / iPhone 1.12.2
+
+- 媒体名称与物理文件位置正式分离：资料仍保持同一个稳定身份和显示名，引用、托管、下载、离线与远程副本统一由独立 `MediaLocation` 记录表达。每台 Mac 可以选择自己的首选位置；首选磁盘离线时只临时回退到其他可用副本，不会偷偷改掉用户选择。
+- Mac 资料库将存储根和媒体位置从整块状态拆为独立 SQLite 记录。旧资料库继续直接读取，首次新保存前沿用自动备份并原子迁移；媒体、标签和片段 ID 不变。新版本资料库若要降级，需恢复迁移前备份。
+- 托管改为持久化本机任务：按字节显示文件数、容量、速度和预计剩余时间，支持暂停、继续、取消、失败重试以及重启后手动继续；切换页面或资料库不会取消复制，结果会登记回任务所属资料库。
+- 托管复制继续保持原始文件名和媒体身份目录，最多两路分块复制并复用未完成的临时文件。每个成功副本立即独立登记，随后在后台比较原片与副本的完整指纹；只有完整校验通过的托管副本才允许清理旧位置，原文件仍永不自动删除。
+- 资料库普通保存改为串行后台持久化，写入失败会用完整快照安全重试，正常退出前等待落盘；文件管理的大型位置投影也移出主线程并合并重复刷新。性能诊断新增 16 ms 交互保存调度和 500 ms 文件管理投影目标。
+- 新增 20,000 个媒体、60,000 个位置的 SQLite 与文件管理投影基线，以及首选位置回退、托管任务恢复、逐项登记、原名复制和完整校验测试。Mac 更新为 1.15.0（84），iPhone 保持 1.12.2（67），同步协议 5 与 iPhone DB 21 不变。
+
+# 镜藏 Lite 1.14.4 / iPhone 1.12.2
+
+- 修复 Mac 重复媒体确认执行时复核页短暂变成大块空白的问题：现在先完整关闭“整理方案复核”，关闭完成后才启动整理任务和清空方案。
+- 保持安全确认、固定状态栏进度、后台整理和结果报告不变；不改文件处理、资料库/媒体/标签/设备 ID、数据库结构或同步协议。Mac 更新为 1.14.4（83），iPhone 保持 1.12.2（67）。
+
+# 镜藏 Lite 1.14.3 / iPhone 1.12.2
+
+- 修复 Mac 重复媒体执行方案时提示顺序错误：生成方案后的说明不再滞留到执行开始后弹出，正确流程恢复为“复核方案 → 安全确认 → 显示整理进度 → 展示结果报告”。
+- 整理进度改为复用窗口原有固定状态栏，不再临时插入和移除一整块进度面板，避免三栏审阅内容在任务开始和结束时反复上下跳动。
+- 整理完成时先保持 100% 完成状态和当前审阅画面，结果报告关闭后才刷新已处理重复组，减少快速任务连续触发多次界面重排。
+- 本次只调整 Mac 重复媒体界面状态和展示顺序，不改变整理规则、文件处理、资料库/媒体/标签/设备 ID、数据库结构或同步协议。Mac 更新为 1.14.3（82），iPhone 保持 1.12.2（67）。
+
+# 镜藏 Lite 1.14.2 / iPhone 1.12.2
 
 - 重复媒体方案确认后立即显示真实整理进度：明确展示准备、完整指纹复核、移入回收站、合并资料和完成状态，并显示当前文件、已完成组数与百分比，不再让长时间整理表现为“点击后无反应”。
 - Mac 新增独立重复媒体任务中心，任务不再依赖审阅窗口生命周期；选择“转到后台”或关闭窗口后会继续执行，完成时主动显示整理结果报告。重新打开审阅台可重新查看仍在执行的进度。
@@ -324,7 +345,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5273896" type="application/octet-stream" sparkle:edSignature="ErJb56jK/h/RL73D/lYdUdJyWxKKESyF511U2bfV+GLm6IVl6709NbqNWPwD4EPrted8CsviX8m88eJYD978Cw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5368531" type="application/octet-stream" sparkle:edSignature="+2XjSGeS6lbUmyuPCaa2WidgN3btKCcu+6A9lImtrD0va9mo/LiqH1zrSyviwdUEWTMq3VsO1+Aq5AtmPK5TBA=="/>
         </item>
     </channel>
 </rss>
