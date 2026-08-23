@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.15.0</title>
-            <pubDate>Sun, 23 Aug 2026 11:51:59 +0800</pubDate>
-            <sparkle:version>84</sparkle:version>
-            <sparkle:shortVersionString>1.15.0</sparkle:shortVersionString>
+            <title>1.15.1</title>
+            <pubDate>Sun, 23 Aug 2026 15:18:05 +0800</pubDate>
+            <sparkle:version>85</sparkle:version>
+            <sparkle:shortVersionString>1.15.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.0 / iPhone 1.12.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.1 / iPhone 1.12.3
+
+- 播放器正式使用本机会话模型：进入播放器时固定当前可见队列，之后改变浏览筛选或排序不会扰动正在播放的顺序；队列到末尾停止，不再回绕，无法播放的项目会被跳过并提示原因。
+- Mac 与 iPhone 统一片段规则：打开已保存片段会定位到入点并保持暂停，播放到出点停止；只有用户明确开启“片段循环”才会重复。iPhone 循环按钮默认关闭，未设置出入点时会说明操作方法，开启与关闭都会立即变色、震动并提示。
+- iPhone 点击视频后立即进入播放器工作区，片源解析与远程缓冲改在播放器画面内显示；原生 AVPlayer 主动推送位置、播放、缓冲和错误事件，移除每 250 ms 两次跨端轮询，远程缓冲 7 秒后显示恢复操作。
+- 两端按资料库在本机恢复媒体、固定队列、位置、选中片段、出入点和编辑模式，恢复时始终暂停且不恢复全屏；会话只保存稳定 ID 和时间，不保存文件路径、URL、播放中状态，也不进入资料库同步。
+- 保留单播放器和最多前后两项预载，明确播放器外壳 100 ms、本机首帧 800 ms、预载相邻项 300 ms、远程恢复提示 7 秒的验收预算。新增两端队列、片段范围、离线跳过与本地恢复测试。
+- 播放会话规则从界面层抽到独立 Domain；iPhone 原生播放事件适配器和 Organizer 播放运行时已独立成文件，AppDelegate 与大型页面不再承担状态轮询。数据库结构、资料库/媒体/标签 ID、文件位置和同步协议均不改变。Mac 更新为 1.15.1（85），iPhone 更新为 1.12.3（68），iPhone DB 21、同步协议 5 保持不变。
+
+# 镜藏 Lite 1.15.0 / iPhone 1.12.2
 
 - 媒体名称与物理文件位置正式分离：资料仍保持同一个稳定身份和显示名，引用、托管、下载、离线与远程副本统一由独立 `MediaLocation` 记录表达。每台 Mac 可以选择自己的首选位置；首选磁盘离线时只临时回退到其他可用副本，不会偷偷改掉用户选择。
 - Mac 资料库将存储根和媒体位置从整块状态拆为独立 SQLite 记录。旧资料库继续直接读取，首次新保存前沿用自动备份并原子迁移；媒体、标签和片段 ID 不变。新版本资料库若要降级，需恢复迁移前备份。
@@ -345,7 +354,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5368531" type="application/octet-stream" sparkle:edSignature="+2XjSGeS6lbUmyuPCaa2WidgN3btKCcu+6A9lImtrD0va9mo/LiqH1zrSyviwdUEWTMq3VsO1+Aq5AtmPK5TBA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5389945" type="application/octet-stream" sparkle:edSignature="b49NY2AeyWYs2dSFZGb3kT3T2OmyhHgAALtD5PXoKEWIQWxWgePQ2F/pPeZeLXg898PyDiRmczLSAZRA+H8SAQ=="/>
         </item>
     </channel>
 </rss>
