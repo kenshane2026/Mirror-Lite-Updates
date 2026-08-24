@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.16.0</title>
-            <pubDate>Mon, 24 Aug 2026 13:27:11 +0800</pubDate>
-            <sparkle:version>88</sparkle:version>
-            <sparkle:shortVersionString>1.16.0</sparkle:shortVersionString>
+            <title>1.16.1</title>
+            <pubDate>Mon, 24 Aug 2026 15:45:31 +0800</pubDate>
+            <sparkle:version>89</sparkle:version>
+            <sparkle:shortVersionString>1.16.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.0 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.1 / iPhone 1.12.5
+
+- Library Browser 的默认媒体读取链正式切换为 `View → LibraryBrowserStore → LoadAssetBrowserPage → AssetQueryRepository → SQLite`，列表展示只持有轻量 `AssetSummary`，不再从 `LibraryStore.data.videos` 全量筛选、排序或切片。
+- 浏览分页直接查询既有 `assets`、`asset_metadata`、`asset_locations` 和 `storage_roots`，采用稳定排序值与 Asset ID 组成的 Keyset Cursor；没有使用 OFFSET，也没有先加载全部媒体再做内存分页。每页最多读取 120 项，滚动接近页尾时按需追加。
+- 搜索、媒体类型、导入时间、名称、时长、类型、大小和可用状态均由结构化 SQLite 查询完成；缩略图、选择、播放和右键文件动作只通过 Asset ID 进入临时旧功能适配器，Browser 展示模型不会退回 `VideoItem`。
+- 标签、智能文件夹、来源文件夹、最近整理和其他仍依赖旧关系数据的筛选明确使用兼容 Browser；结构化表缺失、目录数量不完整、查询失败或分页数据异常时也会自动回退，避免把已有资料误显示为空库。
+- 新增 2,000 Asset 全量游标一致性、10,000 Asset 首屏性能、Metadata/Location 字段对照和查询失败回退测试。测试数据库中，10,000 Asset 首屏结构化查询为 21 ms、仅返回 120 个 Summary；旧链路全量解码 10,000 个 VideoItem 为 203 ms。
+- 本阶段只迁移 Mac Browser 读取，不删除 `VideoItem`，不改变写入、导入、播放器、标签、片段、同步、文件管理、重复媒体、导出、SQLite Schema、Mac 数据结构或同步协议。Mac 更新为 1.16.1（89），iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.16.0 / iPhone 1.12.5
 
 - 资料库升级为目录型 `*.mirrorlibrary`：每个 Library 独立拥有 `Database`、可选的 `Original Media`、`Thumbnails`、`Cache` 和 `Analysis`。旧版平铺 SQLite 会在后台通过 SQLite 一致性快照复制进 Library 包，原数据库继续保留为恢复来源，迁移过程不移动或删除任何媒体。
 - 建立正式 Asset 核心：媒体身份与物理路径分离，Asset、AssetLocation、StorageRoot 和带来源版本的 Metadata 分别写入规范化 SQLite 表；现有 `VideoItem` 记录继续双写作为 iPhone 同步兼容层，资料库、媒体、标签、片段和设备 ID 均不改变。
@@ -386,7 +395,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5548798" type="application/octet-stream" sparkle:edSignature="YUoYtkOynJpIKtLS+0fnYVz/I+kxUuwwMAw8nPAay0ralC94aAl/hcolMJyQhWi8rumXypoGZ6W1fYmgl/EUCg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5781675" type="application/octet-stream" sparkle:edSignature="E6icpmzwbFGKHSfxbs7G0vfD6LV9GexzHMdgCLnrn1kiGF9V0Jf1+z9VXNVypT5nMiBOl1K76fPZGEHPCuPJAg=="/>
         </item>
     </channel>
 </rss>
