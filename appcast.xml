@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.16.4</title>
-            <pubDate>Mon, 24 Aug 2026 17:28:16 +0800</pubDate>
-            <sparkle:version>92</sparkle:version>
-            <sparkle:shortVersionString>1.16.4</sparkle:shortVersionString>
+            <title>1.16.5</title>
+            <pubDate>Mon, 24 Aug 2026 18:11:15 +0800</pubDate>
+            <sparkle:version>93</sparkle:version>
+            <sparkle:shortVersionString>1.16.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.4 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.5 / iPhone 1.12.5
+
+- Mirror Library V2 首条正式写入链完成切换：备注与媒体名称现在通过 `AssetDetailStore → Asset Command Use Case → Command Repository → SQLite` 直接更新结构化 `assets`，不再先修改 VideoItem 再等待反向投影。
+- Metadata 分析、重新分析、失效和失败分别通过 `RecordAssetMetadata`、`InvalidateAssetMetadata` 与 `RecordMetadataFailure` 写入 `asset_metadata`。来源签名在同一事务内校验，原文件变化后，旧分析任务不能覆盖新来源。
+- 新增字段域权威保护：Asset Core 或 Metadata 一旦由 Command 接管，旧的全量保存和增量保存都不会把 VideoItem 的过期值覆盖回结构化表；重启时则由结构化 Asset 单向恢复 VideoItem 兼容视图，避免形成双向循环。
+- Metadata 待分析列表改为直接查询 SQLite 轻量候选，不再先遍历完整 `LibraryData.videos`；分析只读取时长、大小、分辨率和类型，不再隐式计算内容指纹。兼容 VideoItem 每 100 项集中投影保存，减少大型资料库后台保存次数。
+- 不修改 SQLite Schema、LibraryData、records 表结构、同步协议或媒体位置。导入、Location、Bookmark、标签、片段、Sync 与 Backup 继续使用既有兼容路径，后续按独立阶段迁移。
+- 新增 Asset 权威、Metadata 权威、来源签名冲突、失效/失败状态、旧保存保护、重启兼容投影和 10,000 Asset 性能测试；完整 172 项测试通过。10,000 Asset 中单条 Metadata 直接事务约 8 ms。Mac 更新为 1.16.5（93），iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.16.4 / iPhone 1.12.5
 
 - 用户会话选择正式迁移为 `AssetSelectionState` 与 `AssetSessionStore`：单选、多选、当前工作区和跨启动恢复只保存 Library ID 与 Asset ID，不再让 `ContentView`、结构化 Browser 或播放器工作区通过 `selectedVideo`、`VideoItem` 和 `data.videos` 建立运行时状态。
 - 新增 `AssetRuntimeAdapter`，恢复选中项时通过 `AssetQueryRepository → SQLite` 重新读取 `AssetSummary`；切换资料库会先清空上一资料库的选择和队列，只有新资料库完成交互式打开后才提交恢复结果，避免快速切库串状态。
@@ -423,7 +432,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5924428" type="application/octet-stream" sparkle:edSignature="k2G6zLAyzYB7I204xGVRLoFPTB5ZmZ2QjA7FBB8d2BZYYeSlJ6xd8QDE/ycnPhSonGHuaGELasEsLaWDGwSzBw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5993994" type="application/octet-stream" sparkle:edSignature="xYwwSdSO0Qq7Y7doIMF41VUed6Q8j2vDZ9DJ7NnREI+jaU3xnHvEMGUprsya1IuUdwaX2GoXnNgx6btYuhsTBA=="/>
         </item>
     </channel>
 </rss>
