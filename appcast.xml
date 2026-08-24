@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.16.1</title>
-            <pubDate>Mon, 24 Aug 2026 15:45:31 +0800</pubDate>
-            <sparkle:version>89</sparkle:version>
-            <sparkle:shortVersionString>1.16.1</sparkle:shortVersionString>
+            <title>1.16.2</title>
+            <pubDate>Mon, 24 Aug 2026 16:26:16 +0800</pubDate>
+            <sparkle:version>90</sparkle:version>
+            <sparkle:shortVersionString>1.16.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.1 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.2 / iPhone 1.12.5
+
+- Asset 运行时只读边界继续扩展到媒体详情与资料库缩略图：详情页面现在通过 `AssetDetailStore → LoadAssetDetails → AssetQueryRepository → SQLite` 读取名称、类型、导入时间、时长、大小、分辨率、媒体类型、照片元数据、位置与可用状态，不再使用 `VideoItem` 作为展示数据来源。
+- 资料库缩略图改为按当前设备和当前数据库页面批量读取 `AssetThumbnailDescriptor`；每页只查询当前 120 个 Asset 的结构化 Metadata、Location 与 StorageRoot，不再通过 Legacy Adapter 和 `VideoItem` 逐行解析缩略图源。
+- 新增带 Asset ID、媒体类型、来源签名和缩略图引用的 `AssetThumbnailRequest`。来源大小、修改时间或文件身份变化后会自动使用新的缓存身份；现有 Asset ID 与旧指纹缓存仍会按需迁移，内存缓存、磁盘缓存、并发门控和重复请求合并继续保留。
+- 非视频 Quick Look 预览继续使用结构化 Location 解析出的本机 URL；备注保存、默认应用打开、Finder、下载、重新定位和重新分析仍通过既有兼容写入边界执行，不改变写入格式或行为。
+- 新增 2,000 Asset 详情读取、10,000 Asset 当前页缩略图描述符和签名感知缓存复用测试。聚焦测试中单条结构化详情读取约 2 ms，10,000 Asset 目录内批量读取当前 120 个缩略图描述符约 3 ms；同一请求第二次直接命中内存缓存，不重复生成。
+- 本阶段不修改播放器、导入、标签、片段、同步、文件管理、重复媒体、导出、SQLite Schema、Mac 数据结构或同步协议，也不删除 `VideoItem`。Mac 更新为 1.16.2（90），iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.16.1 / iPhone 1.12.5
 
 - Library Browser 的默认媒体读取链正式切换为 `View → LibraryBrowserStore → LoadAssetBrowserPage → AssetQueryRepository → SQLite`，列表展示只持有轻量 `AssetSummary`，不再从 `LibraryStore.data.videos` 全量筛选、排序或切片。
 - 浏览分页直接查询既有 `assets`、`asset_metadata`、`asset_locations` 和 `storage_roots`，采用稳定排序值与 Asset ID 组成的 Keyset Cursor；没有使用 OFFSET，也没有先加载全部媒体再做内存分页。每页最多读取 120 项，滚动接近页尾时按需追加。
@@ -395,7 +404,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5781675" type="application/octet-stream" sparkle:edSignature="E6icpmzwbFGKHSfxbs7G0vfD6LV9GexzHMdgCLnrn1kiGF9V0Jf1+z9VXNVypT5nMiBOl1K76fPZGEHPCuPJAg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5833657" type="application/octet-stream" sparkle:edSignature="2QpIcMCfIqAaQ0TKtKi9BQBAGC8EKCj2Fuwc3L9EhRpaezXfZXh3IclpwJrIUkyhLX1XDlQK5g6CXMCwvuHbDQ=="/>
         </item>
     </channel>
 </rss>
