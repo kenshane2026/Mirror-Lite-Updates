@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.16.5</title>
-            <pubDate>Mon, 24 Aug 2026 18:11:15 +0800</pubDate>
-            <sparkle:version>93</sparkle:version>
-            <sparkle:shortVersionString>1.16.5</sparkle:shortVersionString>
+            <title>1.17.0</title>
+            <pubDate>Mon, 24 Aug 2026 21:32:14 +0800</pubDate>
+            <sparkle:version>94</sparkle:version>
+            <sparkle:shortVersionString>1.17.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.5 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.0 / iPhone 1.12.5
+
+- Mirror Library V2 的媒体生命周期主链完成切换：普通导入现在由 `MediaImportScanner → RegisterImportedAssets → Asset/AssetLocation Command Repository → SQLite` 登记，扫描阶段只收集廉价文件事实，不创建 VideoItem、不生成缩略图、不打开媒体或计算完整指纹。
+- Asset、初始 Metadata、引用 Location 与 StorageRoot 在一个 SQLite 事务内创建；任一项目失败会整批回滚。提交成功后才由单向 Legacy Adapter 生成 VideoItem 兼容视图，旧保存被权威标记阻止反向覆盖结构化 Asset 数据。
+- 文件访问权限从媒体实体和同步数据中移出，新增按 Library ID、Location ID、Device ID 索引的本机 `FileAccessGrant` 存储。新导入、托管和重新定位不再把 security-scoped bookmark 写入 VideoItem；旧 bookmark 仅在兼容边界首次使用时惰性迁移。
+- “复制到 Library”保持先复制、再完整校验、最后批量登记；复制失败或校验失败不会产生假 Location。已有托管副本恢复也改为结构化 Location 事务登记，原文件名、Asset ID 和历史位置均保留。
+- 单个和批量重新定位、真实移动文件、可用性刷新、原位置清理、删除文件位置与删除 Asset 均通过独立 Use Case 和 Command Repository。旧位置改为 `missing`，外接盘离线只更新 Location 的五态可用性，不删除 Asset、标签或片段；批量移动的文件操作或数据库事务失败时会回滚已移动文件。
+- 启动加载由结构化 Asset/Metadata/Location/StorageRoot 单向恢复兼容快照；新命令接管的行不会再被旧 `LibraryStore.save()` 覆盖。Sync、Backup、标签、片段和重复媒体合并仍保留在明确的 Legacy 兼容区，本阶段不修改 SQLite Schema、Mac 数据结构、iPhone DB 或同步协议。
+- 新增导入原子回滚、批量重定位原子性、托管副本校验后登记、离线与位置删除保留 Asset、本机访问授权隔离，以及 1,000 Asset 单事务性能测试。完整 180 项测试通过；1,000 Asset 生命周期登记约 0.15 秒。Mac 更新为 1.17.0（94），iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.16.5 / iPhone 1.12.5
 
 - Mirror Library V2 首条正式写入链完成切换：备注与媒体名称现在通过 `AssetDetailStore → Asset Command Use Case → Command Repository → SQLite` 直接更新结构化 `assets`，不再先修改 VideoItem 再等待反向投影。
 - Metadata 分析、重新分析、失效和失败分别通过 `RecordAssetMetadata`、`InvalidateAssetMetadata` 与 `RecordMetadataFailure` 写入 `asset_metadata`。来源签名在同一事务内校验，原文件变化后，旧分析任务不能覆盖新来源。
@@ -432,7 +442,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5993994" type="application/octet-stream" sparkle:edSignature="xYwwSdSO0Qq7Y7doIMF41VUed6Q8j2vDZ9DJ7NnREI+jaU3xnHvEMGUprsya1IuUdwaX2GoXnNgx6btYuhsTBA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6078929" type="application/octet-stream" sparkle:edSignature="opUSalQuOvx5QAVLRzmoUStBqAaUWjjH5Y+RVf5aV7m/n2pRTpRMMAD3QbtphRmK47VF88Yst71y6F4UQkOZCA=="/>
         </item>
     </channel>
 </rss>
