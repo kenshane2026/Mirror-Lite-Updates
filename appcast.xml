@@ -3,13 +3,25 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.15.3</title>
-            <pubDate>Sun, 23 Aug 2026 16:18:27 +0800</pubDate>
-            <sparkle:version>87</sparkle:version>
-            <sparkle:shortVersionString>1.15.3</sparkle:shortVersionString>
+            <title>1.16.0</title>
+            <pubDate>Mon, 24 Aug 2026 13:27:11 +0800</pubDate>
+            <sparkle:version>88</sparkle:version>
+            <sparkle:shortVersionString>1.16.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.15.3 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.0 / iPhone 1.12.5
+
+- 资料库升级为目录型 `*.mirrorlibrary`：每个 Library 独立拥有 `Database`、可选的 `Original Media`、`Thumbnails`、`Cache` 和 `Analysis`。旧版平铺 SQLite 会在后台通过 SQLite 一致性快照复制进 Library 包，原数据库继续保留为恢复来源，迁移过程不移动或删除任何媒体。
+- 建立正式 Asset 核心：媒体身份与物理路径分离，Asset、AssetLocation、StorageRoot 和带来源版本的 Metadata 分别写入规范化 SQLite 表；现有 `VideoItem` 记录继续双写作为 iPhone 同步兼容层，资料库、媒体、标签、片段和设备 ID 均不改变。
+- 停止导入后自动托管。文件与文件夹默认使用“保留文件原位置”，只做一次登记，不持续监视或重复扫描硬盘；用户也可在导入菜单中明确选择“复制到 Library”。外部文件移动或硬盘断开只会把位置标为离线，Asset 及全部整理资料继续保留并可重新定位。
+- 普通导入改为后台一次枚举，只读取目录项、大小、修改时间和文件身份，不在导入阶段打开视频、生成完整指纹或复制原片；主线程登记使用 O(n) 索引和已知变更集，只调度一次后台 SQLite 事务。1000 个文件的目录扫描基准约 0.9 秒，不再因导入大型原片阻塞窗口。
+- 关闭启动、激活和切库后的隐式全库位置指纹任务；完全重复内容只在用户明确点击扫描时读取完整文件。媒体远程副本判断改为按 Asset 的位置索引查询，不再让每个列表项重复扫描全库位置。
+- Metadata 缓存加入来源签名；大小、修改时间或文件身份变化时才失效。缩略图缓存按 Library 写入其 `Thumbnails` 目录，旧全局缩略图会按需迁入，Derived Data 与原始媒体严格分离。
+- “复制到 Library”仍逐字保留原文件名和外部引用，最多两路有界复制并支持暂停、继续、取消和重试；新复制在写入过程中直接计算完整 SHA-256，完成后批量一次登记和提交，不再为 1000 个文件执行上千次数据库保存或重复读取源文件与副本。
+- 旧外部托管文件不再被当成一个特殊全局文件夹，而作为普通 AssetLocation 原样保留；只有当前 Library 内的 `Original Media` 在侧栏合并显示为“Library 原始媒体”。原文件清理仍必须由用户单独确认，并在完整校验通过后移入 macOS 废纸篓。
+- 新增 Library 包迁移、规范化 Asset 表、千文件扫描、旧托管兼容、Library 原始媒体展示和批量单事务登记测试；Mac 自动测试现为 148 项。Mac 更新为 1.16.0（88），Mac 数据结构更新为 8；iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.15.3 / iPhone 1.12.5
 
 - 设备连接改为以稳定设备 ID 为核心：同一台 Mac 的局域网、Tailscale 100.x 与 MagicDNS 地址会合并为一台设备，不再把每个地址误当作不同设备；可信设备离线后仍保留在“我的可信设备”列表。
 - Mac 设备管理重新分成“本机连接服务、我的可信设备、附近可连接设备、连接新设备和同步状态”，明确显示在线状态、当前实际线路、全部已知线路、最近检查、最近在线、所属资料库与设备身份。
@@ -374,7 +386,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5509308" type="application/octet-stream" sparkle:edSignature="XulqWitEqVGJ7ns4VgIlCfHbgTjwX0bJrY15TYdmbaI2YqYWY/uiQBqNEYO9NiOXVJdd2mtPBi6ccDBIiIjiBg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5548798" type="application/octet-stream" sparkle:edSignature="YUoYtkOynJpIKtLS+0fnYVz/I+kxUuwwMAw8nPAay0ralC94aAl/hcolMJyQhWi8rumXypoGZ6W1fYmgl/EUCg=="/>
         </item>
     </channel>
 </rss>
