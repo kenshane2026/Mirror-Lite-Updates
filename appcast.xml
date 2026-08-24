@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.16.3</title>
-            <pubDate>Mon, 24 Aug 2026 16:54:50 +0800</pubDate>
-            <sparkle:version>91</sparkle:version>
-            <sparkle:shortVersionString>1.16.3</sparkle:shortVersionString>
+            <title>1.16.4</title>
+            <pubDate>Mon, 24 Aug 2026 17:28:16 +0800</pubDate>
+            <sparkle:version>92</sparkle:version>
+            <sparkle:shortVersionString>1.16.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.3 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.16.4 / iPhone 1.12.5
+
+- 用户会话选择正式迁移为 `AssetSelectionState` 与 `AssetSessionStore`：单选、多选、当前工作区和跨启动恢复只保存 Library ID 与 Asset ID，不再让 `ContentView`、结构化 Browser 或播放器工作区通过 `selectedVideo`、`VideoItem` 和 `data.videos` 建立运行时状态。
+- 新增 `AssetRuntimeAdapter`，恢复选中项时通过 `AssetQueryRepository → SQLite` 重新读取 `AssetSummary`；切换资料库会先清空上一资料库的选择和队列，只有新资料库完成交互式打开后才提交恢复结果，避免快速切库串状态。
+- 播放队列模型改为 `assetIDs/currentAssetID`，WorkspaceSession 新写入使用 `selectedAssetID/playbackQueueAssetIDs`；旧 `selectedVideoID`、`mediaIDs` 和 `playbackQueueIDs` 仅保留解码兼容，不再由新版本写出。
+- 结构化 Browser 在首屏显示后独立查询稳定排序的 Asset ID 队列，上一项、下一项、离线跳过、恢复位置和播放范围均继续使用 Asset ID；不加载完整 `LibraryData`，不遍历全部 `VideoItem`，也不阻塞首屏。
+- 10,000 Asset 基线中首屏 120 项约 8 ms、完整稳定 ID 队列约 6 ms/0.1 MB；旧链路完整加载 10,000 个 VideoItem 约 90 ms/14.4 MB。新增选择、多选、切库失效、结构化恢复、新旧会话解码与队列顺序测试。
+- Legacy Browser、导入、文件管理、重新定位、Metadata 写入、标签、片段、同步和导出继续使用兼容写路径；本阶段不修改 SQLite Schema、records、LibraryData、同步协议，也不删除 VideoItem。Mac 更新为 1.16.4（92），iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.16.3 / iPhone 1.12.5
 
 - Playback 读取链正式迁移为 `ViewerWorkspace → PlaybackStore → PlayAsset → AssetLocationResolver → ResolvedAssetSource → PlayableSource → PlayerModel`。播放器入口只传稳定 Asset ID，不再通过 `VideoItem`、旧 path 或 `LibraryStore.mediaURL` 查找原片。
 - 新增只读 `AssetLocationQueryRepository` 与 SQLite 实现，按 Library ID、Asset ID 和当前设备直接查询 `assets`、`asset_locations`、`storage_roots`；播放单条媒体不加载完整 `LibraryData`、不遍历全部 VideoItem，也不扫描文件夹。
@@ -414,7 +423,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5882455" type="application/octet-stream" sparkle:edSignature="NsDro87a92me7ixoUK5mx5zZ9sqQXH/c3Fyqbk3p6q2kvouwdNkheS2z5+/BoqcE8M4DJDkMtE82MyxlylIIBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5924428" type="application/octet-stream" sparkle:edSignature="k2G6zLAyzYB7I204xGVRLoFPTB5ZmZ2QjA7FBB8d2BZYYeSlJ6xd8QDE/ycnPhSonGHuaGELasEsLaWDGwSzBw=="/>
         </item>
     </channel>
 </rss>
