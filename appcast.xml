@@ -3,13 +3,25 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.5</title>
-            <pubDate>Tue, 25 Aug 2026 18:28:45 +0800</pubDate>
-            <sparkle:version>99</sparkle:version>
-            <sparkle:shortVersionString>1.17.5</sparkle:shortVersionString>
+            <title>1.17.6</title>
+            <pubDate>Tue, 25 Aug 2026 20:25:37 +0800</pubDate>
+            <sparkle:version>100</sparkle:version>
+            <sparkle:shortVersionString>1.17.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.5 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.6 / iPhone 1.12.5
+
+- 修复 Mac 主媒体 Browser 没有撑满工作区而被垂直居中、导致“所有媒体”上方出现大片空白的问题；空状态、缩略图和列表现在都从顶部工具栏下方开始，并继续自适应三栏宽度。
+- 修复资料库、来源文件夹、标签、智能文件夹和评价筛选只改变侧栏选中状态、却没有重新执行 Structured SQLite 查询的问题；Browser 标题与当前筛选同步，列表与侧栏数量保持同一查询语义。
+- 左侧栏改为一个完整纵向滚动区域。资料库和来源文件夹全部展开时，可以直接用鼠标或触控板继续滚到标签，不再必须先折叠前面的分区。
+- 媒体列表增加 Finder 式多选：Command 点选切换单项、Shift 点选连续区间、Command+Shift 累加区间、Command+A 选择当前完整筛选结果；搜索输入框保持系统原生 Command+A 文本全选行为。
+- Library `Original Media` 新副本改为平铺保存，不再为每个 Asset 建立 UUID 子文件夹；原文件名优先保持不变，同名冲突使用稳定短 MediaID 后缀，批量并发复制也不会互相覆盖。
+- 文件管理新增“整理旧 Original Media”，由用户明确触发后把历史 UUID 子目录中的媒体校验并平铺、更新对应 AssetLocation，并清理已经为空的旧目录；失败项和无法确认的同内容副本保持原样。
+- 引用媒体现在可选择“复制到 Library”或“移动到 Library”。移动流程固定为复制、完整 SHA-256 校验、Structured SQLite 登记、再次完整校验原位置，最后才把原文件移入 macOS 废纸篓；任一步失败都保留原文件，只有成功项进入清理。
+- 新增右下角非模态操作状态卡，覆盖导入、复制、移动、旧目录整理、原位置清理、批量重新定位、重复扫描、导出、备份、下载和资料库事务。长任务显示阶段与进度，完成或失败提示可关闭，不弹窗抢焦点，不阻止继续浏览、整理和播放。
+- 没有修改数据库 Schema、LibraryID、MediaID、Structured Sync Protocol 6、Backup V2 或 iPhone 数据。新增平铺同名并发、移动只清理成功项、Finder 区间选择等回归；完整 214 项测试、架构门禁和 Release 构建通过。Mac 更新为 1.17.6（100），iPhone 保持 1.12.5（70）。
+
+# 镜藏 Lite 1.17.5 / iPhone 1.12.5
 
 - 修复 Air 在追赶 Mini 的 Structured Sync 变更时持续闪烁“正在读取 Asset 目录”并反复清空列表的问题。同步批次仍逐笔安全提交到 SQLite，但运行时展示刷新现在会合并同步突发，只在数据稳定后发布一次。
 - Browser 的结构化内容刷新改为保留当前可见页面，新首屏查询成功后再原位替换；同步、Metadata 或其他后台提交不再让已经显示的列表退回空白 Loading 状态。
@@ -492,7 +504,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5939946" type="application/octet-stream" sparkle:edSignature="tqHtHaz/o9NnrsAtBJYygq9coO/X2RgZqC/SgK3Wop63fo123JgZQOy+gBaZVpfK4vCafOzQFL69ep7bb4fyCw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6001567" type="application/octet-stream" sparkle:edSignature="y0GjbOSehzgDqWtZ0HtbRH/dXs8ks6GljyZZAcJDeW+KgJm53X566ALJiDLk90Cyy86qVGUn2tce9ATxZozNBA=="/>
         </item>
     </channel>
 </rss>
