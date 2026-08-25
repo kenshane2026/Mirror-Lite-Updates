@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.3</title>
-            <pubDate>Tue, 25 Aug 2026 16:22:02 +0800</pubDate>
-            <sparkle:version>97</sparkle:version>
-            <sparkle:shortVersionString>1.17.3</sparkle:shortVersionString>
+            <title>1.17.4</title>
+            <pubDate>Tue, 25 Aug 2026 18:10:32 +0800</pubDate>
+            <sparkle:version>98</sparkle:version>
+            <sparkle:shortVersionString>1.17.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.3 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.4 / iPhone 1.12.5
+
+- Mirror Library V2 Phase 7.2 完成 Legacy Architecture Retirement：正常运行链固定为 `View → Feature Store → Use Case → Repository → Structured SQLite`；`LibraryStore` 与 Asset、文件、播放、标签、片段等核心 Feature 已不再引用 `VideoItem`、`LibraryData.videos` 或 `videoIndex`。
+- V2 资料库启动现在只打开并校验结构化 SQLite，再加载轻量运行时关系状态；不会解码 `records(kind: video)`，不会构造完整 `[VideoItem]`。10,000 Asset 专项回归中结构化启动约 35 ms，VideoItem materialization 为 0。
+- 删除无生产消费者的旧 Browser、旧相邻播放、旧路径/书签读取、旧 VideoItem 删除/占位合并、旧 Asset/Location/Segment 持久投影和旧同步运行时投影。来源文件夹、可用性刷新、第二硬盘恢复、导出和批量删除改为结构化 Asset/Location 查询与命令。
+- 正常 Structured 写入停止维护 `records(kind: video)` 持久镜像；旧行采用“停止读取、停止写入、延迟清理”的数据安全策略。Legacy 保存门禁继续阻止旧快照覆盖 Asset、Metadata、Location、Tag/Rating、Segment/Marker 权威。
+- Protocol 5 暂时保留为按需边界转换：旧入站快照先转换为 Structured Change，旧出站只在真实兼容请求发生时由 SQLite 生成完整 DTO，不再要求运行时常驻 VideoItem 世界。彻底删除门禁仍为 Mac 与 iPhone 均升级 Protocol 6、旧客户端停止支持且真机同步验收通过。
+- 旧 JSON Backup Import、旧 `.mirrorlibrary` 数据库升级与单条历史 bookmark 提升继续作为 Compatibility/Migration Adapter 保留；它们不会进入正常 Runtime，也不会反向成为数据权威。Backup V2 与 Structured Sync Protocol 6 保持结构化实现。
+- Duplicate Merge 已通过结构化事务处理 Asset、Location、Tag、Rating、Segment、Marker 与 tombstone；全量 LibraryData Snapshot Undo 对结构化 V2 域禁用，避免撤销操作覆盖新权威。
+- 新增并强化 Phase 7.2 架构依赖门禁和专项回归。完整 208 项测试 / 25 个 Suite、Structured Sync、Backup V2、旧资料库迁移、Protocol 5 兼容、10,000 Asset 性能基线、Release 构建与 diff 检查均已通过。Mac 更新为 1.17.4（98）；数据结构 9、同步协议 6、iPhone 1.12.5（70）均不变。
+
+# 镜藏 Lite 1.17.3 / iPhone 1.12.5
 
 - Mirror Library V2 Phase 7.1 完成 Backup V2：手动备份与资料库检查点现在从结构化 SQLite 通过 SQLite Backup API 创建一致性快照，不再编码完整 `LibraryData / VideoItem JSON`。备份采用明确版本的 `*.mirrorbackup` 包，包含 `Manifest.json`、单文件 SQLite，以及完整备份时可选的 `Original Media`。
 - 新增 Database Backup 与 Full Library Backup。默认延续快速数据库备份；用户可明确勾选包含 Library 原始媒体。原片逐文件复制并以 SHA-256 复核，缩略图、Cache 与临时 Analysis 不属于恢复正确性的必要内容。
@@ -472,7 +483,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6347958" type="application/octet-stream" sparkle:edSignature="wUk9F4zEJgnF8qwJ5PxNtcz2ueVXWFFy31/lRxYgFAkLnUWBzpUiKgBTuIVtKnRqITTEzHAazyQoQeBjDXRHDw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5935395" type="application/octet-stream" sparkle:edSignature="m76tLBJkzzCPHUAplkrneCVHHKj0WJsCOYlmyuxEPxY2rXoNgyd2KAIETaiwA/TT+bakucPSAS1Aj8HFsdiBAA=="/>
         </item>
     </channel>
 </rss>
