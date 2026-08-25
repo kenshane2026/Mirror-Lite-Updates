@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.2</title>
-            <pubDate>Tue, 25 Aug 2026 10:50:30 +0800</pubDate>
-            <sparkle:version>96</sparkle:version>
-            <sparkle:shortVersionString>1.17.2</sparkle:shortVersionString>
+            <title>1.17.3</title>
+            <pubDate>Tue, 25 Aug 2026 16:22:02 +0800</pubDate>
+            <sparkle:version>97</sparkle:version>
+            <sparkle:shortVersionString>1.17.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.2 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.3 / iPhone 1.12.5
+
+- Mirror Library V2 Phase 7.1 完成 Backup V2：手动备份与资料库检查点现在从结构化 SQLite 通过 SQLite Backup API 创建一致性快照，不再编码完整 `LibraryData / VideoItem JSON`。备份采用明确版本的 `*.mirrorbackup` 包，包含 `Manifest.json`、单文件 SQLite，以及完整备份时可选的 `Original Media`。
+- 新增 Database Backup 与 Full Library Backup。默认延续快速数据库备份；用户可明确勾选包含 Library 原始媒体。原片逐文件复制并以 SHA-256 复核，缩略图、Cache 与临时 Analysis 不属于恢复正确性的必要内容。
+- 快照会在副本内清除 VideoItem、旧 StorageRoot/MediaLocation 兼容 payload、本机挂载路径、在线状态、验证错误、设备游标与本机同步身份，并将结构化 Asset/Metadata/Location/StorageRoot 提升为单向权威；security-scoped bookmark 与 `FileAccessGrant` 本来就只在设备本机存储，不进入备份。
+- Structured Sync 的持久 Change Journal 与 tombstone 会随一致性快照保留；设备专属 cursor、`local_device_id` 与临时 journal 抑制状态不会迁移。恢复时重新绑定当前设备同步身份，外部 Location 保留但默认离线，Library 内托管原片仅在文件实际存在并校验后恢复为本机在线。
+- 恢复流程改为“识别格式 → 临时恢复 → Manifest/版本/必要表/`integrity_check`/外键与原片校验 → 确认后切换”。目标资料库在全部校验完成前保持不动；切换过程保留 SQLite 回滚快照，任何失败都会恢复原数据库和原片目录，不会先删除当前资料库。
+- 旧 `.json` 备份继续作为只读导入格式：一次性解码后转换为结构化 SQLite、提升权威并完成同样的可移植性校验；新版本不再生成旧 JSON 备份，也没有执行 VideoItem、LibraryData、records、library_state、Protocol 5 或 iPhone 兼容代码退役。
+- 新增 12 项 Backup V2 专项测试，覆盖结构化域往返、Tag/Rating/Segment/Marker、tombstone、同步日志、FileAccessGrant 隔离、外部位置离线、完整原片、中断/未来/损坏备份、恢复失败安全、旧 JSON 转换和 10,000 Asset。10,000 Asset 数据库备份在本机回归中约 0.2–0.5 秒，快照中 VideoItem 行数为 0，不构造完整 LibraryData。Mac 更新为 1.17.3（97）；数据结构 9、同步协议 6、iPhone 1.12.5（70）均不变。
+
+# 镜藏 Lite 1.17.2 / iPhone 1.12.5
 
 - Mirror Library V2 Phase 6 完成结构化增量同步迁移：Asset、Metadata、StorageRoot、Location、标签分类、标签、AssetTag、Rating、Segment、SegmentTag 与 Marker 的事务提交会在同一 SQLite 事务内写入持久 Change Journal；新设备之间不再把完整 `LibraryData / VideoItem Snapshot` 作为同步权威。
 - 新增 `StructuredSyncEnvelope / SyncChange`、逐设备游标和 SQLite 合并事务。出站只按游标读取待发送变化；入站先校验资料库与协议，再按 `updatedAt → originDeviceID → changeID` 的稳定规则解决冲突，重复投递幂等，任一实体应用失败会整笔回滚，未确认变化在网络失败或重启后继续保留。
@@ -462,7 +472,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6289243" type="application/octet-stream" sparkle:edSignature="AP+8t70TK6lbU8rCD1cueSDXKSRmFMHChHiQZzesgBzH4VXdp9HLDrDa3O2bMqQ6uOAOsu9pWs3N8E0/+si+Dg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6347958" type="application/octet-stream" sparkle:edSignature="wUk9F4zEJgnF8qwJ5PxNtcz2ueVXWFFy31/lRxYgFAkLnUWBzpUiKgBTuIVtKnRqITTEzHAazyQoQeBjDXRHDw=="/>
         </item>
     </channel>
 </rss>
