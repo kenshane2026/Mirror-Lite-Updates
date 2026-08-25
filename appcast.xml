@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.4</title>
-            <pubDate>Tue, 25 Aug 2026 18:10:32 +0800</pubDate>
-            <sparkle:version>98</sparkle:version>
-            <sparkle:shortVersionString>1.17.4</sparkle:shortVersionString>
+            <title>1.17.5</title>
+            <pubDate>Tue, 25 Aug 2026 18:28:45 +0800</pubDate>
+            <sparkle:version>99</sparkle:version>
+            <sparkle:shortVersionString>1.17.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.4 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.5 / iPhone 1.12.5
+
+- 修复 Air 在追赶 Mini 的 Structured Sync 变更时持续闪烁“正在读取 Asset 目录”并反复清空列表的问题。同步批次仍逐笔安全提交到 SQLite，但运行时展示刷新现在会合并同步突发，只在数据稳定后发布一次。
+- Browser 的结构化内容刷新改为保留当前可见页面，新首屏查询成功后再原位替换；同步、Metadata 或其他后台提交不再让已经显示的列表退回空白 Loading 状态。
+- 修复旧托管布局把每个媒体内部 UUID 目录误当成来源文件夹的问题。所有 Managed Location 统一复用托管命名领域规则折叠内部目录，侧栏展示“托管区”或“Library 原始媒体”，Structured SQLite 来源筛选与展示规则保持一致。
+- 无有效本机根路径的历史 Location 不再进入来源文件夹投影，避免同步过来的远程/旧设备路径生成虚假本地目录；Asset 和 Location 记录本身完整保留，不修改、不删除用户媒体。
+- 本机 `main` 资料库诊断确认单次结构化打开约 470 ms、启动至可操作约 824 ms，首屏查询约 20–54 ms；卡顿根因是同步批次造成的重复 UI 刷新，而不是 SQLite 分页本身。
+- 新增同步突发只发布一次刷新、刷新期间保留可见列表、外部托管目录折叠及折叠后 SQLite 来源筛选回归。Mac 更新为 1.17.5（99）；数据结构 9、同步协议 6、iPhone 1.12.5（70）均不变。
+
+# 镜藏 Lite 1.17.4 / iPhone 1.12.5
 
 - Mirror Library V2 Phase 7.2 完成 Legacy Architecture Retirement：正常运行链固定为 `View → Feature Store → Use Case → Repository → Structured SQLite`；`LibraryStore` 与 Asset、文件、播放、标签、片段等核心 Feature 已不再引用 `VideoItem`、`LibraryData.videos` 或 `videoIndex`。
 - V2 资料库启动现在只打开并校验结构化 SQLite，再加载轻量运行时关系状态；不会解码 `records(kind: video)`，不会构造完整 `[VideoItem]`。10,000 Asset 专项回归中结构化启动约 35 ms，VideoItem materialization 为 0。
@@ -483,7 +492,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5935395" type="application/octet-stream" sparkle:edSignature="m76tLBJkzzCPHUAplkrneCVHHKj0WJsCOYlmyuxEPxY2rXoNgyd2KAIETaiwA/TT+bakucPSAS1Aj8HFsdiBAA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="5939946" type="application/octet-stream" sparkle:edSignature="tqHtHaz/o9NnrsAtBJYygq9coO/X2RgZqC/SgK3Wop63fo123JgZQOy+gBaZVpfK4vCafOzQFL69ep7bb4fyCw=="/>
         </item>
     </channel>
 </rss>
