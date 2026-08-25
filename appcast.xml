@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.0</title>
-            <pubDate>Mon, 24 Aug 2026 21:32:14 +0800</pubDate>
-            <sparkle:version>94</sparkle:version>
-            <sparkle:shortVersionString>1.17.0</sparkle:shortVersionString>
+            <title>1.17.1</title>
+            <pubDate>Tue, 25 Aug 2026 09:52:41 +0800</pubDate>
+            <sparkle:version>95</sparkle:version>
+            <sparkle:shortVersionString>1.17.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.0 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.1 / iPhone 1.12.5
+
+- Mirror Library V2 Phase 5.2 完成 Segment 与 Marker 关系边界迁移：片段和时间标记现在通过独立 `Query Repository → Use Case → Command Repository → SQLite records` 读取与写入，实体只保存 Asset ID、时间范围、标题、备注和关系状态，不包含路径、bookmark、URL 或 VideoItem。
+- 新增 `SegmentStore` 与 `MarkerStore`，播放器的片段创建、范围调整、备注、Love/Reject、删除和标记增删均从专用 Store 进入关系命令，不再由 View 直接修改 `LibraryData.segments/markers`；当前片段与精确范围读取也统一通过 Store。
+- SegmentTag 从 Segment 本体中拆成独立的多对多权威记录；`Segment.tagIDs` 只作为旧 Sync/Backup/UI 的单向兼容投影。增加标签、移除标签和整组替换均在 SQLite 事务内同时提交关系记录与兼容 payload。
+- 片段导出成功后改由 `RecordSegmentExport` 记录 `exportedAt`；导出文件仍由原有 `SegmentExportService` 负责，文件写入和关系状态职责不再混在一起，导出失败不会错误登记成功状态。
+- 增加逐实体关系权威和删除权威保护。新命令接管的 Segment/Marker 不会再被旧的全量或增量 `LibraryStore.save()` 覆盖，删除后的关系也不能被过期 `LibraryData` 复活；重启时由 SQLite 单向恢复兼容数组。
+- 新增 `SegmentMigrationValidator`，可比较旧、新 Segment/Marker 数量、ID 与字段一致性，不自动删除旧数据。Sync、Backup、重复媒体合并及初始化清理继续保留在明确的 Legacy 区，本阶段不修改数据库 Schema、records 表、iPhone DB 或同步协议。
+- 新增 Segment 创建/更新/范围/描述/导出、SegmentTag 独立关系、Marker CRUD、旧保存保护、删除防复活和迁移校验测试；完整 185 项测试、架构边界检查与 Release 构建通过。Mac 更新为 1.17.1（95），iPhone 保持 1.12.5（70）、iPhone DB 21、同步协议 5 不变。
+
+# 镜藏 Lite 1.17.0 / iPhone 1.12.5
 
 - Mirror Library V2 的媒体生命周期主链完成切换：普通导入现在由 `MediaImportScanner → RegisterImportedAssets → Asset/AssetLocation Command Repository → SQLite` 登记，扫描阶段只收集廉价文件事实，不创建 VideoItem、不生成缩略图、不打开媒体或计算完整指纹。
 - Asset、初始 Metadata、引用 Location 与 StorageRoot 在一个 SQLite 事务内创建；任一项目失败会整批回滚。提交成功后才由单向 Legacy Adapter 生成 VideoItem 兼容视图，旧保存被权威标记阻止反向覆盖结构化 Asset 数据。
@@ -442,7 +452,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6078929" type="application/octet-stream" sparkle:edSignature="opUSalQuOvx5QAVLRzmoUStBqAaUWjjH5Y+RVf5aV7m/n2pRTpRMMAD3QbtphRmK47VF88Yst71y6F4UQkOZCA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6164514" type="application/octet-stream" sparkle:edSignature="bOeL6m78cPxnyDk0A94rMRTg8/KB+elIPQdT3FRBHyQI7rZ9cgVdnrZfM5IlWkEe4s7WrpJ+CljBhmlcEN1kBQ=="/>
         </item>
     </channel>
 </rss>
