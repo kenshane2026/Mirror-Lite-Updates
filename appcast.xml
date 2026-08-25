@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.6</title>
-            <pubDate>Tue, 25 Aug 2026 20:25:37 +0800</pubDate>
-            <sparkle:version>100</sparkle:version>
-            <sparkle:shortVersionString>1.17.6</sparkle:shortVersionString>
+            <title>1.17.7</title>
+            <pubDate>Tue, 25 Aug 2026 22:26:50 +0800</pubDate>
+            <sparkle:version>101</sparkle:version>
+            <sparkle:shortVersionString>1.17.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.6 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.7 / iPhone 1.12.5
+
+- 资料库升级为可放在任意文件夹或外接硬盘的独立 `*.mirrorlibrary` 包；新建时先选择位置，也可以通过“打开资料库…”或在访达中双击资料库包重新加入本机。软件本体只保留设备本地的最近资料库指针与安全访问授权，LibraryID、Structured SQLite、Original Media、缩略图和分析缓存都在资料库包内。
+- “资料库管理”新增“搬移整个资料库”：先检查目标空间，通过 SQLite Backup API 建立一致性快照，复制整个包，并对 Original Media 逐文件执行完整 SHA-256 校验；所有验证完成后才原子切换到新位置。旧位置默认保留作为回退副本，实际验收后可明确移入 macOS 废纸篓。
+- 外接硬盘未连接时资料库明确显示“磁盘未连接”，不会在电脑内置硬盘自动创建同 LibraryID 的空资料库，也不会静默改用旧路径。缺少 `Database/library.sqlite` 或身份不一致的包会被拒绝打开。
+- 包内 Original Media 的结构化位置改为跟随 LibraryID 的可迁移位置；搬移后不再指向旧硬盘路径，在另一台 Mac 打开同一个包时会为当前设备激活可用位置，同时保持 AssetID、标签、片段、评价和历史设备位置不变。包外的外部引用与历史托管目录不会被误改。
+- 历史“每个视频一个 UUID 文件夹”的托管位置在新资料库外时，继续作为“外部媒体”进入文件管理候选；可以复制或安全移动到当前资料库的平铺 `Original Media`，也可以使用“整理旧 Original Media”处理已经位于包内的旧 UUID 子目录。同名冲突继续使用稳定短 MediaID 后缀。
+- 资料库新建、打开、搬移和清理都接入非模态操作状态卡；搬移显示检查、复制、完整校验和切换阶段，不抢焦点、不阻断正常浏览。删除本机最近资料库记录不会删除独立外置资料库包。
+- 没有修改数据库 Schema、LibraryID、MediaID、Structured Sync Protocol 6、Backup V2 或 iPhone 数据；没有引入新的 Legacy Runtime 依赖。新增独立包创建、离线保护、损坏包拒绝、搬移一致性、标签/片段保留、Original Media 路径重写、跨设备激活及历史外部托管候选回归。完整 219 项测试与架构门禁通过。Mac 更新为 1.17.7（101），iPhone 保持 1.12.5（70）。
+
+# 镜藏 Lite 1.17.6 / iPhone 1.12.5
 
 - 修复 Mac 主媒体 Browser 没有撑满工作区而被垂直居中、导致“所有媒体”上方出现大片空白的问题；空状态、缩略图和列表现在都从顶部工具栏下方开始，并继续自适应三栏宽度。
 - 修复资料库、来源文件夹、标签、智能文件夹和评价筛选只改变侧栏选中状态、却没有重新执行 Structured SQLite 查询的问题；Browser 标题与当前筛选同步，列表与侧栏数量保持同一查询语义。
@@ -504,7 +514,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6001567" type="application/octet-stream" sparkle:edSignature="y0GjbOSehzgDqWtZ0HtbRH/dXs8ks6GljyZZAcJDeW+KgJm53X566ALJiDLk90Cyy86qVGUn2tce9ATxZozNBA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6118384" type="application/octet-stream" sparkle:edSignature="YsTRdXNUdXngwx0qcoYDBh15BJGIxfdb3PVBDxAlZitiBW6sSSdTxGLe7HD2gopqTQyusoqNwI0n6Lv6b9pHAw=="/>
         </item>
     </channel>
 </rss>
