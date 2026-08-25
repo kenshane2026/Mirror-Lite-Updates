@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.1</title>
-            <pubDate>Tue, 25 Aug 2026 09:52:41 +0800</pubDate>
-            <sparkle:version>95</sparkle:version>
-            <sparkle:shortVersionString>1.17.1</sparkle:shortVersionString>
+            <title>1.17.2</title>
+            <pubDate>Tue, 25 Aug 2026 10:50:30 +0800</pubDate>
+            <sparkle:version>96</sparkle:version>
+            <sparkle:shortVersionString>1.17.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.1 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.2 / iPhone 1.12.5
+
+- Mirror Library V2 Phase 6 完成结构化增量同步迁移：Asset、Metadata、StorageRoot、Location、标签分类、标签、AssetTag、Rating、Segment、SegmentTag 与 Marker 的事务提交会在同一 SQLite 事务内写入持久 Change Journal；新设备之间不再把完整 `LibraryData / VideoItem Snapshot` 作为同步权威。
+- 新增 `StructuredSyncEnvelope / SyncChange`、逐设备游标和 SQLite 合并事务。出站只按游标读取待发送变化；入站先校验资料库与协议，再按 `updatedAt → originDeviceID → changeID` 的稳定规则解决冲突，重复投递幂等，任一实体应用失败会整笔回滚，未确认变化在网络失败或重启后继续保留。
+- 删除统一使用结构化 delete change 与现有 Authority tombstone，Asset、Tag、Segment、Marker、Location 和关系删除不会被迟到的旧 upsert 复活；不同实体变化独立合并，一个设备修改备注、另一个设备创建片段时两者都会保留。
+- Location 同步只携带跨设备可理解的逻辑身份、相对路径、校验与指纹；security-scoped bookmark、`FileAccessGrant`、本机挂载路径、在线/离线、验证错误、线路延迟、播放/UI 状态、凭据与缓存均不会进入同步 payload。远程 Location 在本机默认登记为离线，Asset 继续保留。
+- 保留现有 LAN/Tailscale 发现、配对、加密、请求缓存和媒体传输。协议 6 的 Mac 使用结构化数据包并按 2,000 项有界分页自动续传；协议 5 的 Mac/iPhone 继续通过 Legacy Adapter 兼容，旧 Snapshot 入站先转换成结构化变化，不能直接覆盖 V2 权威。
+- 数据库只新增同步所需的最小 `sync_changes`、`sync_cursors` 与内部同步设置；没有修改业务表、Backup、原片、文件访问授权或 iPhone 数据库。旧 `LibraryStore.save()` 继续服务未退役功能，但 Asset、Metadata、Location、Tag/Rating、Segment/Marker 的结构化权威会阻止过期兼容快照反向覆盖。
+- 新增 9 项结构化同步系统测试，覆盖 15 类验收场景：Asset/Metadata、并发实体、确定性冲突、Tag/Rating/SegmentTag、Segment/Marker 删除墓碑、重复投递、乱序、重启游标、事务回滚、Legacy 保存保护与本机数据隔离。完整 194 项测试通过；10,000 Asset 中单条待同步变化查询约 1–2 ms，常驻内存增量约 0–0.7 MB，不加载 `LibraryData.videos`。Mac 更新为 1.17.2（96），Mac 数据结构更新为 9、同步协议更新为 6；iPhone 保持 1.12.5（70）、iPhone DB 21、旧协议 5 兼容。
+
+# 镜藏 Lite 1.17.1 / iPhone 1.12.5
 
 - Mirror Library V2 Phase 5.2 完成 Segment 与 Marker 关系边界迁移：片段和时间标记现在通过独立 `Query Repository → Use Case → Command Repository → SQLite records` 读取与写入，实体只保存 Asset ID、时间范围、标题、备注和关系状态，不包含路径、bookmark、URL 或 VideoItem。
 - 新增 `SegmentStore` 与 `MarkerStore`，播放器的片段创建、范围调整、备注、Love/Reject、删除和标记增删均从专用 Store 进入关系命令，不再由 View 直接修改 `LibraryData.segments/markers`；当前片段与精确范围读取也统一通过 Store。
@@ -452,7 +462,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6164514" type="application/octet-stream" sparkle:edSignature="bOeL6m78cPxnyDk0A94rMRTg8/KB+elIPQdT3FRBHyQI7rZ9cgVdnrZfM5IlWkEe4s7WrpJ+CljBhmlcEN1kBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6289243" type="application/octet-stream" sparkle:edSignature="AP+8t70TK6lbU8rCD1cueSDXKSRmFMHChHiQZzesgBzH4VXdp9HLDrDa3O2bMqQ6uOAOsu9pWs3N8E0/+si+Dg=="/>
         </item>
     </channel>
 </rss>
