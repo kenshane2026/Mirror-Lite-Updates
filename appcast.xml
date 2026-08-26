@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.9</title>
-            <pubDate>Wed, 26 Aug 2026 08:46:30 +0800</pubDate>
-            <sparkle:version>103</sparkle:version>
-            <sparkle:shortVersionString>1.17.9</sparkle:shortVersionString>
+            <title>1.18.0</title>
+            <pubDate>Wed, 26 Aug 2026 15:48:25 +0800</pubDate>
+            <sparkle:version>104</sparkle:version>
+            <sparkle:shortVersionString>1.18.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.9 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.18.0 / iPhone 1.13.0
+
+- 本版本是 UX/UI 重构 Phase 1–4 的完整已完成批次，不是单独的播放器补丁：包含现状与安全基线、双端 App Shell、资料浏览与导入、播放器与 Clip 捕获，以及其间已经完成的收藏集和同步兼容。Mac 固定为“资料、片段、标签、收藏集、存储”五个顶级区域，iPhone 收口为“资料、整理、设置”三个入口；左侧栏可完整滚动，浏览器保持 Finder 式 Command/Shift 多选、Command+A、方向键、Return 与双击打开。
+- Mac 新增上下文 Space 快速预览。Asset Browser 中 Space 打开独立预览，再按 Space 或 Esc 返回原选择、筛选与滚动位置；播放器聚焦时 Space 仍为播放/暂停，文本输入中的空格和 Esc 不会被全局快捷键抢占。
+- Clip 捕获统一为稳定 AssetID 与整数毫秒范围：Mac 和 iPhone 都支持开始/结束两次操作、即时标签、取消、失败反馈与重新保存。打开已保存 Clip 时会先从 Structured SQLite 读取最新 Segment，再解析 AssetLocation 并定位，旧异步请求不能覆盖新目标。
+- Mac 与 iPhone 新增持久化收藏集：支持 Asset/Clip 混合成员、有序排列、改名、移除和回到来源。删除收藏集或成员只删除关联，不删除资料、片段或原文件；SQLite 修订号与事务阻止旧界面或旧同步覆盖新顺序。
+- Structured Sync 升级至协议 7，收藏集使用独立范围和游标进行双向增量同步；旧协议 5 资料同步继续兼容。遇到旧客户端无法承载收藏集时会明确要求升级，不会静默跳过变更后推进游标。Backup V2 继续保存完整 Structured SQLite，并校验收藏集表和成员顺序。
+- iPhone 文件选择后的落盘与书签登记进入既有 ImportMedia → MediaAccessService 边界；所有长任务继续使用非模态反馈，不阻止浏览和播放。Mac Clip Capture 只在播放器已经加载当前选中 Asset 后允许写入，避免片源切换期间把旧时间记到新媒体。
+- 本次新增 `PlaybackTarget / ResolvePlaybackTarget` 与 Collection Domain、Use Case、Repository；运行时权威仍只有 Structured SQLite。已有 Legacy 仅保留在明确的旧快照、迁移和书签提升适配边界，没有形成第二条运行时业务路径。
+- 自动验证：Mac 252 tests / 30 suites、iPhone 126 项通过（另有 1 项跨语言契约测试在专用 Swift→Dart→Swift 回环中通过），双端构建、架构边界与格式检查通过。Mac 更新为 1.18.0（104），iPhone 更新为 1.13.0（71）。
+
+# 镜藏 Lite 1.17.9 / iPhone 1.12.5
 
 - 修复 Reject 左侧显示 17、列表却为空的真实数据冲突。资料库打开迁移现在会把旧兼容状态中仍有效、但 Structured SQLite 缺失的 Love/Reject 评价补入 `ratingState`；已有结构化记录始终优先且不会被覆盖。中间列表、左侧计数、同步与后续评价操作重新使用同一套结构化数据权威。
 - 修复播放期间用真实鼠标点击“导入媒体”时菜单闪烁或无法选项的问题。全局交互监听不再在鼠标按下、原生 Menu 正开始跟踪时强制变更 responder；Esc 清除输入焦点的行为保持不变。
@@ -528,7 +539,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6128076" type="application/octet-stream" sparkle:edSignature="LIa8WUkvJk3RtA/pr55z0NmfDZ8r4kAIPaioG1AzXXmtIL3FswI0dStdV5Elc4Ef6Bkzft/5soFVpVwqs92MCg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6469575" type="application/octet-stream" sparkle:edSignature="dHbGF3pWWIyuzpdSIXJVLUM2bBPtOl/fvVKS7JGX+OpaHXU4ogglGlFvUmleTzfyw+j8NafiXpM1/fvOq4ivAQ=="/>
         </item>
     </channel>
 </rss>
