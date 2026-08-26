@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.18.0</title>
-            <pubDate>Wed, 26 Aug 2026 15:48:25 +0800</pubDate>
-            <sparkle:version>104</sparkle:version>
-            <sparkle:shortVersionString>1.18.0</sparkle:shortVersionString>
+            <title>1.19.0</title>
+            <pubDate>Wed, 26 Aug 2026 17:54:32 +0800</pubDate>
+            <sparkle:version>105</sparkle:version>
+            <sparkle:shortVersionString>1.19.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.18.0 / iPhone 1.13.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.19.0 / iPhone 1.14.0
+
+- 本批接续已发布的 Phase 1–4，补齐片段整理、标签查找、全局搜索和存储安全入口。验收包含全部累计内容，不仅是当前阶段。Mac 保持资料、片段、标签、收藏集、存储五个区域；iPhone 主导航为资料、片段、搜索。
+- Mac 片段成为独立工作区：全部、未整理、最近 30 天、分页、多选、快速预览、批量标签、加入收藏集与专注整理。没有标签即为未整理；标题与备注均不是必填。标签页优先展示相关片段，支持 Space 预览、双击/Return 打开与回到来源。
+- 片段备注提供编辑、保存中、已保存、失败与冲突状态；保留切页草稿，保存期间继续输入不会丢字，过期修订不会覆盖较新备注。专注整理先保存当前备注再进入下一项；批量标签显示成功/失败数量，并可撤销成功项。
+- Mac Command+K 与 iPhone 搜索 Tab 查询当前资料库，按片段优先分组显示资料、标签、备注和收藏集；Command+F 定位当前工作区搜索。搜索去抖、重试与请求隔离阻止旧结果覆盖新输入或串入另一资料库，结果可打开对应对象。
+- 存储与安全集中显示已登记文件位置、Backup V2 本次运行结果和远程最后成功连接时间；区分正常、需要注意、阻断、未知。读取失败不再伪装成空列表；没有备份结果不会宣称已备份。权限及只读状态未重新检测时明确说明，恢复确认默认取消。
+- 继续使用 Structured SQLite、AssetLocation/FileAccessGrant、Structured Sync 7 与 Backup V2；本批没有新增数据库或同步协议迁移，没有自动移动、清理或删除用户原片。Mac 1.19.0（105），iPhone 1.14.0（72）。
+- 开发检查和累计验收范围见 `docs/ux-ui-refactor/acceptance-1.19.0.md`。真机安装、实际体验、外接硬盘异常与 VoiceOver 验收由用户执行；此说明不代表已经安装、验收或发布。
+- 自动验证：Mac 264 项 / 33 组、iPhone 133 项通过，另 1 项在专用跨语言回环中通过；双端构建和架构门禁通过。本批不包含 iPhone 独立专注整理/备注冲突界面或所有新增动作的全局 Undo/Redo 统一。
+
+# 镜藏 Lite 1.18.0 / iPhone 1.13.0
 
 - 本版本是 UX/UI 重构 Phase 1–4 的完整已完成批次，不是单独的播放器补丁：包含现状与安全基线、双端 App Shell、资料浏览与导入、播放器与 Clip 捕获，以及其间已经完成的收藏集和同步兼容。Mac 固定为“资料、片段、标签、收藏集、存储”五个顶级区域，iPhone 收口为“资料、整理、设置”三个入口；左侧栏可完整滚动，浏览器保持 Finder 式 Command/Shift 多选、Command+A、方向键、Return 与双击打开。
 - Mac 新增上下文 Space 快速预览。Asset Browser 中 Space 打开独立预览，再按 Space 或 Esc 返回原选择、筛选与滚动位置；播放器聚焦时 Space 仍为播放/暂停，文本输入中的空格和 Esc 不会被全局快捷键抢占。
@@ -539,7 +550,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6469575" type="application/octet-stream" sparkle:edSignature="dHbGF3pWWIyuzpdSIXJVLUM2bBPtOl/fvVKS7JGX+OpaHXU4ogglGlFvUmleTzfyw+j8NafiXpM1/fvOq4ivAQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7017189" type="application/octet-stream" sparkle:edSignature="z3xfAsPVTTmKwjt13U6ypp839pxPiq/URoJxQsd0W7hwRIK1kl4qkMHtuMjnnDpF9/VOFRtji6SFERr8giCiBw=="/>
         </item>
     </channel>
 </rss>
