@@ -3,13 +3,27 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.17.7</title>
-            <pubDate>Tue, 25 Aug 2026 22:26:50 +0800</pubDate>
-            <sparkle:version>101</sparkle:version>
-            <sparkle:shortVersionString>1.17.7</sparkle:shortVersionString>
+            <title>1.17.9</title>
+            <pubDate>Wed, 26 Aug 2026 08:46:30 +0800</pubDate>
+            <sparkle:version>103</sparkle:version>
+            <sparkle:shortVersionString>1.17.9</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.7 / iPhone 1.12.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.17.9 / iPhone 1.12.5
+
+- 修复 Reject 左侧显示 17、列表却为空的真实数据冲突。资料库打开迁移现在会把旧兼容状态中仍有效、但 Structured SQLite 缺失的 Love/Reject 评价补入 `ratingState`；已有结构化记录始终优先且不会被覆盖。中间列表、左侧计数、同步与后续评价操作重新使用同一套结构化数据权威。
+- 修复播放期间用真实鼠标点击“导入媒体”时菜单闪烁或无法选项的问题。全局交互监听不再在鼠标按下、原生 Menu 正开始跟踪时强制变更 responder；Esc 清除输入焦点的行为保持不变。
+- 本次变化归属 Initial Library Migration、Structured SQLite Repository 与 ContentView 交互边界；没有新增 Domain、Use Case、Repository、数据库 Schema、LibraryID、MediaID、Structured Sync、Backup V2 或 Legacy Runtime 依赖。完整 224 项测试与架构门禁通过。Mac 更新为 1.17.9（103），iPhone 保持 1.12.5（70）。
+
+# 镜藏 Lite 1.17.8 / iPhone 1.12.5
+
+- “移动到 Library”改为逐文件调用 macOS 原生移动，成功后立即通过 Structured SQLite 重新登记为当前资料库的 Managed AssetLocation，全部成功项登记后自动刷新一次资料库索引。移动链路不再先复制、不再重新计算 SHA-256，也不再把原文件移入废纸篓；“复制到 Library”仍保留原有复制与完整校验保护。
+- 同一磁盘内移动使用文件系统重命名语义，基本不额外占用空间；跨磁盘由 macOS 逐文件完成跨卷移动。单个文件的系统移动失败时原位置保持不变；文件已移动但 SQLite 登记异常时目标文件保留，可由现有 Original Media 恢复索引识别，不会反复搬运文件。
+- 修复 Reject 左侧计数正确但中间列表为空的问题。语义侧栏集合现在拥有完整查询条件，不再叠加持久化的相反评价筛选；标签和智能文件夹选择也会清除上一项资料库分类，避免只改变侧栏高亮而列表沿用旧条件。
+- 修复视频播放时“导入媒体”按钮闪烁、菜单无法选择的问题。全局取消输入焦点监听不再抢占 Menu、按钮或 AVPlayer 的 responder chain，导入选项在播放期间保持可交互。
+- 本次变化归属既有 Managed Storage、Asset Browser Query 与 ContentView 交互边界；没有新增数据库 Schema、LibraryID、MediaID、Structured Sync、Backup V2 或 Legacy Runtime 依赖。完整 221 项测试、架构门禁和 Release 构建通过。Mac 更新为 1.17.8（102），iPhone 保持 1.12.5（70）。
+
+# 镜藏 Lite 1.17.7 / iPhone 1.12.5
 
 - 资料库升级为可放在任意文件夹或外接硬盘的独立 `*.mirrorlibrary` 包；新建时先选择位置，也可以通过“打开资料库…”或在访达中双击资料库包重新加入本机。软件本体只保留设备本地的最近资料库指针与安全访问授权，LibraryID、Structured SQLite、Original Media、缩略图和分析缓存都在资料库包内。
 - “资料库管理”新增“搬移整个资料库”：先检查目标空间，通过 SQLite Backup API 建立一致性快照，复制整个包，并对 Original Media 逐文件执行完整 SHA-256 校验；所有验证完成后才原子切换到新位置。旧位置默认保留作为回退副本，实际验收后可明确移入 macOS 废纸篓。
@@ -514,7 +528,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6118384" type="application/octet-stream" sparkle:edSignature="YsTRdXNUdXngwx0qcoYDBh15BJGIxfdb3PVBDxAlZitiBW6sSSdTxGLe7HD2gopqTQyusoqNwI0n6Lv6b9pHAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="6128076" type="application/octet-stream" sparkle:edSignature="LIa8WUkvJk3RtA/pr55z0NmfDZ8r4kAIPaioG1AzXXmtIL3FswI0dStdV5Elc4Ef6Bkzft/5soFVpVwqs92MCg=="/>
         </item>
     </channel>
 </rss>
