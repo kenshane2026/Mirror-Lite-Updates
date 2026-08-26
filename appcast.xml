@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.19.0</title>
-            <pubDate>Wed, 26 Aug 2026 17:54:32 +0800</pubDate>
-            <sparkle:version>105</sparkle:version>
-            <sparkle:shortVersionString>1.19.0</sparkle:shortVersionString>
+            <title>1.20.0</title>
+            <pubDate>Wed, 26 Aug 2026 20:00:09 +0800</pubDate>
+            <sparkle:version>106</sparkle:version>
+            <sparkle:shortVersionString>1.20.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.19.0 / iPhone 1.14.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.20.0 / iPhone 1.15.0
+
+- 完成上一批剩余的 iPhone 专注整理与独立片段备注界面：在“片段”页进入专注整理，或从片段操作菜单进入“标签与备注”；支持搜索/创建标签、预览来源、保存备注和完成下一项。无标签即未整理，备注不必填，离线仍可整理。
+- 手机备注提供未保存、保存中、已保存、失败与冲突状态。切页保留本次运行草稿；保存期间继续输入不会丢字；冲突可载入较新内容或明确用自己的草稿覆盖备注，保留较新标签。新编辑写入现有 SQLite 事务及同步队列，不依赖视频在线。
+- Mac 新备注、批量添加/移除标签、收藏集成员添加/移除、改名和排序统一接入 Command+Z / Shift+Command+Z，也可使用工具栏。命令历史跨工作区保留、切库清空；文本编辑继续使用系统文本撤销。手机独立整理页提供备注和标签的撤销/重做。
+- 撤销只反向修改本次操作涉及的字段，不回滚整个资料库。批量标签撤销在同一事务内检查目标；远端冲突、删除或写入失败时不覆盖新内容，提供重试或跳过该历史记录。永久删除仍需明确确认，不通过历史命令复活已同步删除的对象。
+- 修复 Mac 专注整理中，打标签后保存备注会提前跳到其他片段的问题；现在停留至“完成并下一个”。保留历史归档标签不再阻止无关的备注保存；非法新增标签关联仍被拒绝。
+- 累计保留 Phase 1–4 的导航、浏览/导入、播放器捕获，以及 Phase 5–8 的片段/标签/收藏集、分组搜索和存储安全入口。新界面与反向命令遵守 View → Store → Use Case → Repository → Structured SQLite，没有新增 Legacy 运行时依赖、Schema 迁移、同步协议或 Backup V2 格式变更。
+- 发行身份：Mac 1.20.0（106），iPhone 1.15.0（73）。Mac 269 项 / 33 组、Flutter 144 项及静态分析通过；另有 1 项跨语言测试使用专用 Swift→Dart→Swift 回环验证；Mac Release 与 iPhone device Debug 无签名构建通过。
+- 当前状态：等待本机验收。累计清单见 `docs/ux-ui-refactor/acceptance-1.20.0.md`。用户先双击 `本机验收.command`，确认实际体验后再双击 `正式发布.command`；本次未安装、提交、推送或发布，也未操作真实资料库和外接硬盘媒体。
+
+# 镜藏 Lite 1.19.0 / iPhone 1.14.0
 
 - 本批接续已发布的 Phase 1–4，补齐片段整理、标签查找、全局搜索和存储安全入口。验收包含全部累计内容，不仅是当前阶段。Mac 保持资料、片段、标签、收藏集、存储五个区域；iPhone 主导航为资料、片段、搜索。
 - Mac 片段成为独立工作区：全部、未整理、最近 30 天、分页、多选、快速预览、批量标签、加入收藏集与专注整理。没有标签即为未整理；标题与备注均不是必填。标签页优先展示相关片段，支持 Space 预览、双击/Return 打开与回到来源。
@@ -550,7 +561,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7017189" type="application/octet-stream" sparkle:edSignature="z3xfAsPVTTmKwjt13U6ypp839pxPiq/URoJxQsd0W7hwRIK1kl4qkMHtuMjnnDpF9/VOFRtji6SFERr8giCiBw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7058150" type="application/octet-stream" sparkle:edSignature="/ETUtNBUeH+cLo/vOExWhPIAEoFwluFwF53tJpwlnXhRDYisvqGFkeLuXiQzeWv5pDRcfBKiNno6F2JK7/vDAQ=="/>
         </item>
     </channel>
 </rss>
