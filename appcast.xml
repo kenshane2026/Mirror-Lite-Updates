@@ -3,13 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.20.4</title>
-            <pubDate>Tue, 01 Sep 2026 16:45:04 +0800</pubDate>
-            <sparkle:version>110</sparkle:version>
-            <sparkle:shortVersionString>1.20.4</sparkle:shortVersionString>
+            <title>1.20.5</title>
+            <pubDate>Tue, 01 Sep 2026 17:16:41 +0800</pubDate>
+            <sparkle:version>111</sparkle:version>
+            <sparkle:shortVersionString>1.20.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.20.4 / iPhone 1.15.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.20.5 / iPhone 1.15.3
+
+- Quick Organize 保留标签、备注、收藏集三个统一入口，但标签页恢复为原有完整快速标签选择器：继续支持搜索、拼音与首字母匹配、父子层级结果、最近使用、方向键选择、回车添加或创建、输入法确认以及连续添加，不再使用新增的平铺勾选列表。
+- Quick Organize 面板从播放器右上角移回原快速标签面板在浏览区左侧上方的位置；T 打开标签页，N / C 仍切换备注与收藏集。M 创建片段及“开始片段时立即添加标签”继续复用同一个原标签组件，原调用位置和交互不变。
+- 标签选择后的写入仍由当前 `PlaybackTarget` 决定 Asset 或 Clip；现场创建新标签会先确认既有标签持久化落盘，再经 Structured Repository 写入当前对象，Clip 播放原片或越界查看上下文时不会串写到 Asset。
+- Mac 1.20.5（111）；iPhone 保持 1.15.3（76）。没有新增数据库 migration、Domain、Use Case 或 Repository；Structured Sync 7、兼容协议 5、Backup V2 与数据库 schema 不变，不引入 Legacy 运行时业务依赖。
+- 聚焦回归、完整 297 项 / 35 个测试套件、架构边界检查、格式与差异检查及 macOS Release 构建均已通过。当前状态：等待本机验收；请先双击 `本机验收.command`，实际体验通过后再双击 `正式发布.command`。本次未安装、提交、推送或发布。
+
+# 镜藏 Lite 1.20.4 / iPhone 1.15.3
 
 - 完成镜藏 Lite UX/UI 重构 Phase 1 的共享基础。播放器与快速整理统一使用既有 `PlaybackTarget` 表达当前 Asset 或 Clip；Clip 仍解析并加载所属原始 Asset、定位最新片段范围，拖到范围外查看上下文后当前整理对象仍保持为该 Clip。
 - 新增可复用 Quick Organize 面板，只包含 Tag、Note、Collection。所有操作按当前对象明确分流到 Asset 或 Clip 的既有模型与结构化仓储，Clip 播放原片时不会把整理内容误写到 Asset；T / N / C 分别打开对应入口，文本输入焦点下不拦截正常输入。
@@ -614,7 +622,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7245472" type="application/octet-stream" sparkle:edSignature="GlBcjhCO/Nydr5Kq4q6wyz1mOffKXp+N/UZsBPX14uPMI8iCO7lR+ZmIXQZdsQpJKUjfa7TwPgS8VUb5YnUZCQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7244638" type="application/octet-stream" sparkle:edSignature="RoxtIN2pkFYJ28KOQx7uDy4/6SWkmFbccqbYHgW6gtDClQ/kcgKUWwMZx9ESRQ8jHNAYyMVJIqmZeRTQyVHnBg=="/>
         </item>
     </channel>
 </rss>
