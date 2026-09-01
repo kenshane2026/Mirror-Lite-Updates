@@ -3,13 +3,66 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.20.0</title>
-            <pubDate>Wed, 26 Aug 2026 20:00:09 +0800</pubDate>
-            <sparkle:version>106</sparkle:version>
-            <sparkle:shortVersionString>1.20.0</sparkle:shortVersionString>
+            <title>1.20.4</title>
+            <pubDate>Tue, 01 Sep 2026 16:45:04 +0800</pubDate>
+            <sparkle:version>110</sparkle:version>
+            <sparkle:shortVersionString>1.20.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.20.0 / iPhone 1.15.0
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.20.4 / iPhone 1.15.3
+
+- 完成镜藏 Lite UX/UI 重构 Phase 1 的共享基础。播放器与快速整理统一使用既有 `PlaybackTarget` 表达当前 Asset 或 Clip；Clip 仍解析并加载所属原始 Asset、定位最新片段范围，拖到范围外查看上下文后当前整理对象仍保持为该 Clip。
+- 新增可复用 Quick Organize 面板，只包含 Tag、Note、Collection。所有操作按当前对象明确分流到 Asset 或 Clip 的既有模型与结构化仓储，Clip 播放原片时不会把整理内容误写到 Asset；T / N / C 分别打开对应入口，文本输入焦点下不拦截正常输入。
+- Asset Tag 补齐 Structured SQLite 命令仓储和字段级可逆命令；Asset Note、Segment 内容与 Collection Membership 复用现有 Use Case / Repository，并接入同一全局 Undo / Redo。现有 M 创建片段与“开始片段时立即添加标签”链路保持不变。
+- Mac 1.20.4（110）；iPhone 保持 1.15.3（76）。没有新增数据库 migration，Structured Sync 7、兼容协议 5、Backup V2 与数据库 schema 不变；新增 1 个 Asset Tag Repository 边界和共享整理 Use Case / Store / View，不引入 Legacy 运行时业务依赖。
+- 当前状态：等待本机验收。请先双击 `本机验收.command`；实际体验通过后再双击 `正式发布.command`。本次未安装、提交、推送或发布。
+
+# 镜藏 Lite 1.20.3 / iPhone 1.15.3
+
+- 修复手机连接 Mac 后再次批量覆盖 `main` 标签的两层根本原因。兼容同步不再把历史删除墓碑的版本时间改成本次连接时间，而是保留原始删除事件时间；Mac 还会拒绝增量快照中没有对应删除事件的历史墓碑，旧手机即使继续携带完整墓碑列表也不能把它们伪装成本次新删除。手机端的增量导出保护与较新恢复记录胜出规则已补齐，但按本轮范围不再启动或安装手机，留待下次卸载旧 App 后全新安装。
+- 修复播放器顺序切换本地视频时右侧先清空并长时间显示“正在准备下一条视频”。播放器现在保留旧画面，后台确认下一条可用后一次性切换并立即播放，不再执行阻塞式预卷，也不再显示割裂的准备遮罩；顺序播放列表的连续播放规则保持不变。
+- 修复“定位当前播放视频”。按钮现在读取播放器的稳定 AssetID，经现有 Structured SQLite 分页查询逐页定位并滚动到条目；当前筛选确实不包含该视频时，才回到“所有媒体”完成定位。
+- 移除资料、片段和标签界面的 Space 快速预览快捷键。资料浏览器中 Space 改为直接播放当前选中的视频；显式菜单中的“快速预览”和播放器内 Space 播放/暂停保持可用。
+- 修复 T 快速标签搜索默认选中父级的问题。父级仍作为结构上下文显示，但精确命中的三级/子级标签现在默认选中最具体的结果。
+- 移除 Mac 独占一行的系统窗口标题栏，将交通灯并入应用顶栏；侧栏、资料库菜单和其他内容不变。
+- Mac 1.20.3（109）；iPhone 1.15.3（76）。Structured SQLite 仍为唯一运行时权威，Structured Sync 7、兼容协议 5、Backup V2 和数据库 schema 不变；新增的只有同步删除版本规则与资料定位规则，没有新增 Repository，也没有引入 Legacy 运行时业务依赖。
+- 验收范围见 `docs/ux-ui-refactor/acceptance-1.20.3.md`。按用户最新要求，本轮只覆盖安装并验收 Mac；手机保持关闭，下次修复时先卸载再全新安装，避免旧数据库继续参与同步。不发布、不提交、不推送。
+
+# 镜藏 Lite 1.20.2 / iPhone 1.15.2
+
+- 修复 Mac 与 iPhone 在“顺序播放列表”模式切换到下一条后停住、仍需手动按播放的问题。下一条媒体现在保留连续播放意图，来源解析完成后直接续播；Mac 不再被 Viewer 生命周期的重复激活覆盖，iPhone 手动“下一条”与自然播完使用同一模式规则。“播放一条后停止”和“单条视频循环”行为不变。
+- 修复外置 `main` 资料库点击后仍停留在当前库。真实失败原因是旧版本删除标签时留下了片段、媒体标签和智能文件夹的孤儿关系，Structured Runtime 为保护数据而拒绝打开；现在初始资料库 Repository 会在 Domain 校验前只移除已删除标签的失效引用，保留片段、媒体、有效标签和原片。
+- Structured Sync 接收标签删除时，在同一 SQLite 事务内清理 Segment 内嵌标签、独立 SegmentTag、AssetTag 与智能文件夹关系。任何刷新都不会再观察到“标签已删除、关系仍存在”的中间状态，旧库修复与后续同步共用 Structured SQLite 权威。
+- iPhone 每次真正交换资料前由现有 Sync Repository 压缩本机 `change_events`，同一实体只保留最终状态和序列高水位。升级后不会再把几十万条历史编辑重新上传给 Mac；尚未同步的最新状态、删除墓碑及新设备首次同步仍完整保留。
+- 细化结构化关系校验错误，重复标签、重复片段、缺失分类和已删除标签引用分别报告，不再统一显示无法定位的“结构化关系记录无效”。
+- 已对本机外置 `main` 做受控维护：先建立并校验完整 SQLite 备份，再删除 723 条同设备/同 Asset/同物理路径的确定重复位置，移除 460 条已删除标签引用，并把 764,112 条重复同步历史压缩为 27,152 条当前赢家与序列高水位；1,562 个 Asset 和原片文件均未删除。数据库由 782 MB 收缩到 55 MB，`quick_check` 通过，Mac 已实际冷启动进入 `main`。
+- Mac 1.20.2（108）；iPhone 1.15.2（75）。SQLite schema、Structured Sync 7、对外数据 schema 22、Backup V2、LibraryID、AssetID 与文件访问边界均不变；没有新增 Domain、Use Case 或 Repository，仅扩展现有初始资料库 Repository 与 Structured Sync Repository。
+- 详细自动检查与验收步骤见 `docs/ux-ui-refactor/acceptance-1.20.2.md`。等待本机验收：先双击 `本机验收.command`，实际确认 Mac 切库与手机同步；通过后再双击 `正式发布.command`。本次没有提交、推送或发布，也没有删除任何原片。
+
+# 镜藏 Lite 1.20.1 / iPhone 1.15.1
+
+- 修复 Mac 每次重新构建后反复询问访问 `com.kenshane.mirrorlite.trusted-clients` 钥匙串。本机验收的临时签名现在具有稳定的 Designated Requirement，重签后身份不再随可执行文件哈希变化；Sparkle 嵌套组件独立签名并经深度验证。旧钥匙串项迁移到新稳定身份时最多需要再点一次“始终允许”，后续本机验收安装不再因构建变化重复弹出。
+- 修复 iPhone 合并 Mac 返回资料时，写入 `video_tags` 出现 SQLite 787 外键失败。上次修复覆盖的是收藏集资料库 ID 大小写；本次根因是历史标签合并留下了指向已删除标签的身份别名。Sync Repository 现在加载时清理失效别名，并在写入整条视频标签、片段标签和智能文件夹规则前，确认目标标签仍存在于当前资料库；缺失父项不再导致整个同步事务失败。
+- 修复 iPhone 合并 Mac 返回收藏集时的 SQLite 787 外键失败：同步身份仍使用规范化小写 UUID，写入时先解析 SQLite 中真实保存的资料库 ID 大小写，收藏集、日志、队列和游标在同一事务中使用同一外键。
+- iPhone“设备连接”新增当前资料库的已登记设备管理。可移除不再使用的重复设备；当前 iPhone、主要设备及仍持有媒体位置的设备受保护。已移除设备不会被后续同步自动加回，重新配对才恢复登记；移除不删除媒体。
+- iPhone 远程播放缓冲超时不再跳成整页“媒体不可播放”。播放器、当前媒体和整理进度保留，错误作为播放器内的轻量覆盖提示，可直接重新连接。
+- 修复 Mac“存储与安全”页反复闪动/跳位：媒体位置修订触发后台刷新时保留上一次已加载卡片，不再反复替换为更矮的加载卡片导致 ScrollView 高度抖动。
+- 修复 Mac 媒体列表显示“可用”、播放器却无法读取的矛盾。浏览器状态现在按本机文件或当前可达的远程设备实际播放线路显示“本机可用 / 远程可用 / 检查中 / 不可播放”；Air 持有外接硬盘时，Mini 可经已连接的 Air 读取媒体。远程设备本地维护的离线标记不再阻断网络解析，实际文件仍由 Air 的媒体端点核验。
+- Mac 设备管理不再把本机当作可信或附近可连接设备。Bonjour 发现先通过只读身份端点取得稳定 DeviceID，再决定是否发布到附近列表；启动时会清理旧的本机自信任记录，配对握手也拒绝连接自己，主机名与局域网 IP 不同也不会绕过过滤。
+- 优化 iPhone 自动同步的稳定性和耗时。连接状态探测不再每 8 秒反复排队同步；只有本机真实编辑、恢复连接或安全轮询发现远端序列变化时才交换数据。Mac 健康检查返回资料与收藏集序列，双方无变化时手机不再上传/下载兼容快照、不刷新媒体页、也不新增“0 项”同步记录。实际交换改用正确的本机出站游标选择增量快照。
+- 修复 Mac 外置 `main` 资料库点击后长时间仍停留在当前库。资料库包激活不再在打开路径逐条访问 Original Media；同一物理文件只选择当前设备的一条位置投影，重复打开保持幂等，不再让不同设备的指纹来回覆盖并制造大量伪位置变更。健康检查也只读目标库同步序列，不再为了确认在线状态建立完整后台 `LibraryStore` 与用户切库竞争。
+- 修复“设备在线，但手机仍显示当前资料库未连接并持续同步”。手机健康检查现在携带已绑定的远端 LibraryID，不再拿 Mac 当前窗口的资料库身份误判目标库；Mac 兼容快照把实际 Structured SQLite 序列作为完成修订返回，与下一轮 `/health` 使用同一序列。升级后的首次同步会正常追平一轮，之后无编辑时停止空转，新 V2 编辑仍会触发同步。
+
+- 修复“重新定位媒体”无法进入独立 `.mirrorlibrary` 包内 `Original Media` 的问题。单项、已选项和全部离线媒体的重新定位面板现在允许展开资料库包，并在当前资料库在线时直接从其 `Original Media` 打开；原有名称、大小、时长、尺寸和指纹身份校验保持不变。
+- 修复同一文件重新定位时被误报“内容指纹不同”：旧逻辑把整文件 SHA-256 与首尾抽样指纹直接比较。现在明确区分旧抽样、快速与整文件指纹，兼容旧版曾误写入 `full_fingerprint` 的抽样值；新的成功重新定位只把真实整文件指纹登记为完整校验。指纹读取在后台执行，核对与成功都有非阻塞提示。
+- 修复 Mac 片段、标签工作区内容纵向居中、顶部大量留白的问题；工作区使用剩余窗口高度，标题与列表贴顶，列表滚动占满可用区域。修复顶部搜索文字被挤成竖排。
+- 片段页和标签片段结果现在普通单击即可打开对应片段播放；Command 单击增减选择、Shift 单击范围选择、Command+Shift 追加范围继续可用。片段行新增明确的“整理”入口，留在当前页编辑右侧标签与备注。
+- 修复播放器页面初始化覆盖显式片段打开请求的问题：保留所选 Segment、数据库读取的时间范围与自动播放意图；加载失败保留错误，不静默切成整条视频。加载前、加载后进入播放器及显式重试均有回归覆盖。
+- 标签结果由当前标签唯一驱动；切换时立即清除上一标签内容，并丢弃过期查询。接收库变更后刷新标签用途及片段结果；没有使用过的标签不再重复显示在“高频”中。标签计数仍来自真实关联，不会自动给未打标签片段添加关联。
+- Mac 1.20.1（107）；iPhone 1.15.1（74）。iPhone 本地 SQLite schema 升至 23，只新增“已忘记设备”防复活记录；Structured Sync 7、对外数据 schema 22、Backup V2 和 Asset 身份不变。
+- 详细自动检查与验收步骤见 `docs/ux-ui-refactor/acceptance-1.20.1.md`。等待本机验收：先双击 `本机验收.command`，体验通过后再双击 `正式发布.command`。本次没有安装、提交、推送或发布，没有修改真实库记录或媒体文件。
+
+# 镜藏 Lite 1.20.0 / iPhone 1.15.0
 
 - 完成上一批剩余的 iPhone 专注整理与独立片段备注界面：在“片段”页进入专注整理，或从片段操作菜单进入“标签与备注”；支持搜索/创建标签、预览来源、保存备注和完成下一项。无标签即未整理，备注不必填，离线仍可整理。
 - 手机备注提供未保存、保存中、已保存、失败与冲突状态。切页保留本次运行草稿；保存期间继续输入不会丢字；冲突可载入较新内容或明确用自己的草稿覆盖备注，保留较新标签。新编辑写入现有 SQLite 事务及同步队列，不依赖视频在线。
@@ -561,7 +614,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7058150" type="application/octet-stream" sparkle:edSignature="/ETUtNBUeH+cLo/vOExWhPIAEoFwluFwF53tJpwlnXhRDYisvqGFkeLuXiQzeWv5pDRcfBKiNno6F2JK7/vDAQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7245472" type="application/octet-stream" sparkle:edSignature="GlBcjhCO/Nydr5Kq4q6wyz1mOffKXp+N/UZsBPX14uPMI8iCO7lR+ZmIXQZdsQpJKUjfa7TwPgS8VUb5YnUZCQ=="/>
         </item>
     </channel>
 </rss>
