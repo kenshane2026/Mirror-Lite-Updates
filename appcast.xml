@@ -3,19 +3,29 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.0</title>
-            <pubDate>Wed, 02 Sep 2026 07:40:38 +0800</pubDate>
-            <sparkle:version>112</sparkle:version>
-            <sparkle:shortVersionString>1.21.0</sparkle:shortVersionString>
+            <title>1.21.1</title>
+            <pubDate>Wed, 02 Sep 2026 09:34:00 +0800</pubDate>
+            <sparkle:version>113</sparkle:version>
+            <sparkle:shortVersionString>1.21.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.0 / iPhone 1.15.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.1 / iPhone 1.15.3
+
+- 修复 Phase 2 本机验收中的分栏回归：原生 9pt 分割线只调整面板、不再拖动窗口；窗口、浏览区和播放器使用可闭合的最小宽度，片段工具栏、专注整理的当前片段/快速整理以及标签工作区不再被折叠、漂移或推到屏幕外。
+- 标签工作区分类整行均可展开或折叠；新建分类和标签会等待 Structured SQLite 持久化后刷新并立即显示。标签树移除颜色和装饰图标，保留纯文字层级、计数与选择状态；播放器标题区不再重复显示标签/备注/收藏集按钮。
+- 资料筛选以“全部资料”为一级范围分组，“所有 Asset”清空 Asset 条件并留在资料 Workspace，“所有片段”复用现有导航进入只含 Clip 的片段 Workspace；二级整理状态独立为“无标签 / 未整理”，移除重复的“无评价或关键词”并清理旧残留状态。浏览器不再观察播放器的高频时间发布，视频播放时媒体类型、标签和来源菜单保持稳定可点。
+- 播放器快捷键在非文本输入状态下由播放上下文统一接管：Space 播放/暂停，J/K/L 穿梭，↑/↓ 切换上一项/下一项；Esc 可退出单行搜索焦点，多行备注仍保留自身输入行为。M 捕获、开始片段时立即加标签及 Undo/Redo 链路不变。
+- 顶栏连接与导入入口右对齐并改为纯图标；未连接显示红色，连接后按实际状态显示绿色手机、Mac 或双设备图标。Mac 1.21.1（113）；iPhone 保持 1.15.3（76）。没有新增数据库 migration、Domain、Use Case 或 Repository，也没有新增 Legacy 运行时依赖。
+- 架构边界、Swift format、差异检查、113 项本次相关回归及 macOS Release 构建通过。完整 308 项 / 36 组在并发全套中出现过两项既有时序波动：10k 拓扑样本 8.29 秒超过 8 秒门槛、资料库失败文案未及时发布；两项分别单独复跑为 6.29 秒和 0.02 秒并通过。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.0 / iPhone 1.15.3
 
 - 完成 UX/UI 重构 Phase 2 主界面定型：Sidebar 收敛为资料、片段、专注整理、标签、收藏集及存储与安全；Global Toolbar、Library Switcher、Global Search 空状态、资料筛选/智能视图、片段筛选与导出入口均按最终信息架构收敛。
 - 资料、片段、标签、收藏集与专注整理共用 Phase 1 `PlaybackTarget`、`PlaybackStore`、Player 和 Quick Organize；媒体在发现位置原地播放，Clip 保持自身整理身份并支持当前结果集前后切换。专注整理支持稳定队列、筛选结果启动、完成/撤销、跳过和上一个，文本输入不会误触工作流快捷键。
 - 标签管理与内容浏览合并为一个 Workspace，Clip Card 在片段与标签内容中复用；收藏集以成员媒体和手动顺序为主，添加统一使用 C，移除只删除 Membership 并保留 Undo。旧 Sidebar、固定标签 Inspector、Asset 独立快速预览、旧 Collection 隐式添加入口及顶部 Global “…”入口已清理；低频兼容能力暂留存储与安全，不进入 Phase 3。
+- 修复 Phase 2 本机验收发现的三项交互问题：片段筛选工具栏在较窄浏览区自动改为两行并限制最小宽度，功能键不再被折叠；单行搜索按 Esc 会退出输入焦点并恢复 T / N / C 等工作区快捷键，多行备注编辑保持原行为；播放器与浏览器之间的分割线改为明确拒绝窗口拖动的原生拖拽面，拖动只调整分栏宽度，不再移动整个窗口。
 - Mac 1.21.0（112）；iPhone 保持 1.15.3（76）。没有新增数据库 migration、Domain 模型或 Repository；为标签树新增一个分类读取 Use Case，并扩展既有 Tag Catalog Repository 的结构化分类/层级/排序投影，避免新 Workspace 依赖 Legacy 运行时投影。Structured Sync 7、兼容协议 5、Backup V2 与数据库 schema 不变。
-- 完整 300 项 / 36 个测试套件、架构边界检查、Swift format/lint 与差异检查均通过；macOS Release 构建通过。当前状态：等待本机验收；请双击 `本机验收.command`。本次未安装、提交、推送或发布。
+- 完整 304 项 / 36 个测试套件、架构边界检查、Swift format 与差异检查均通过；macOS Release 构建通过。当前状态：等待本机验收；请双击 `本机验收.command`。本次未安装、提交、推送或发布。
 
 # 镜藏 Lite 1.20.5 / iPhone 1.15.3
 
@@ -630,7 +640,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7096872" type="application/octet-stream" sparkle:edSignature="ELqQB8y/7Jblm46HI8OUQ0LA4EVLqmxrkuwuSslCj96SOjngZvoZEERFDpz2+y+JITyvlQguFUC3gb3eIUvoAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7114401" type="application/octet-stream" sparkle:edSignature="lCHwm9DOTRMBTGyMMFOh7HkfAvDbStrXhCAwNugAixkJrjdGQZr8BPRSv60QsjWASgueMuJV+dOqktiSxf6OBg=="/>
         </item>
     </channel>
 </rss>
