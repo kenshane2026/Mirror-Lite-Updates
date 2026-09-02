@@ -3,20 +3,29 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.1</title>
-            <pubDate>Wed, 02 Sep 2026 09:34:00 +0800</pubDate>
-            <sparkle:version>113</sparkle:version>
-            <sparkle:shortVersionString>1.21.1</sparkle:shortVersionString>
+            <title>1.21.2</title>
+            <pubDate>Wed, 02 Sep 2026 11:57:16 +0800</pubDate>
+            <sparkle:version>114</sparkle:version>
+            <sparkle:shortVersionString>1.21.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.1 / iPhone 1.15.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.2 / iPhone 1.15.3
 
 - 修复 Phase 2 本机验收中的分栏回归：原生 9pt 分割线只调整面板、不再拖动窗口；窗口、浏览区和播放器使用可闭合的最小宽度，片段工具栏、专注整理的当前片段/快速整理以及标签工作区不再被折叠、漂移或推到屏幕外。
 - 标签工作区分类整行均可展开或折叠；新建分类和标签会等待 Structured SQLite 持久化后刷新并立即显示。标签树移除颜色和装饰图标，保留纯文字层级、计数与选择状态；播放器标题区不再重复显示标签/备注/收藏集按钮。
 - 资料筛选以“全部资料”为一级范围分组，“所有 Asset”清空 Asset 条件并留在资料 Workspace，“所有片段”复用现有导航进入只含 Clip 的片段 Workspace；二级整理状态独立为“无标签 / 未整理”，移除重复的“无评价或关键词”并清理旧残留状态。浏览器不再观察播放器的高频时间发布，视频播放时媒体类型、标签和来源菜单保持稳定可点。
+- 补齐真实的一级媒体范围：“全部资料”合并显示 Asset 与 Clip，“所有 Asset / 所有片段”只显示对应对象；Love、已拒绝、媒体类型、标签、来源、智能视图及二级整理条件再次点击已选项即可取消，不再用容易误解的“全部标记”表达无条件状态。
+- 资料浏览 Store 提升到 Workspace 生命周期，重复点击“资料”不再销毁列表或重新读取；导入、移动及结构化变更采用保留旧列表的原子刷新，并合并通知、等待文件事务结束后再发布。自动续播与手动切换共用 PlaybackTarget 相邻预解析/预载缓存，播放结束不会再走一条额外的重载路径。
+- 播放源切换进一步收敛为统一的后台准备/一次提交：无论鼠标选择、上下方向键还是顺序自动续播，播放器都保留上一条已解码画面和时间轴，直到下一条媒体已确认可播放后才替换 AVPlayerItem；手动切换也直接消费相邻目标缓存，不再先清空播放器或重复解析来源。
+- 修复本机验收反复弹出登录钥匙串密码：设备身份与信任仓储改用禁止交互的 Keychain 查询，并迁移到稳定的 V2 服务命名；旧 ACL 无法静默读取时只需重新配对，不再向用户索要 macOS 登录密码。已完成的“移动到 Library”任务会在日志恢复时自动清理，不再每次启动显示“等待继续 1/1”。
+- 文件管理以“物理路径是否位于当前资料库 Original Media”判定已在 Library，不再因历史位置类型误报可复制；全部资料恢复列表/缩略图切换。混合媒体 Browser Store 只订阅筛选与结构化内容修订，播放时间更新不再重建筛选菜单，媒体类型、标签和来源子菜单可稳定悬停与点击。
+- 片段与标签 Workspace 现在订阅统一 `PlaybackTarget`：手动切换、方向键切换或自动续播后，对应 Clip / Asset 行会同步选中并滚动到可视区域；两处都新增“定位当前播放媒体”按钮，标签页会按当前对象自动切换到片段或资料结果。Player 仍是唯一播放实例，列表只同步 UI 选择状态。
+- 修复本机剩余空间低于 1 GiB 时，便携资料库搬移回归测试被生产空间保护误阻断的问题：Repository 保留生产默认的 1 GiB 安全余量，仅为测试注入受控容量检查；真实搬移的空间保护没有降低或绕过。
+- 修复本机验收中的资料浏览与播放器回归：全部资料未选中行恢复正常透明背景，工具栏恢复定位当前播放媒体，Asset / Clip 恢复右键操作；媒体类型、标签和来源改为打开后固定快照的原生子菜单，播放刷新不再打断悬停或点击。标签分类展开状态按资料库保存，包含“全部折叠”；Asset 摘要异步切换期间播放器外壳保持挂载，原生播放视图固定黑色底层，不再用空白页面过渡。
+- 修复 `DeleteAsset` 的结构化事务缺口：删除 Asset 时会在同一 SQLite 事务中终止依赖的 Segment、Marker、Tag/Rating 关系并写入删除权威；启动修复只处理已有明确 Asset 删除墓碑的历史孤立关系，无法解释的缺失父项仍会严格报错。本机 `main` 修复前已建立独立 SQLite 备份，3 条历史孤立片段已转为墓碑；1,564 个有效 Asset 和全部原文件未改动，`integrity_check` 通过。
 - 播放器快捷键在非文本输入状态下由播放上下文统一接管：Space 播放/暂停，J/K/L 穿梭，↑/↓ 切换上一项/下一项；Esc 可退出单行搜索焦点，多行备注仍保留自身输入行为。M 捕获、开始片段时立即加标签及 Undo/Redo 链路不变。
-- 顶栏连接与导入入口右对齐并改为纯图标；未连接显示红色，连接后按实际状态显示绿色手机、Mac 或双设备图标。Mac 1.21.1（113）；iPhone 保持 1.15.3（76）。没有新增数据库 migration、Domain、Use Case 或 Repository，也没有新增 Legacy 运行时依赖。
-- 架构边界、Swift format、差异检查、113 项本次相关回归及 macOS Release 构建通过。完整 308 项 / 36 组在并发全套中出现过两项既有时序波动：10k 拓扑样本 8.29 秒超过 8 秒门槛、资料库失败文案未及时发布；两项分别单独复跑为 6.29 秒和 0.02 秒并通过。当前状态：等待本机验收；请双击 `本机验收.command`。
+- 顶栏连接与导入入口右对齐并改为纯图标；未连接显示红色，连接后按实际状态显示绿色手机、Mac 或双设备图标。Mac 1.21.2（114）；iPhone 保持 1.15.3（76）。没有新增数据库 migration、Domain、Use Case 或 Repository，也没有新增 Legacy 运行时依赖。
+- 本轮没有数据库 migration、没有新增 Repository，也没有引入 Legacy 运行时依赖；新增的混合媒体 Browser Store 只组合既有 Asset / Clip Query Repository，删除级联与历史修复仍由现有 Asset Lifecycle / Initial Library Repository 边界负责。完整 314 项 / 36 个测试套件、架构边界检查、差异检查及 macOS Release 构建均已通过。当前状态：等待本机验收；请双击 `本机验收.command`。
 
 # 镜藏 Lite 1.21.0 / iPhone 1.15.3
 
@@ -640,7 +649,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7114401" type="application/octet-stream" sparkle:edSignature="lCHwm9DOTRMBTGyMMFOh7HkfAvDbStrXhCAwNugAixkJrjdGQZr8BPRSv60QsjWASgueMuJV+dOqktiSxf6OBg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7299801" type="application/octet-stream" sparkle:edSignature="ZipJDghpsQY2nJDViLhskw6fcje9a2Am05ZHzJtJM5m/Pt843GLq6pRnxmKCGiowpMMakfBah0ypastq1wJVDA=="/>
         </item>
     </channel>
 </rss>
