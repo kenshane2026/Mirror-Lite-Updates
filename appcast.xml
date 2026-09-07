@@ -3,13 +3,25 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.2</title>
-            <pubDate>Wed, 02 Sep 2026 11:57:16 +0800</pubDate>
-            <sparkle:version>114</sparkle:version>
-            <sparkle:shortVersionString>1.21.2</sparkle:shortVersionString>
+            <title>1.21.3</title>
+            <pubDate>Mon, 07 Sep 2026 15:30:25 +0800</pubDate>
+            <sparkle:version>115</sparkle:version>
+            <sparkle:shortVersionString>1.21.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.2 / iPhone 1.15.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.3 / iPhone 1.15.4
+
+- 修复 iPhone 合并 Mac 标签时的 SQLite 2067 失败：历史数据中若同一标签 UUID 存在仅字母大小写不同的两条物理记录，同步现在会先精确识别并合并重复项，再把 Mac 的规范记录移到正确分类和父标签，不再触发 `tags_sibling_name_unique`。
+- 重复标签原有的 Asset 标签、Clip 标签、子标签和智能文件夹条件会完整迁移到规范 UUID；仅大小写不同的物理重复行不会被误记为“删除规范标签”的同步墓碑。
+- 问题归属现有 Sync Repository 的 Structured SQLite 合并边界；调用链仍为 `LibraryHome → LanSyncEngine → SyncRepository → Structured SQLite`。没有新增 Domain、Use Case、Repository、数据库 migration 或 Legacy 运行时依赖；Structured Sync 7 和 Backup V2 格式不变。
+- 修复 LAN 状态 5 秒检查的无效 Observation 发布：定时器仍照常执行 `getifaddrs` 和 Tailscale 状态检查，但只在最终展示地址真实变化时才更新 `@Published`，不再因相同值触发 `ContentView` 根级 invalidation。本项仅修改 Connectivity Presentation，没有改变 Timer 频率、LAN Transport 或 UI。
+- 修复 Sidebar 往返时反复创建 Workspace Store、重复执行首轮 Query 以及 requested Clip / Tag / Collection 通过 `.id` 销毁整棵 Workspace 的问题。同一 Library workspace generation 现在按既有 Workspace 槽位保留 Presentation Store；requested entity 作为选择命令交给原 Store，只有 `LibraryContext.token` 真正变化才建立新世代。
+- Viewer / Native Player 从 Workspace 路由分支中提到稳定的共同结构位置，普通资料、片段、标签、收藏集往返和 selection 更新不再重建 `AVPlayerView`。没有改变 Playback Domain、PlaybackStore 或 PlaybackTarget。
+- 新增同库 Workspace re-entry、requested selection、切库及同库重开 generation、Native Player identity、Clip 初始 Query 只执行一次六项回归。Mac 完整 323 项 / 38 个套件、架构边界、差异检查及 Release 构建通过；Instruments 空闲 35.8 秒覆盖 7 个 Timer 周期，与 5 秒 LAN Timer 精确同步的周期性 Microhang 由每周期 263–278 ms 降为 0 次。
+- Workspace 两轮固定导航复测中，Store 构造由 8 次降为 4 次（第二轮 4→0），两轮顶层 Repository 读取由约 18 次降为约 9 次，`NativePlayerView.makeNSView` 采样由 3 次降为 1 次；交互窗主线程运行样本由 6.544 秒降为 2.139 秒，超过 250 ms 的 Hang 由 12 次降为 2 次。残余首次进入 711 ms、再次进入 313 ms 对应尚未处理的 Observation / Browser / Query 热点，不在本项范围内。
+- Mac 版本更新为 1.21.3（115），iPhone 版本更新为 1.15.4（77）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.2 / iPhone 1.15.3
 
 - 修复 Phase 2 本机验收中的分栏回归：原生 9pt 分割线只调整面板、不再拖动窗口；窗口、浏览区和播放器使用可闭合的最小宽度，片段工具栏、专注整理的当前片段/快速整理以及标签工作区不再被折叠、漂移或推到屏幕外。
 - 标签工作区分类整行均可展开或折叠；新建分类和标签会等待 Structured SQLite 持久化后刷新并立即显示。标签树移除颜色和装饰图标，保留纯文字层级、计数与选择状态；播放器标题区不再重复显示标签/备注/收藏集按钮。
@@ -649,7 +661,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7299801" type="application/octet-stream" sparkle:edSignature="ZipJDghpsQY2nJDViLhskw6fcje9a2Am05ZHzJtJM5m/Pt843GLq6pRnxmKCGiowpMMakfBah0ypastq1wJVDA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7314563" type="application/octet-stream" sparkle:edSignature="B1j1KRA4QUGsY/BVBh+QrnRMD4mNe/7/dlgMpcEQk6wrAybN9GPZrWg8plRwk+1+UnongogXwpv6chGaMn0gAA=="/>
         </item>
     </channel>
 </rss>
