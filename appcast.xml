@@ -3,13 +3,32 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.5</title>
-            <pubDate>Tue, 08 Sep 2026 12:43:30 +0800</pubDate>
-            <sparkle:version>117</sparkle:version>
-            <sparkle:shortVersionString>1.21.5</sparkle:shortVersionString>
+            <title>1.21.7</title>
+            <pubDate>Tue, 08 Sep 2026 17:04:58 +0800</pubDate>
+            <sparkle:version>119</sparkle:version>
+            <sparkle:shortVersionString>1.21.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.5 / iPhone 1.15.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.7 / iPhone 1.15.6
+
+- 修复 iPhone v23→v24 Membership migration 的阻断性回归：旧库中同一稳定 DeviceID 若以大小写变体或跨资料库记录多次，升级会先完整暂存每个 `(libraryID, deviceID)` Membership，再按 DeviceID 无关大小写确定性选择最新设备 metadata，避免临时全局设备表的单列主键冲突；失败重试与升级后重开均可安全完成，schema 版本保持 24。
+- 修复资料页空资料或搜索无结果时整个 Browser 被 HStack 按固有高度垂直居中、顶部留下大块空白的问题；Browser 现在始终占满可用高度并顶对齐，工具栏固定在内容区顶部，空状态只在工具栏下方的剩余区域居中。
+- Device & Sync Pack 2 Lite：Device Identity 继续使用 Pack 1 的设备级稳定 DeviceID；iPhone Structured SQLite 新增以 `(libraryID, deviceID)` 为复合主键的最小 Membership 关系，同一设备可独立加入多个资料库，不再由全局唯一的 `devices.id` 代替资料库成员关系。
+- PrimaryDeviceLease 保持既有 epoch 与破坏性操作权限语义，但读取、同步导入与 Library 摘要只接受当前资料库中存在的 Membership；Mac Library aggregate 同样会忽略或腾空指向其他资料库设备的无效租约。
+- iPhone 数据库 schema 由 23 升至 24：升级只将既有 `devices.library_id` 投影迁入 Membership 表并保留全局设备身份，不删除、合并、退役或改写任何历史 Device UUID、originDeviceID 与 Media Location owner；Structured Sync 7 和同步数据格式不变。
+- macOS 点击最后一个窗口的红色 X 现在直接执行正常 App termination，不再显示“继续后台运行 / 完全退出”确认；与 Cmd+Q 共用持久化 flush 和系统退出清理，LAN、Remote 与 Sync 服务随进程结束。
+- 原 Pack 2 的 Active/Retired、Retire Use Case、Alias、supersededBy、lineage、历史 9→3 reconciliation 与复杂设备管理 UI 已取消且未保留。本轮没有新增 Domain、Use Case 或 Repository 类型，也没有引入 Legacy 运行时依赖。
+- 跨 Library Membership、Primary/vacant lease、v23→v24 安全迁移与红色 X 退出策略回归通过；Mac 完整 339 项 / 41 个套件、iPhone 170 项（另 1 项既有真机探针跳过）、Flutter 静态分析、架构边界及 Debug/Release 构建均通过。Mac 版本更新为 1.21.7（119），iPhone 更新为 1.15.6（79）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.6 / iPhone 1.15.5
+
+- Device & Sync Pack 1：Mac 本机身份收敛为 Keychain 权威、UserDefaults 兼容镜像，并移除文件管理中 Keychain 读取失败即临时生成 UUID 的身份旁路；App 重启、Library 切换和文件管理继续使用同一个 DeviceID。
+- iPhone 新增 Library-independent Keychain DeviceID：升级时仅在安全身份为空时迁移一次当前有效的历史 iOS UUID，成功持久化后 Library 数据、LAN/Tailscale 地址、Pairing、Sync Session 与 Primary Device 均不再参与本机身份判定；后续登记、同步和媒体位置写入共用该稳定 ID。
+- iOS 设备显示名会拒绝 `localhost`、空值、loopback 与明显 placeholder hostname，无法获得可靠名称时统一显示为 `iPhone`；显示名只作为 metadata，不参与身份判断。
+- 保持 Trust、Pairing Token、PrimaryDeviceLease、Structured Sync 7、Backup V2、Media/Asset Location、origin/sender DeviceID 语义不变；没有数据库 migration，也未清理或合并历史设备。只读核对确认 `main` Library 原 9 个 Device UUID 保持原样。
+- 新增 Mac Keychain/UserDefaults 权威与恢复测试，以及 iOS 重启、Library 切换、重新登记、并发首次解析、旧身份迁移和 localhost fallback 回归。完整 Mac 336 项 / 40 个套件、iPhone 165 项测试及静态分析通过；Debug/Release 构建通过。Mac 版本更新为 1.21.6（118），iPhone 更新为 1.15.5（78）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.5 / iPhone 1.15.4
 
 - 修复 Quick Tag Picker 回车确认的同步卡顿：键盘事件只生成一次稳定结果快照，并在事件派发结束后复用鼠标点击的同一选择路径；标签写入立即更新当前对象，不再在每次提交后重复加载完整 Tag / Note / Collection 整理投影。
 - Quick Organize 面板统一接管 Esc，T 标签、N 备注、C 收藏集三个入口均可关闭；已有快捷键、搜索、鼠标选择、Undo/Redo 与 Asset / Clip 写入语义不变。
@@ -678,7 +697,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7323488" type="application/octet-stream" sparkle:edSignature="fWMk0NMxNMLRGiXHIGyu1vkCR3a3QX5MvaSgEiolEy63PTnaCyUn2o3aPS1c22Y5IW2YXr0xD8gBF7MwcRg9Aw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7326441" type="application/octet-stream" sparkle:edSignature="+6omefoY8NX0aSI+BRpua8kS/1RGUgcjHyJMA+KSbUMioCSuBd03y4xdLJ/OffLiQtsm+lOaKwkv+eeVZ8ZIAw=="/>
         </item>
     </channel>
 </rss>
