@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.4</title>
-            <pubDate>Tue, 08 Sep 2026 11:31:39 +0800</pubDate>
-            <sparkle:version>116</sparkle:version>
-            <sparkle:shortVersionString>1.21.4</sparkle:shortVersionString>
+            <title>1.21.5</title>
+            <pubDate>Tue, 08 Sep 2026 12:43:30 +0800</pubDate>
+            <sparkle:version>117</sparkle:version>
+            <sparkle:shortVersionString>1.21.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.4 / iPhone 1.15.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.5 / iPhone 1.15.4
+
+- 修复 Quick Tag Picker 回车确认的同步卡顿：键盘事件只生成一次稳定结果快照，并在事件派发结束后复用鼠标点击的同一选择路径；标签写入立即更新当前对象，不再在每次提交后重复加载完整 Tag / Note / Collection 整理投影。
+- Quick Organize 面板统一接管 Esc，T 标签、N 备注、C 收藏集三个入口均可关闭；已有快捷键、搜索、鼠标选择、Undo/Redo 与 Asset / Clip 写入语义不变。
+- 资料 Workspace 在同一 Library 的 Sidebar 往返中保留“全部资料 / 所有 Asset”范围及搜索、筛选和排序状态；返回已保留的 Browser 时只在实际 Query 发生变化后刷新，真正切换 Library 仍按既有流程初始化。
+- 修正 Asset 筛选的确定性错误：Asset 标签不再因所属 Clip 带同名标签而误命中；多标签保持全部匹配，Smart View 恢复自身“匹配全部 / 匹配任一”规则；整理状态与 Love/已拒绝按界面语义组合，不再静默忽略评价条件；“所有 Asset”不再顺带清空二级筛选。
+- 完整 333 项 / 39 个测试套件、聚焦回归、架构边界、差异检查及 macOS Debug/Release 构建通过。没有新增 Domain、Use Case、Repository、Legacy 运行时依赖或数据库 migration；Thumbnail、Tag Workspace SQL、Unified Browser 分页等后续性能项未改动。
+- Mac 版本更新为 1.21.5（117），iPhone 保持 1.15.4（77）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.4 / iPhone 1.15.4
 
 - 收窄 `ContentView`、`ViewerWorkspace` 与 Unified Browser 的 Presentation Observation 边界：顶层只保留不发布状态的 Feature 生命周期容器，Library、LAN、Toolbar、Player、Quick Organize 与副作用监听分别下沉到实际消费它们的最小子 View。
 - 播放进度、skim、片段捕获和播放目标等高频状态只使 Player 子树及零尺寸副作用节点参与求值，不再波及 Browser；Browser 局部发布也不会重建 `NativePlayerView`。现有 Workspace Store 生命周期、Playback 语义、Repository 与 UI 行为保持不变。
@@ -669,7 +678,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7317280" type="application/octet-stream" sparkle:edSignature="KFUwkBpomglscRDEs+07c5iiKEIQ8+RJgyukCMuyYh/AYKhw1IRTFjvAzydHsQxD69v7uOa5BuYyJD84d8+tAA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7323488" type="application/octet-stream" sparkle:edSignature="fWMk0NMxNMLRGiXHIGyu1vkCR3a3QX5MvaSgEiolEy63PTnaCyUn2o3aPS1c22Y5IW2YXr0xD8gBF7MwcRg9Aw=="/>
         </item>
     </channel>
 </rss>
