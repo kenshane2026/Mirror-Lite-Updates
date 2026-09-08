@@ -3,13 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.3</title>
-            <pubDate>Mon, 07 Sep 2026 15:30:25 +0800</pubDate>
-            <sparkle:version>115</sparkle:version>
-            <sparkle:shortVersionString>1.21.3</sparkle:shortVersionString>
+            <title>1.21.4</title>
+            <pubDate>Tue, 08 Sep 2026 11:31:39 +0800</pubDate>
+            <sparkle:version>116</sparkle:version>
+            <sparkle:shortVersionString>1.21.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.3 / iPhone 1.15.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.4 / iPhone 1.15.4
+
+- 收窄 `ContentView`、`ViewerWorkspace` 与 Unified Browser 的 Presentation Observation 边界：顶层只保留不发布状态的 Feature 生命周期容器，Library、LAN、Toolbar、Player、Quick Organize 与副作用监听分别下沉到实际消费它们的最小子 View。
+- 播放进度、skim、片段捕获和播放目标等高频状态只使 Player 子树及零尺寸副作用节点参与求值，不再波及 Browser；Browser 局部发布也不会重建 `NativePlayerView`。现有 Workspace Store 生命周期、Playback 语义、Repository 与 UI 行为保持不变。
+- Instruments 的 32 秒连续播放复测中，Browser、`ViewerWorkspace` 根与 `ContentView` 根相关采样均由非零降为 0，超过 250 ms 的 Hang 为 0；两轮 Sidebar 往返中主线程采样时间由 9.333 秒降为 8.022 秒，Browser 根样本由 18 ms 降为 12 ms，`ContentView` 根样本由 38 ms 降为 26 ms，SwiftUI / AttributeGraph 样本由 72 ms 降为 54 ms，未复现约 313 ms 的再次进入 Hang。
+- 新增 Playback/Browser、LibraryStore/Workspace、LAN/Browser 与 Browser/Native Player 四组 Observation 隔离回归；完整 327 项 / 39 个测试套件、架构边界、差异检查及 macOS Debug/Release 构建通过。没有新增 Domain、Use Case、Repository、数据库 migration 或 Legacy 运行时依赖；Thumbnail、Tag SQL、Unified Browser 分页等 P1 热点未改动。
+- Mac 版本更新为 1.21.4（116），iPhone 保持 1.15.4（77）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.3 / iPhone 1.15.4
 
 - 修复 iPhone 合并 Mac 标签时的 SQLite 2067 失败：历史数据中若同一标签 UUID 存在仅字母大小写不同的两条物理记录，同步现在会先精确识别并合并重复项，再把 Mac 的规范记录移到正确分类和父标签，不再触发 `tags_sibling_name_unique`。
 - 重复标签原有的 Asset 标签、Clip 标签、子标签和智能文件夹条件会完整迁移到规范 UUID；仅大小写不同的物理重复行不会被误记为“删除规范标签”的同步墓碑。
@@ -661,7 +669,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7314563" type="application/octet-stream" sparkle:edSignature="B1j1KRA4QUGsY/BVBh+QrnRMD4mNe/7/dlgMpcEQk6wrAybN9GPZrWg8plRwk+1+UnongogXwpv6chGaMn0gAA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7317280" type="application/octet-stream" sparkle:edSignature="KFUwkBpomglscRDEs+07c5iiKEIQ8+RJgyukCMuyYh/AYKhw1IRTFjvAzydHsQxD69v7uOa5BuYyJD84d8+tAA=="/>
         </item>
     </channel>
 </rss>
