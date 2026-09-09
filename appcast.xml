@@ -3,13 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.22.3</title>
-            <pubDate>Wed, 09 Sep 2026 18:47:14 +0800</pubDate>
-            <sparkle:version>127</sparkle:version>
-            <sparkle:shortVersionString>1.22.3</sparkle:shortVersionString>
+            <title>1.22.4</title>
+            <pubDate>Wed, 09 Sep 2026 19:56:37 +0800</pubDate>
+            <sparkle:version>128</sparkle:version>
+            <sparkle:shortVersionString>1.22.4</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.3 / iPhone 1.15.8
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.4 / iPhone 1.15.8
+
+- Backup V2 “仅资料库数据”体积审计确认 914.3 MB 几乎全部来自 Structured Sync 历史：`sync_changes` 及索引占数据库约 97.83%，不是 Original Media、缩略图、分析缓存、WAL/SHM 或大业务 BLOB；freelist 仅约 11.6 MB。
+- Backup V2 现在只在独立 portable snapshot 中按既有 Structured Sync 冲突规则保留每个实体的最终 winner（包括 delete tombstone），随后压实该临时 SQLite；用户真实资料库不做 `DELETE` 或 `VACUUM`，Full Backup 的原片复制、SHA 校验与恢复语义保持不变。
+- 同一份现有备份的只读副本验证从 914,264,447 bytes 降至 17,744,251 bytes，减少 98.06%；914,543 条历史日志收敛为 28,716 个实体 winner，业务表逐行差异为 0，SQLite integrity / foreign key 均通过。新增 package component size diagnostics 及同步历史、derived data 排除、失败不发布、Folder/Collection/完整原片恢复回归。
+- 当前真实 Folder V1 资料库的临时 Backup → Restore round-trip 通过：旧流程等价包基准为 1,193,619,838 bytes / 7 秒，新流程为 17,981,822 bytes / 45.311 秒，减少 98.49%；恢复保留 1,441 Assets、2 个系统 Folder 及全部主要业务表关系。最终 397 项 / 45 个 Swift 测试套件、macOS Debug/Release 构建与差异检查通过；未修改 iPhone 或共享备份协议。
+- 问题归属既有 Backup V2 Repository portable snapshot 边界；调用链仍为 `Backup View → LibraryStore → CreateLibraryBackup → LibraryBackupRepository → FileSystemLibraryBackupRepository → Structured SQLite snapshot`。没有新增 Domain、Use Case、Repository、数据库 schema、同步协议或 Backup 格式，也没有新增 Legacy 运行时依赖。Mac 更新为 1.22.4（128），iPhone 保持 1.15.8。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.22.3 / iPhone 1.15.8
 
 - Folder V1 本机验收修复：Folder 行现在明确进入 Asset-only Browser，并把 FolderID 作为 Browser query context 的正式组成，经 `LoadAssetBrowserPage → SQLiteAssetQueryRepository → assets.folder_id` 做 direct-folder 查询；Parent 不合并 descendants，Unfiled 只显示直接归属项，All Media 仍显示全量，搜索、排序和原有筛选继续与 Folder 条件组合。
 - Asset 单选/多选拖放改用两个私有 UTType 的 Codable Transferable，Folder node、Asset payload 与 Finder file URL 不再共享 plain-text transport。Drop 继续调用既有 `MoveAssetsToFolder`，Structured SQLite 提交后刷新 Store/Browser；Managed 原片继续由 durable managed mutation 整理，Referenced 外部字节绝不移动。
@@ -771,7 +779,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7951552" type="application/octet-stream" sparkle:edSignature="B4J3STSO9w+mx/eal+PEf6JRCzATXr8tCPG6z+yAvnl3l2ZhjS+rFrZmfl17UcinZ6/F/mo6V5Msi3cXgng2CA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7954958" type="application/octet-stream" sparkle:edSignature="iygaKR46SPocCTRWzkLzU3RCwHVVP7gc+BG1HvY6EJsJxXBXZm2tN9+2lFsx7CH7Yl9F450XBva224SwHwsGCg=="/>
         </item>
     </channel>
 </rss>
