@@ -3,13 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.11</title>
-            <pubDate>Wed, 09 Sep 2026 11:02:58 +0800</pubDate>
-            <sparkle:version>123</sparkle:version>
-            <sparkle:shortVersionString>1.21.11</sparkle:shortVersionString>
+            <title>1.22.0</title>
+            <pubDate>Wed, 09 Sep 2026 13:46:43 +0800</pubDate>
+            <sparkle:version>124</sparkle:version>
+            <sparkle:shortVersionString>1.22.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.11 / iPhone 1.15.8
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.0 / iPhone 1.15.8
+
+- Duplicate Resolution V1 将既有完整 SHA-256 扫描闭环为可裁决工作流，并在同一 ReadModel 中按 Location/Asset 结构区分文件重复、Asset 重复与混合组；三栏审阅继续由左侧分组、中间现有播放器预览和右侧候选/裁决组成，新增 Pending / Resolved、Keep All、Keep This、Result Preview 与 Safe Cleanup。
+- Keep All 只写最小 Resolution history，不改变 File、Asset 或 metadata；成员指纹使用完整 SHA 加排序后的稳定 LocationID，同一成员重扫保持 Resolved，出现新成员会重新进入 Pending。该设备本地历史表随 Structured SQLite schema 6 安装，不新增 Duplicate sync protocol，也不会把外部 Trash 行为同步到其他设备。
+- Keep This 允许 surviving Asset 与 surviving backing File 来自不同候选。File Duplicate 仅移除冗余 Location，Asset identity 与关系不变；Asset/Mixed 在一个正式 SQLite transaction 中依次迁移 Tag union、Collection union、Clip/Marker、Favorite OR，应用已确认 Title/Note，切换 backing，验证结果，再为 duplicate Asset 写 tombstone。surviving lifecycle、createdAt 与 identity history 保持不变。
+- 外部引用默认只做 Library Cleanup，真实原片保持不动；显式 Disk Cleanup 会在执行前重新 stat 并计算完整 SHA，优先通过系统 Trash，成功后才提交引用移除。Trash 不可用时安全失败，不静默 fallback 到 unlink。托管重复先同目录暂存，数据库失败会补偿恢复，提交后才清理镜藏拥有的冗余 bytes；从不自动删除空文件夹。
+- Safe Batch 只接纳 keeper 本机可用、完整性已验证、所有重复位置可访问、ownership/dependency 明确且无 Title/Note 冲突的组；每组执行前重新验证，变化项和失败项独立跳过，最终分别报告成功、跳过原因、引用移除、外部 Trash 与托管空间回收，不把 partial failure 标成整体成功。
+- 问题归属 MediaFilesFeature；调用链为 `DuplicateMediaManagementView → DuplicateMediaManagementStore → ManageExactDuplicates / ExecuteDuplicateMergePlan → ExactDuplicateRepository / AssetMergeCommandRepository / DuplicateResolutionHistoryRepository → Structured SQLite`，文件访问继续经过 `AssetLocation + FileAccessGrant`。只新增最小 Resolution persistence 与 Trash/staging adapter，没有恢复 `VideoItem` / `LibraryData` 运行时依赖，也没有改写 Backup 格式或调查 914 MB Backup Size。
+- 重复裁决专项 13 项、Asset/Clip/Tag/Collection/File ownership/Backup/架构边界聚焦 67 项，以及 Mac 完整 372 项 / 44 个套件通过；macOS Release 构建通过。iPhone 源码未受影响，完整 176 项测试（另 1 项既有条件探针跳过）、Flutter 静态分析与无签名 Debug 构建通过。Mac 更新为 1.22.0（124），iPhone 保持 1.15.8（81）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.11 / iPhone 1.15.8
 
 - Pack 6 将“存储与安全”正式收敛为 Library Health Workspace：内部只有总览、存储、媒体健康、设备与同步、备份与恢复五个主要区域，并以分隔后的高级维护承接低频能力。首页改为先给出“健康 / 需要注意 / 存在问题”结论，再显示媒体可用性、Managed/Referenced 存储、Missing/Offline/Duplicate、当前 Library 设备和最近已验证备份；不再用 Location、StorageRoot、Multi-location 或 Device record 数充当主要信息。
 - 存储页按真实 Volume / Storage Context 汇总媒体数量、容量与在线状态；外接卷断开只产生一个 Offline Volume 摘要，不会制造成百上千条 Missing。只有卷在线但预计文件不存在才进入 Missing，并继续调用现有 `RelinkMediaFiles`；Exact Duplicate 继续使用用户主动触发、可后台运行的 SHA-256 扫描与人工 inspect/remove，不增加 Similar Media 或自动处理。
@@ -735,7 +745,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7527415" type="application/octet-stream" sparkle:edSignature="//qOf7gDFAtOzMJCc5/jxaGr1azCUTTUuanOsjr81k+CR4GF333cgzCc4lPF2NBP+9Qnzrmzn5+VryWqsD6wBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7680488" type="application/octet-stream" sparkle:edSignature="gnlkR4p5VV+u/fEW3P02+8svn/IdiEyc1Hp8Kg7I+TLLtwtGecVylABNUhTMqWz6PqLxjVL4t5LuR8kaAt7BBg=="/>
         </item>
     </channel>
 </rss>
