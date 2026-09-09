@@ -3,13 +3,40 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.7</title>
-            <pubDate>Tue, 08 Sep 2026 17:04:58 +0800</pubDate>
-            <sparkle:version>119</sparkle:version>
-            <sparkle:shortVersionString>1.21.7</sparkle:shortVersionString>
+            <title>1.21.10</title>
+            <pubDate>Wed, 09 Sep 2026 10:06:43 +0800</pubDate>
+            <sparkle:version>122</sparkle:version>
+            <sparkle:shortVersionString>1.21.10</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.7 / iPhone 1.15.6
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.10 / iPhone 1.15.8
+
+- Pack 5.1 修复 Clean Reset 后的跨设备拓扑回灌。根因是 iPhone 核心同步仍使用兼容协议 5，快照持续携带本机保存的完整历史 Membership，而 Mac 又把该列表当普通 topology upsert 合并。现在 iPhone 只发布本次同步的稳定 sender DeviceID；Mac 也只允许经本次会话验证的 sender 建立 Membership。旧 replica 的 9 条历史 topology 不再具有重建当前 Library Membership 的权限，LAN、Tailscale 与 reconnect 仍共用同一 stable DeviceID。
+- Structured Sync Apply 新增 parent Asset 最终约束：当 `assetDeletedAuthority` 仍有效时，来自旧 peer 的 Metadata、Location、AssetTagState、RatingState、Segment 与 Marker upsert 只记录为已忽略冲突，不会复活子状态；若未来有合法且胜出的 Asset upsert，仍沿用既有冲突顺序先清除旧 parent tombstone，再允许其新 child state。正常未删除 Asset 的 Tag / Rating 双向同步保持不变。
+- Controlled Clean Reset 的 Use Case 现在要求明确确认“其他 peer 已暂停、Reset 后旧 replica 将受控 re-seed”；未确认时在建立 Backup V2 或 rollback snapshot 前停止。iPhone / Mac mini 继续复用现有“只删除本机 Library 副本 → 保留设备级 stable DeviceID 与 Trust → 从当前 Mac LibraryID 重新加入”路径，不新增 Retire、Alias、lineage、Membership history 或第二套同步系统。
+- 只读现场核对：当前真实 `main` 仍为 Asset 1,565、Location 1,565、Clip 155、Primary epoch 6；iPhone 回灌后 Membership 为 9，两个正式 tombstoned Asset 的 AssetTagState / RatingState 仍待新版本通过正式 Maintenance / Repository 路径清理。未修改真实数据库、原片或 canonical Location。
+- 新增 legacy sender-only Membership、旧 child state 不越过 Asset tombstone、Clean Reset peer 安全确认与 iPhone sender-only 快照回归。Mac 完整 355 项 / 43 个套件、iPhone 完整 176 项（另 1 项既有条件探针跳过）、Flutter 静态分析、架构边界、差异检查及双方 Debug/Release 构建通过；最终聚焦复测 34 项 / 4 个套件通过。Mac 更新为 1.21.10（122），iPhone 更新为 1.15.8（81）。当前状态：等待本机验收；不进入 Pack 6。请先双击 `本机验收.command`，通过后再在正式 App 内清理当前 Membership / child state 并重建 iPhone replica。
+
+# 镜藏 Lite 1.21.9 / iPhone 1.15.7
+
+- File Management Phase 3 将统计收敛为 Asset、canonical Original、当前设备 Download、Available、Volume Offline、Missing 与 Exact Duplicate Group；metadata presence 和临时 Cache 不再作为正式文件位置。外接卷未挂载优先显示 Volume Offline，卷在线但文件消失才显示 Missing。
+- 新增受控旧拓扑 Clean Reset：`FileManagementView → FileManagementStore → Prepare/ExecuteControlledCleanReset → SQLiteControlledCleanResetRepository + Backup V2 → Structured SQLite`。Dry Run 只读生成 canonical 保留/历史删除计划；执行前强制建立并校验 Metadata Backup V2 与单文件 rollback snapshot，再在一个 SQLite 事务中清除旧 Device、Location 与闲置 StorageRoot 拓扑，同时保留 stable DeviceID、LibraryID、Asset/Clip/Tag/Note/Rating/Collection、Outbox、Tombstone、Primary epoch、Sync Cursor 和原片。
+- 真实 main Library 的两个已确认缺失 Asset 已通过正式 Asset Lifecycle 删除并建立 tombstone：`2CE71184…` 无业务关系，`916A0784…` 的 1 个 Clip 与 Asset/Clip Tag state 随从属删除语义清理，全局 Tag 定义、同名其他 Asset 与 Finder 文件均未删除。第三个 `F70F1014…` 已重新定位并确认为当前设备 online canonical。
+- 清理后的只读 Dry Run 为 Device 9→1、Location 14,885→1,565、Available 10,158→1,565、Offline 2,713→0、Missing 2,014→0、Blocking 0、Multi-location 1,564→0，Asset 1,565、Clip 155 保持；1,565 个 Asset 全部具有本机 confirmed canonical，Controlled Clean Reset READY，但尚未执行真实 Reset。
+- Relink 继续复用既有 Asset Lifecycle 与完整 identity/SHA-256 校验，更新 Location 而不改变 AssetID 或业务关系；恢复 macOS 用户主动触发的后台 Exact Duplicate Scan，只展示完整 SHA-256 相同的分组，本轮不自动删除、合并或选择保留项。
+- Asset 删除改由 `RemoveAssetFromLibrary` 协调：Referenced 只提交正式业务删除并保留 Finder 文件；Managed 先把当前设备的全部托管原片移入系统废纸篓，再提交结构化删除；仅当 StorageRoot 已确认挂载且文件确实不存在时，允许跳过空的 Trash 步骤并继续正式从属删除与 tombstone。Volume Offline、存在但不可读或 Trash 失败仍完整保留数据库。没有数据库 migration、没有 Sync/Backup 协议变化，也没有新增 Legacy 运行时依赖。
+- 新增 Dry Run、双安全点、陈旧计划回滚、保护数据/关系、原片不变、Offline/Missing、Referenced/Managed/Confirmed Missing 删除及 Exact Duplicate 统计回归。Mac 更新为 1.21.9（121），iPhone 保持 1.15.7（80）。当前状态：Controlled Clean Reset READY，等待用户确认执行真实 Reset；不进入 Pack 6。
+
+# 镜藏 Lite 1.21.8 / iPhone 1.15.7
+
+- Device & Sync Pack 4：明确区分稳定 Device Identity、按资料库 Membership、设备 Trust、Pairing、LAN/Tailscale Connection、Structured Sync Session、Media Location 与 iPhone Download；这些概念继续复用现有边界，没有新增 Domain、Use Case、Repository 或数据库 migration。
+- iPhone 配对现在只建立/更新同一稳定 DeviceID 的 Trust 与连接凭证，不再顺带恢复已移除的 Membership；LAN 与 Tailscale 地址会合并为同一设备的 Endpoint，取消信任会删除该设备的全部凭证与连接绑定，但保留 Membership 和资料库业务数据。启动时也不再由历史连接记录反向改写当前 Library Identity。
+- Mac 配对不再自动启动同步；Pairing 与 Sync Session 改为显式分离。修复 Trust Repository 使用测试/注入 UserDefaults 读取却写入全局 defaults 的持久化旁路，取消信任现在可可靠删除连接记录与 Keychain token。
+- iPhone metadata sync 只创建结构化 Asset 与必要 Membership，不会为本机制造假的 Original/Managed/Referenced Media Location；远端 Location 保持远端 owner，明确下载继续生成独立的本机 `downloaded` 副本，流媒体解析不写持久化位置。
+- Remote playback 的健康检查和远端身份读取现在都携带目标 LibraryID，避免多资料库连接时探测到远端当前打开的其他资料库；Sync Cursor、Membership 与 Primary 继续按 Library 独立。
+- 新增取消 Trust、同设备多线路/多资料库绑定、metadata 无假位置、远端 owner 与本机下载分离、多资料库 Cursor、Remote playback Library 约束等回归。Flutter 静态分析、架构边界与差异检查通过；iPhone 完整 175 项测试（另 1 项既有真机探针跳过）、Mac 完整 340 项 / 41 个套件及双方 Debug/Release 构建通过。Mac 版本更新为 1.21.8（120），iPhone 更新为 1.15.7（80）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.7 / iPhone 1.15.6
 
 - 修复 iPhone v23→v24 Membership migration 的阻断性回归：旧库中同一稳定 DeviceID 若以大小写变体或跨资料库记录多次，升级会先完整暂存每个 `(libraryID, deviceID)` Membership，再按 DeviceID 无关大小写确定性选择最新设备 metadata，避免临时全局设备表的单列主键冲突；失败重试与升级后重开均可安全完成，schema 版本保持 24。
 - 修复资料页空资料或搜索无结果时整个 Browser 被 HStack 按固有高度垂直居中、顶部留下大块空白的问题；Browser 现在始终占满可用高度并顶对齐，工具栏固定在内容区顶部，空状态只在工具栏下方的剩余区域居中。
@@ -697,7 +724,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7326441" type="application/octet-stream" sparkle:edSignature="+6omefoY8NX0aSI+BRpua8kS/1RGUgcjHyJMA+KSbUMioCSuBd03y4xdLJ/OffLiQtsm+lOaKwkv+eeVZ8ZIAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7403116" type="application/octet-stream" sparkle:edSignature="RmSLQNIa9qGh1fXeBrrI2WU9fEI1bLabCBEtSXHtkWIN1ldhRQFa1KV+wMUGsUIn+0ESaAc4R2vKCzo5fb8jBQ=="/>
         </item>
     </channel>
 </rss>
