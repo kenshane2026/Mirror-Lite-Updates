@@ -3,13 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.22.0</title>
-            <pubDate>Wed, 09 Sep 2026 13:46:43 +0800</pubDate>
-            <sparkle:version>124</sparkle:version>
-            <sparkle:shortVersionString>1.22.0</sparkle:shortVersionString>
+            <title>1.22.1</title>
+            <pubDate>Wed, 09 Sep 2026 14:41:11 +0800</pubDate>
+            <sparkle:version>125</sparkle:version>
+            <sparkle:shortVersionString>1.22.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.0 / iPhone 1.15.8
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.1 / iPhone 1.15.8
+
+- 导入菜单新增临时第三种策略“移动到 Library”，支持选择媒体/文件或文件夹；扫描与结构化登记继续复用既有 ImportMedia 链路，登记后由现有 `TransferMediaToLibrary(.move)` 逐项移动到包内 `Original Media`，并经 `RelinkAssetLocation` 更新原位置。移动失败项保留诊断，不会改走复制或静默删除；“保留文件原位置”和“复制到 Library”行为不变。
+- 顶部导入按钮隐藏了系统自动附加的右侧下拉箭头，只保留主体导入图标。全局操作提示改到工具栏下方右上角并使用更宽、更高对比度的通知卡；资料库管理弹窗会在自身层级显示主要设备权限及其他错误，不再把提示遮在弹窗后面的右下角。
+- 资料库重命名现在同时安全改名本机 `.mirrorlibrary` 包，并更新设备本地 catalog、可移动包书签、Manifest 与包内 `Original Media` 的结构化 Location 投影；LibraryID、AssetID、标签、片段和同步身份均保持不变。文件名中的 `/`、`:` 会转换为 `-`，目标包冲突或外置盘离线时拒绝改名并保留原状态。
+- 重复媒体审阅台修复扫描中无结果时三栏内容被压到窗口底部、上方大面积留白的问题；扫描阶段改为占满剩余区域的居中进度状态，存在分组时三栏也会完整填充可用高度。完整 SHA-256、Pending/Resolved、Keep All/Keep This 与 Safe Cleanup 规则不变。
+- 工作区 Presentation 会话按 Library 独立保存。重新打开 App 会恢复最后停留的资料、片段、专注整理、标签、收藏集或存储与安全工作区；资料页补齐媒体类型筛选，片段页恢复范围/搜索/导出状态/排序，标签页恢复所选标签/结果类型/搜索，收藏集恢复所选集合/结果类型/搜索，存储页恢复上次分区。会话只存 ID、枚举和查询文本，不保存媒体路径，也不进入 Structured SQLite 业务权威。
+- 问题分别归属 MediaFiles、Library 和 Workspace Presentation 边界；调用链沿用 `View → Store → Use Case → Repository → Structured SQLite`。没有新增业务 Repository、数据库 migration、同步协议或 Backup 格式；`VideoItem` / `LibraryData` 没有成为新的运行时业务依赖。Mac 完整 378 项 / 44 个套件、架构依赖边界、差异检查与 macOS Release 构建通过；iPhone 完整 176 项测试（另 1 项既有真实设备条件探针跳过）、Flutter 静态分析与无签名 Debug 构建通过。Mac 更新为 1.22.1（125），iPhone 保持 1.15.8（81）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.22.0 / iPhone 1.15.8
 
 - Duplicate Resolution V1 将既有完整 SHA-256 扫描闭环为可裁决工作流，并在同一 ReadModel 中按 Location/Asset 结构区分文件重复、Asset 重复与混合组；三栏审阅继续由左侧分组、中间现有播放器预览和右侧候选/裁决组成，新增 Pending / Resolved、Keep All、Keep This、Result Preview 与 Safe Cleanup。
 - Keep All 只写最小 Resolution history，不改变 File、Asset 或 metadata；成员指纹使用完整 SHA 加排序后的稳定 LocationID，同一成员重扫保持 Resolved，出现新成员会重新进入 Pending。该设备本地历史表随 Structured SQLite schema 6 安装，不新增 Duplicate sync protocol，也不会把外部 Trash 行为同步到其他设备。
@@ -745,7 +754,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7680488" type="application/octet-stream" sparkle:edSignature="gnlkR4p5VV+u/fEW3P02+8svn/IdiEyc1Hp8Kg7I+TLLtwtGecVylABNUhTMqWz6PqLxjVL4t5LuR8kaAt7BBg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7730587" type="application/octet-stream" sparkle:edSignature="Nsek8y76gStpAstVK60AnepbtaK4qmIW9E7t4fzAJG0tZMQmEn2KlFZ2EWYr0q4FXJ6rTTGpn+7TFvnkOXWmCw=="/>
         </item>
     </channel>
 </rss>
