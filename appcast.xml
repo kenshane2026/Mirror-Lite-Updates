@@ -3,13 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.21.10</title>
-            <pubDate>Wed, 09 Sep 2026 10:06:43 +0800</pubDate>
-            <sparkle:version>122</sparkle:version>
-            <sparkle:shortVersionString>1.21.10</sparkle:shortVersionString>
+            <title>1.21.11</title>
+            <pubDate>Wed, 09 Sep 2026 11:02:58 +0800</pubDate>
+            <sparkle:version>123</sparkle:version>
+            <sparkle:shortVersionString>1.21.11</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.10 / iPhone 1.15.8
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.21.11 / iPhone 1.15.8
+
+- Pack 6 将“存储与安全”正式收敛为 Library Health Workspace：内部只有总览、存储、媒体健康、设备与同步、备份与恢复五个主要区域，并以分隔后的高级维护承接低频能力。首页改为先给出“健康 / 需要注意 / 存在问题”结论，再显示媒体可用性、Managed/Referenced 存储、Missing/Offline/Duplicate、当前 Library 设备和最近已验证备份；不再用 Location、StorageRoot、Multi-location 或 Device record 数充当主要信息。
+- 存储页按真实 Volume / Storage Context 汇总媒体数量、容量与在线状态；外接卷断开只产生一个 Offline Volume 摘要，不会制造成百上千条 Missing。只有卷在线但预计文件不存在才进入 Missing，并继续调用现有 `RelinkMediaFiles`；Exact Duplicate 继续使用用户主动触发、可后台运行的 SHA-256 扫描与人工 inspect/remove，不增加 Similar Media 或自动处理。
+- 设备与同步现在分别展示本机、当前 Library Membership、Trusted Devices、Connection route、最近连接与 Sync 状态；Stable DeviceID 默认折叠，取消 Trust 仍只删除 Credentials / Endpoint。Primary 已移入设备页的高级控制，不再占据总览；Pairing Code、发现、LAN/Tailscale 和 Structured Sync 链路保持不变。
+- Backup V2 现在拥有正式“备份与恢复”入口，显示最近备份的时间、位置、验证状态、大小与类型，并继续复用现有创建、V2 validation、Legacy detection、integrity、rollback 与 activation 流程。最近备份收据只作为按 Library 保存的 Presentation 状态，不成为新的数据权威。
+- 旧“兼容工具”已删除且没有能力丢失：片段清单导出保留在片段 Workspace；Backup/Restore 进入备份与恢复；Device/Sync/Primary 进入设备与同步；File Management、Batch Relink、Exact Duplicate 进入存储或媒体健康；Identity report、Metadata checkpoint、第二硬盘核对、性能诊断、缩略图缓存和受控 Clean Reset 进入高级维护。危险拓扑维护继续二次确认。
+- 全局 Toolbar 最终只保留 Sidebar、Library Switcher、Undo、Redo、Global Search、Remote 与 Import；不再显示品牌占位、全局“…”、兼容工具或低频管理入口。资料、片段、专注整理、标签与收藏集没有重新设计。
+- 问题归属 Presentation / Navigation / ReadModel composition；调用链为 `StorageSafetyWorkspace → StorageSafetyStore / FileManagementStore → 现有 Use Case / Query → 现有 Repository → Structured SQLite`。只扩展既有 File Management Overview 的 Volume 投影，没有新增 Domain Entity、Use Case、Repository、数据库 migration、同步协议、Backup 格式或 Legacy 运行时依赖；没有修改真实媒体、Device lineage、stable DeviceID、Primary epoch 或 Location topology。
+- 只读真实资料库核对为 Asset 1,565、canonical Location 1,565、Available 1,565、Offline 0、Missing 0、Storage Volume 3、Exact Duplicate Group 126，SQLite `integrity_check` 为 `ok`；界面因此会把媒体与存储显示为可用，并将重复组安静地归类为“需要注意”。Mac 完整 359 项 / 43 个套件与性能样本、iPhone 完整 176 项（另 1 项既有条件探针跳过）、Flutter 静态分析、架构边界、差异检查及双方 Debug / Release 构建通过。Mac 更新为 1.21.11（123），iPhone 保持 1.15.8（81）。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.21.10 / iPhone 1.15.8
 
 - Pack 5.1 修复 Clean Reset 后的跨设备拓扑回灌。根因是 iPhone 核心同步仍使用兼容协议 5，快照持续携带本机保存的完整历史 Membership，而 Mac 又把该列表当普通 topology upsert 合并。现在 iPhone 只发布本次同步的稳定 sender DeviceID；Mac 也只允许经本次会话验证的 sender 建立 Membership。旧 replica 的 9 条历史 topology 不再具有重建当前 Library Membership 的权限，LAN、Tailscale 与 reconnect 仍共用同一 stable DeviceID。
 - Structured Sync Apply 新增 parent Asset 最终约束：当 `assetDeletedAuthority` 仍有效时，来自旧 peer 的 Metadata、Location、AssetTagState、RatingState、Segment 与 Marker upsert 只记录为已忽略冲突，不会复活子状态；若未来有合法且胜出的 Asset upsert，仍沿用既有冲突顺序先清除旧 parent tombstone，再允许其新 child state。正常未删除 Asset 的 Tag / Rating 双向同步保持不变。
@@ -724,7 +735,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7403116" type="application/octet-stream" sparkle:edSignature="RmSLQNIa9qGh1fXeBrrI2WU9fEI1bLabCBEtSXHtkWIN1ldhRQFa1KV+wMUGsUIn+0ESaAc4R2vKCzo5fb8jBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7527415" type="application/octet-stream" sparkle:edSignature="//qOf7gDFAtOzMJCc5/jxaGr1azCUTTUuanOsjr81k+CR4GF333cgzCc4lPF2NBP+9Qnzrmzn5+VryWqsD6wBQ=="/>
         </item>
     </channel>
 </rss>
