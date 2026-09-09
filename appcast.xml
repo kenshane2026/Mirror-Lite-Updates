@@ -3,13 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.22.2</title>
-            <pubDate>Wed, 09 Sep 2026 17:09:07 +0800</pubDate>
-            <sparkle:version>126</sparkle:version>
-            <sparkle:shortVersionString>1.22.2</sparkle:shortVersionString>
+            <title>1.22.3</title>
+            <pubDate>Wed, 09 Sep 2026 18:47:14 +0800</pubDate>
+            <sparkle:version>127</sparkle:version>
+            <sparkle:shortVersionString>1.22.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.2 / iPhone 1.15.8
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.3 / iPhone 1.15.8
+
+- Folder V1 本机验收修复：Folder 行现在明确进入 Asset-only Browser，并把 FolderID 作为 Browser query context 的正式组成，经 `LoadAssetBrowserPage → SQLiteAssetQueryRepository → assets.folder_id` 做 direct-folder 查询；Parent 不合并 descendants，Unfiled 只显示直接归属项，All Media 仍显示全量，搜索、排序和原有筛选继续与 Folder 条件组合。
+- Asset 单选/多选拖放改用两个私有 UTType 的 Codable Transferable，Folder node、Asset payload 与 Finder file URL 不再共享 plain-text transport。Drop 继续调用既有 `MoveAssetsToFolder`，Structured SQLite 提交后刷新 Store/Browser；Managed 原片继续由 durable managed mutation 整理，Referenced 外部字节绝不移动。
+- Finder 文件或目录现在可放入当前 Folder Browser、具体 Folder node 或 All Media（落入 Unfiled）。Drop 只预填 URL 与明确 FolderID，并要求用户选择“保留在 Finder 原位置”或“复制到 Library（托管）”；随后复用现有 ImportMedia 扫描、层级保留、结构化登记及 Managed copy/verification，不新增第二套 Import。
+- 既有 `MoveMediaToManaged` 已能安全复制、完整校验并登记 Managed Location，因此 Asset 菜单将原本含糊的“复制到 Library”明确为“转为托管（保留原文件）”。Referenced 原位置和 FileAccessGrant 保留，外部文件不移动、不删除；Library 删除仍不会删除 Referenced bytes。
+- 新增真实 SwiftUI hosting + Store + Use Case + Repository + SQLite integration regression，覆盖 Folder selection 即时查询、多条件组合、direct child semantics、多选移动源/目的刷新、AssetID 稳定、私有拖放类型隔离、Finder drop ownership gate 与显式目的地。未修改 iPhone、Backup V2、Structured Sync 协议或 schema。Mac 更新为 1.22.3（127），iPhone 保持 1.15.8。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.22.2 / iPhone 1.15.8
 
 - Folder V1 成为独立于 Managed / Referenced ownership 与 Collection 的正式业务结构：每个 Asset 通过稳定 FolderID 单归属到一棵层级树；新增未归档、设备导入和稳定来源设备系统文件夹，支持 Mac 展开/折叠、选择、创建、重命名、层级移动、批量 Asset 拖放与安全删除。现有 Asset 升级后只在 SQLite 中进入未归档，不移动任何旧原片；Folder 操作不改变 AssetID、Tag、Clip、Favorite、Reject 或 Collection membership。
 - 文件与目录导入继续复用既有 ImportMedia 扫描和结构化登记链路。单个文件及散文件进入当前 Folder，所有媒体上下文默认进入未归档；完整目录导入保存用户真实提供的全部相对目录层级，Managed 与 Referenced 使用同一 Folder Tree。Referenced 的外部路径永不因镜藏 Folder 改名或移动而改变。
@@ -763,7 +771,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7915006" type="application/octet-stream" sparkle:edSignature="N/gWqT20YL5rq27U07IpAHbWronKGxXO3UvSWZ2N7keRYydiG19Od7rvbbFPs8nCObp/9KMO7ZVr53hwixWwBQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7951552" type="application/octet-stream" sparkle:edSignature="B4J3STSO9w+mx/eal+PEf6JRCzATXr8tCPG6z+yAvnl3l2ZhjS+rFrZmfl17UcinZ6/F/mo6V5Msi3cXgng2CA=="/>
         </item>
     </channel>
 </rss>
