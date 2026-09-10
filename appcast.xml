@@ -3,13 +3,39 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.22.4</title>
-            <pubDate>Wed, 09 Sep 2026 19:56:37 +0800</pubDate>
-            <sparkle:version>128</sparkle:version>
-            <sparkle:shortVersionString>1.22.4</sparkle:shortVersionString>
+            <title>1.22.6</title>
+            <pubDate>Thu, 10 Sep 2026 17:08:32 +0800</pubDate>
+            <sparkle:version>130</sparkle:version>
+            <sparkle:shortVersionString>1.22.6</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.4 / iPhone 1.15.8
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.6 / Native iPhone 1.17.2
+
+- Native Connectivity 正式接入既有 Device 边界：Native DeviceID 复用 Legacy iOS 钥匙串 `com.kenshane.mirrorlite.device-identity / ios-device-id`，并为已有 P1 Native container 保留原固定身份；Bonjour `_mirror-lite._tcp`、Mac `/pair`、设备 Trust 与 Library directory 均沿用现有协议和端点，不生成第二套身份或资料库映射。
+- 资料页内容区右上角新增唯一连接入口，正式呈现 LAN、Remote 与 Offline；同一可信设备可保存局域网与 Tailscale endpoint，探测始终优先 LAN、局域网消失时切换 Remote、恢复后再回到 LAN。连接详情提供 endpoint、最近成功同步时间、Sync Now、重新配对/忘记设备和远程资料库加入；手动同步只刷新正式 ReadModel，不重置当前 Library Workspace。
+- Native Structured Sync 通过 `Native View → Connection Store → SynchronizeNativeLibrary → NativeConnectivityRepository → StructuredLibrarySession → /peer-health + /sync → Mac LibraryServiceRegistry → Structured SQLite` 接入协议 8。自动同步与 Sync Now 共用相同 cursor、分页、冲突、tombstone 和 S1 maintenance checkpoint；双向离线编辑、重连、重复投递、重启及三副本收敛均不需要 reset 或 rebaseline。
+- P2-F1 真机首次同步失败已按正确资料库 `test名称 行不行`（LibraryID `4A8B05A7-723A-48FE-AF6A-2B85F43C261E`）只读取证：Mac 仍保存同一稳定 iPhone DeviceID 的 outbound cursor 107，而重新采用后的 Native Structured SQLite 为空；旧响应因此从 108 开始，序号 111 的 Location `CA38527B-BDF2-4D2C-A871-B645F8084E48` 引用了未发送的 Asset `44DCAA52-8298-4B0E-94C3-6245B94CC3E7`（其 upsert 为序号 15），最终在 `asset_locations.asset_id → assets.id` 提交时触发外键失败。真实 journal 为 167 行 / 115 winners、未压缩，因此 S1 不是这次故障的直接根因。
+- Structured Sync 服务端响应现在以本次请求携带的真实 acknowledgement 构造页面；已持久化 cursor 继续单调不回退，但空副本的 `ack=0` 不再被旧设备进度覆盖。响应分页会补齐 Folder、Asset、StorageRoot 等物理父依赖，同时保持 `sentThroughSequence` 只推进基础页；S1 winner-only 后父 winner 位于后页、Asset tombstone、仍被引用的 Folder / StorageRoot tombstone 均可在延迟外键事务内确定性收敛。失败 apply 仍整笔回滚 change 与 cursor，没有关闭外键、全局父表先行、reset 或第二套 baseline。
+- DEBUG 播放夹具现在严格限定到模拟器内置 `The one / Travel`。真机 DeviceDebug 与任意从 Mac 采用的资料库都只创建空 Structured SQLite，不再自动写入 `n4-fixture-*` Asset/Tag/Segment；真实 `test名称 行不行` 中已经存在的数据未被自动删除或改写，模拟器 `The one` 与 Mac 资料库仍是彼此独立的测试表面。
+- Native 首次接收 Collection 时不再误报“不能跨资料库修改收藏集”。根因是 Native 新建 Structured SQLite 未保存正式 LibraryID，而 Collection 校验仍只读取可能不存在的 Legacy `library_state.main`；现在 Structured Library 创建和 Sync apply 都在既有 `sync_settings` 持久化/核验 `library_id`，旧数据库只把 Legacy state 与现有 Asset/Folder/Collection owner 当作迁移证据。真正已有其他 LibraryID 的数据库仍会在任何 Collection 写入前整笔拒绝并回滚。
+- Connection 页的同步结果和错误不再作为 Form 最后一节落在滚动内容底部；通知改为导航栏下方固定、可关闭的顶部横幅，错误使用明确警示样式，成功/说明使用普通信息样式。Store 继续只持有 Presentation state，View 不包含同步或 Collection 业务规则。
+- Remote Playback 继续走 `WatchModeView → NativePlaybackStore → NativePlaybackReading → ResolvePlaybackTarget → AssetLocationResolver`。本机可用 Location 永远优先；远端 Original 使用已有 `/media/:AssetID`，Smooth 使用已有 `/preview/:AssetID` 与兼容预览缓存，两者都携带 LibraryID 和 Library credential。远端 Asset/Clip 共用既有 queue、range/seek、上下项与 tag/clip 流程；播放前重探测线路，失败后 Retry 会按 LAN→Remote→Offline 重新解析，不实现复杂的播放中无缝切换。
+- Play 与 Download 仍是两种能力：流媒体解析不写 `AssetLocation`、不登记本机 Original、不中转或缓存完整原片；回归在播放前后逐项比较 Native Structured Asset 投影，结果完全一致。真实用户数据库、原片、canonical Location、Primary、Membership、Backup V2 与 P3 file lifecycle 均未触碰。
+- 本轮新增最小 Native Connectivity Repository / Pair 与 Sync Use Case，因为 P1 Native 没有网络边界；共享 Domain 只补 `RemotePlaybackQuality` 和现有 Library directory wire summary 的公共投影，没有新增业务 Entity、SQLite Repository、schema/migration 或同步 wire，协议保持 8。`VideoItem` / `LibraryData` 没有进入 Native 或共享运行时业务依赖。
+- P2-F1 新增旧 cursor / 空副本、S1 后单行分页、完整关系矩阵、父墓碑、失败回滚、并发新副本与重复重试、Native 空库 Collection identity 与顶部通知专项；完整 Shared Swift 434 项 / 53 个套件与 Native Simulator 41 项通过，`foreign_key_check` 均为 0。架构边界、Build Surface、macOS Release、Native iOS Simulator test build 与 Native iOS DeviceDebug 真机架构构建通过；Flutter 0 build、0 tests、0 product diff。Mac 保持未发布的 1.22.6（130），Native 正式版保持未发布的 1.17.2（85），schema 7 与同步协议 8 均不变。此前验收状态因源码变更失效；当前状态重新回到等待本机验收，请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.22.5 / Native iPhone 1.17.1
+
+- S1-D 将 S1-BC 的安全能力接入生产 Structured Sync 成功检查点：出站与入站交换都会显式登记 library-scoped active operation，只有该 Library 的全部 apply、cursor acknowledgement 与 response envelope 工作成功结束后，才在 2 秒 debounce 的 utility maintenance task 中检查历史；失败同步不触发维护，多个 peer / 多次成功会按 Library 合并，不同 Library 相互独立。
+- 生产策略集中在共享 `StructuredSyncHistoryMaintenancePolicy`：`historyRows >= 10,000`、`supersededRows >= 5,000` 且 `historyRows / retainedWinners >= 4.0` 时才调用既有 `CompactStructuredSyncHistory`。统计完全由 SQLite 侧 `COUNT` / `GROUP BY` 完成，不读取 payload，也没有持久化 scheduler 状态。维护失败只记 StructuredSyncMaintenance OSLog，既有事务回滚后等待下一次成功同步重试，不改变本次同步结果。
+- 自动策略长跑生成 12,017 次变更、12 次成功 checkpoint、2 次压缩；journal 最大 10,017 行，最终 2,016 行 / 16 winners，保持在下一触发阈值以内。完整并发回归中的代表性统计查询最慢 2.70 ms，自动维护最慢 46.84 ms，成功 checkpoint 入队最慢 0.05 ms；维护不在网络或 SQLite 同步事务的 critical path。PHYSICAL B 结论不变，不加入 VACUUM 或物理替换。
+- Structured Sync 新增显式 Live Maintenance：只在现有 `sync_changes` 表内按协议 8 的确定性冲突顺序保留每个 `(entity_type, entity_id)` 的当前 winner（包括 delete tombstone），原地删除其余 superseded loser。winner 的 payload、operation、changedAt、originDeviceID、changeID 与原 sequence 均不重写；不依赖 retention age、peer frontier、设备生命周期或 rebaseline。
+- 压缩在 `BEGIN IMMEDIATE` 单事务内完成，任何删除失败会完整回滚；`sync_cursors` 的 inbound / outbound 值不变。AUTOINCREMENT 高水位在提交前校验，压缩后第一条新变更的 sequence 严格大于压缩前历史最大分配值，避免旧 cursor 将新变更误判为已确认。
+- 新增 BC1 A–M 专项矩阵与 BC2 三副本长跑：覆盖普通更新、墓碑、最高 sequence loser、cursor=0 新副本、长期离线副本、重复投递、重启、同时间冲突、收藏集顺序、Folder / Asset-Folder、Location、注入失败回滚与重复压缩幂等。1,862 次业务变更中，A/B 多轮同步与压缩后 C 无 reset / rebaseline 正常追平，D 从 cursor=0 加入，四副本最终结构化状态哈希一致。
+- 实测逻辑行数多轮累计由 3,558 收敛到 192，末轮 177→16（16 个 winner、1 个 tombstone）；序列高水位 1,699 后下一条为 1,700。物理效果归类 B：`page_count 85→85`、`freelist_count 33→33`、SQLite 主文件 348,160 bytes 不缩小，释放页由 SQLite 后续复用；本轮不加入 `VACUUM`、auto-vacuum、scheduler、schema / migration / wire 变更。
+- 问题归属既有 Structured Sync Application / Repository maintenance 边界；生产调用链为 `successful Structured Sync checkpoint → StructuredSyncHistoryMaintenanceCoordinator → liveHistoryStatistics → policy → CompactStructuredSyncHistory → SQLiteStructuredSyncRepository`。S1-D 新增共享 policy/coordinator 与 Repository 统计方法，没有新增 Domain Entity、Repository 类型、Store/View 业务逻辑或 Legacy 依赖。Mac 保持未发布的 1.22.5（129），Native iPhone 正式版保持 1.17.1（84）；schema 7、同步协议 8 与 wire 均不变。当前状态：等待本机验收；请双击 `本机验收.command`。
+
+# 镜藏 Lite 1.22.4 / iPhone 1.15.8
 
 - Backup V2 “仅资料库数据”体积审计确认 914.3 MB 几乎全部来自 Structured Sync 历史：`sync_changes` 及索引占数据库约 97.83%，不是 Original Media、缩略图、分析缓存、WAL/SHM 或大业务 BLOB；freelist 仅约 11.6 MB。
 - Backup V2 现在只在独立 portable snapshot 中按既有 Structured Sync 冲突规则保留每个实体的最终 winner（包括 delete tombstone），随后压实该临时 SQLite；用户真实资料库不做 `DELETE` 或 `VACUUM`，Full Backup 的原片复制、SHA 校验与恢复语义保持不变。
@@ -779,7 +805,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="7954958" type="application/octet-stream" sparkle:edSignature="iygaKR46SPocCTRWzkLzU3RCwHVVP7gc+BG1HvY6EJsJxXBXZm2tN9+2lFsx7CH7Yl9F450XBva224SwHwsGCg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8463615" type="application/octet-stream" sparkle:edSignature="zO2xCJMx5lNeDGYzvStTMDMqTvEQ6mzce556JPkfDiQID+dVhIa7KisB52CqK+tOw5sPHjeG9b+OUIVANLtABQ=="/>
         </item>
     </channel>
 </rss>
