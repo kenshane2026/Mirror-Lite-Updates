@@ -3,13 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.2</title>
-            <pubDate>Sat, 12 Sep 2026 05:46:12 +0800</pubDate>
-            <sparkle:version>136</sparkle:version>
-            <sparkle:shortVersionString>1.23.2</sparkle:shortVersionString>
+            <title>1.23.3</title>
+            <pubDate>Sat, 12 Sep 2026 06:43:58 +0800</pubDate>
+            <sparkle:version>137</sparkle:version>
+            <sparkle:shortVersionString>1.23.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.2 / Native iPhone 1.18.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.3 / Native iPhone 1.18.3
+
+- UX2 在已验证的 UX1 `MediaWorkspace` 上加入统一 Clip Capture / Precision Editing：`+Clip` 先建立仅存在于 `NativePlaybackStore` 的 unsaved draft，Filmstrip 原位显示橙色虚线范围、可拖动 IN/OUT handles、边界附近的现有缓存画面与精确时间；Cancel 不写数据库，Save 才创建正式 Segment。Library、Organize、Tag Detail、Collection 与 Focus 继续共享同一个 Media Workspace 和唯一 `NativePlaybackStore → AVPlayerPlaybackEngine`，没有独立编辑页或第二播放器。
+- 点击已有 Clip 会以同一 SegmentID 进入 Clip Scope 编辑；粗调、Filmstrip zoom、IN/OUT 当前播放位置、`−5 / −1 / +1 / +5` presentation-frame step、范围试听、Cancel/Save 均在当前 media item 上完成。拖动与精调期间保持暂停，始终约束 `IN < OUT`，重叠 Clip 继续合法。Save 复用既有 `UpdateSegmentRange → SegmentCommandRepository → Structured SQLite` 原子事务，只改变 IN/OUT；Tag、Note、Love、Reject、Collection membership/order 与 Segment identity 保持不变，失败时 draft 留在界面可重试。
+- 逐帧语义保持诚实：平台仅在当前 media item 声明可向前/向后 step 时调用真实 presentation-frame stepping，并读取播放器实际时间戳；不使用 `nominalFrameRate` 或 `1/30` 伪造帧边界。某些远端来源或解码器不支持 step 时，界面明确降级为时间轴拖动与最近可解码时间。Local、Remote Original、Remote Smooth 均继续使用 UX1 已解析且带既有认证的 source URL；编辑不会触发 Download、Keep Offline、AssetLocation 或整文件缓存。
+- Focus range 保存只就地更新当前 Focus session 的 Clip read model，不重新执行查询，也不改变冻结 `PlaybackQueueSnapshot`、Previous/Next 或 membership。Clip audition 已具备 Stop、Repeat One 与 Continue 的现有 mode end semantics；本轮没有加入 UX5 mode UI、preheat 改造或 same-asset item reuse。Boundary preview 只复用可见 Filmstrip 已缓存帧，不增加 thumbnail pipeline、数据库访问或全视频生成。
+- 工程验证通过：完整 Shared Swift 443 项 / 54 个套件、完整 Native Simulator 93 项全部通过；Mac Release、Native Simulator、Native DeviceDebug 无签名构建、架构边界、Build Surface 与 `git diff --check` 均通过。Asset Clip Rail 的 5/50/200 单次读取为 0.69 / 1.81 / 6.63 ms；1,000 次本地边界调整约 3.98 ms，期间 0 persistence、0 source re-resolve、0 AVPlayer 重建。Structured SQLite `user_version=7`、App data schema identity 10、Structured Sync protocol 8 均不变；Flutter 0 build、0 tests、0 product diff。Mac 更新为 1.23.3（137），Native iPhone 更新为 1.18.3（94）；UX3–UX5 与三设备最终 Sync Acceptance 均未开始。
+
+# 镜藏 Lite 1.23.2 / Native iPhone 1.18.2
 
 - UX1 将 Native “播放器”升级为所有正式入口共享的 Media Workspace：Library Asset、Organize Clip、Tag Detail、Collection 与 Focus 都继续复用唯一 `NativePlaybackStore + AVPlayerPlaybackEngine`，统一呈现 Media Surface、播放控制、Clip Rail、当前 Clip/Asset Scope 与后续 UX2 精修插槽。Focus 不再打开普通 Organize Player，而是在自己的工作会话内直接嵌入同一 Workspace。
 - 正式 PlaybackContext 现在携带 origin、进入时冻结的 `PlaybackQueueSnapshot`、workspace configuration、现有 `PlaybackMode`、preheat policy 与 return anchor。Library、Organize、Tag Detail、Collection、Focus 都在进入前形成完整有序快照；播放器运行后 Previous/Next 不再重新查询数据库。Focus 使用独立 session queue，Tag、Note、Love、Reject 触发原查询刷新也不会移除或替换已经开始播放的当前 Clip。
@@ -864,7 +872,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8518179" type="application/octet-stream" sparkle:edSignature="IxWJjrCuGCA+6ZkPuDydZIGPHptubwwVZJfW8Nlbfs5v1pUJamSUur6DOEAnrlIp6e9UXbpzRfC6nBF8VpYrBg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8518930" type="application/octet-stream" sparkle:edSignature="6WJ/mI5Hgl93RJuJaMNwbvwjKORbHog5e7oK6ym54epc1EUfsMTxIpI+wDxC/1ygC/SfhvUnebDAqZX1SjHmCg=="/>
         </item>
     </channel>
 </rss>
