@@ -3,13 +3,27 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.22.6</title>
-            <pubDate>Thu, 10 Sep 2026 17:08:32 +0800</pubDate>
-            <sparkle:version>130</sparkle:version>
-            <sparkle:shortVersionString>1.22.6</sparkle:shortVersionString>
+            <title>1.22.7</title>
+            <pubDate>Fri, 11 Sep 2026 09:30:53 +0800</pubDate>
+            <sparkle:version>131</sparkle:version>
+            <sparkle:shortVersionString>1.22.7</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.6 / Native iPhone 1.17.2
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.7 / Native iPhone 1.17.4
+
+- 本机验收安装阶段修复 Mac 启动竞态：旧脚本在刚替换并签名 App 后直接向 bundle identifier 发送 AppleScript `activate`，LaunchServices/AppleEvent 连接尚未稳定时会返回 `-609 连接无效`，尽管安装包、签名和 1.22.7（131）版本都已正确落盘。现在只在旧进程确实存在时请求正常退出并等待结束，随后使用系统 `open` 启动已签名 App，并以进程存在作为安装成功条件；不会强制终止进程或触碰资料库。Build Surface 增加对应退化守卫。
+- P2-F3 真机只读取证定位到现有 `The one`（LibraryID `9E7ED301-EE49-4448-9048-F44CDA3544AF`）Clip `F37B9B96-71FC-41FA-88A5-AD36DE369A41`：Asset `20FA3991-7232-49E4-921F-0BF3FC4F76D8`，11–19 秒，无 Note，2 个 Tag。Segment 与 SegmentTag 已分别写入 `sync_changes` sequence 42694 / 42695，但同一稳定 iPhone DeviceID 在 Mac 保存的旧 acknowledgement 把新安装副本的 outbound cursor 推到 1,012,441，`prepareEnvelope(sequence > cursor)` 因而发送 0；Mac 端未收到该 Clip。任务文字中的 `test名称 行不行`（`4A8B…`）不是创建时 Native 当前选中库，实际写入与 Sync Now 均使用 `The one`，因此没有修改 Library 映射。
+- Structured Sync response apply 现在只接受不超过同一请求实际 `sentThroughSequence` 的本机 acknowledgement；fresh replica 连续接收的 bootstrap rows 会被标记为该 peer 已知，不回传对端自己的完整初始化页。对已经存在的“cursor 高于本机 AUTOINCREMENT 高水位”状态，Repository 只将 cursor 修复到其记录时间之后第一条本机 journal change 之前；真实副本的精确修复边界为 42693，因此现有 Segment / SegmentTag 会成为 2 条出站变更，不需要 reset、re-pair 或全库 replay。
+- 远程 Original/Smooth 仍只影响 Playback source resolution；正式写入继续走 `NativePlaybackStore → NativeLibraryReader → StructuredLibrarySession.createClip → CreateSegment → SQLiteSegmentCommandRepository → records + sync_changes`。新增稳定 DeviceID 重装、旧 cursor 修复、本地源/远程源 Clip 对照、Segment + Tag/Note journal、Mac 收敛、发送计数、第二轮 0、重启后新 Clip、重复投递无 ping-pong 回归；`sent` 继续严格等于每轮实际 outbound Structured changes 数量。
+- LAN ↔ Remote 探测加入 Repository 与 Connection Store 双层 generation：旧 `/health` 或 `/peer-health` 调用在任务取消或被新 generation 替代后即使返回 `NSURLErrorDomain -999`，也不会发布 Offline、覆盖新线路或显示失败横幅；当前 generation 的超时、拒绝、认证及其他真实失败仍按原规则呈现。确定性回归覆盖 LAN→Remote、Remote→LAN、旧请求取消、无错误横幅与真实 timeout。
+- 问题归属既有 Structured Sync Repository / Session 与 Native Connectivity Repository / Store 边界；没有新增 Domain、Use Case 或 Repository 类型，没有 schema、migration、协议 9、S1、Backup V2 或 Legacy Flutter 变更，Structured SQLite 仍是唯一运行时权威。Mac 更新为 1.22.7（131），Native iPhone 更新为 1.17.4（87）。当前状态：等待本机验收；请双击 `本机验收.command`，Native 真机复测仍使用独立 `install_native_iphone.command`。
+- 最终验证：完整 Shared Swift 435 项 / 53 个套件与 Native Simulator 45 项全部通过；新增 exact Clip、local/remote source、重装稳定 DeviceID、旧 cursor、Tag/Note、计数、重启、重复投递及双向 route generation 回归通过。架构边界、Build Surface、`git diff --check`、Mac Release 与 Native iPhone DeviceDebug 无签名构建通过；Flutter 0 build、0 tests、0 product diff。首次并行全量测试仅有既有 topology 性能门槛因机器负载测得 8.90 秒失败，单项立即复跑为 5.88 秒，随后独占完整 435 项复跑全部通过。
+
+# 镜藏 Lite 1.22.6 / Native iPhone 1.17.3
+
+- P2-F2 真机取证确认 `http://100.79.107.117:48620/identity` 在原 Native target 中准确失败为 `NSURLErrorDomain / -1022`：ATS 要求安全连接；同一 iPhone Safari 与真机 XCTest 的对照排除了服务端、Tailscale 路由、DNS、超时、认证和 URL 规范化。Native ATS 现在只为 Tailscale IPv4 `100.64.0.0/10`、IPv6 `fd7a:115c:a1e0::/48` 与 `ts.net` 子域允许现有 HTTP transport，并保留 `.local`/无后缀主机的 local-network 许可；未使用全局 `NSAllowsArbitraryLoads`。同一真机、同一 URL 随后返回 HTTP 200、原 Mac DeviceID 与协议 8。
+- Native URLSession 错误不再被压成“操作失败”或“当前无法连接设备”：Connectivity Repository 现在保留错误 domain、code、分类、系统原因与去除 query/credential 的安全端点。手动 `100.79.107.117:48620` 继续精确规范化为 `http://100.79.107.117:48620`；现有 `TrustedDeviceRecord.mergeEndpoint` 按同一 DeviceID 合并 LAN 与 Remote，复用同一 Trust token 和 Library membership，不产生第二 peer。
+- LAN/Remote Repository 回归覆盖 LAN only、Remote only、双线路优先 LAN、LAN 消失转 Remote、LAN 返回、两者均不可用转 Offline；Remote Structured Sync 实际通过既有 `/health → /peer-health → /sync` 调用链，并核验原 Trust token 与 Library credential 不变、Workspace 保持。Bonjour browser 进入 waiting/failed/cancelled 时会清除已解析的陈旧 LAN 展示；缓存发现记录不参与 Connection 在线判定。
 
 - Native Connectivity 正式接入既有 Device 边界：Native DeviceID 复用 Legacy iOS 钥匙串 `com.kenshane.mirrorlite.device-identity / ios-device-id`，并为已有 P1 Native container 保留原固定身份；Bonjour `_mirror-lite._tcp`、Mac `/pair`、设备 Trust 与 Library directory 均沿用现有协议和端点，不生成第二套身份或资料库映射。
 - 资料页内容区右上角新增唯一连接入口，正式呈现 LAN、Remote 与 Offline；同一可信设备可保存局域网与 Tailscale endpoint，探测始终优先 LAN、局域网消失时切换 Remote、恢复后再回到 LAN。连接详情提供 endpoint、最近成功同步时间、Sync Now、重新配对/忘记设备和远程资料库加入；手动同步只刷新正式 ReadModel，不重置当前 Library Workspace。
@@ -22,7 +36,7 @@
 - Remote Playback 继续走 `WatchModeView → NativePlaybackStore → NativePlaybackReading → ResolvePlaybackTarget → AssetLocationResolver`。本机可用 Location 永远优先；远端 Original 使用已有 `/media/:AssetID`，Smooth 使用已有 `/preview/:AssetID` 与兼容预览缓存，两者都携带 LibraryID 和 Library credential。远端 Asset/Clip 共用既有 queue、range/seek、上下项与 tag/clip 流程；播放前重探测线路，失败后 Retry 会按 LAN→Remote→Offline 重新解析，不实现复杂的播放中无缝切换。
 - Play 与 Download 仍是两种能力：流媒体解析不写 `AssetLocation`、不登记本机 Original、不中转或缓存完整原片；回归在播放前后逐项比较 Native Structured Asset 投影，结果完全一致。真实用户数据库、原片、canonical Location、Primary、Membership、Backup V2 与 P3 file lifecycle 均未触碰。
 - 本轮新增最小 Native Connectivity Repository / Pair 与 Sync Use Case，因为 P1 Native 没有网络边界；共享 Domain 只补 `RemotePlaybackQuality` 和现有 Library directory wire summary 的公共投影，没有新增业务 Entity、SQLite Repository、schema/migration 或同步 wire，协议保持 8。`VideoItem` / `LibraryData` 没有进入 Native 或共享运行时业务依赖。
-- P2-F1 新增旧 cursor / 空副本、S1 后单行分页、完整关系矩阵、父墓碑、失败回滚、并发新副本与重复重试、Native 空库 Collection identity 与顶部通知专项；完整 Shared Swift 434 项 / 53 个套件与 Native Simulator 41 项通过，`foreign_key_check` 均为 0。架构边界、Build Surface、macOS Release、Native iOS Simulator test build 与 Native iOS DeviceDebug 真机架构构建通过；Flutter 0 build、0 tests、0 product diff。Mac 保持未发布的 1.22.6（130），Native 正式版保持未发布的 1.17.2（85），schema 7 与同步协议 8 均不变。此前验收状态因源码变更失效；当前状态重新回到等待本机验收，请双击 `本机验收.command`。
+- P2-F1/P2-F2 新增旧 cursor / 空副本、S1 后单行分页、完整关系矩阵、父墓碑、失败回滚、并发新副本与重复重试、Native 空库 Collection identity、顶部通知、Tailscale ATS、错误分类、完整线路切换与 Remote credential 专项；完整 Shared Swift 434 项 / 53 个套件与 Native Simulator 44 项通过，`foreign_key_check` 均为 0。架构边界、Build Surface、macOS Release、Native iOS Simulator test build 与 Native iOS DeviceDebug 真机架构构建通过；Flutter 0 build、0 tests、0 product diff。Mac 保持未发布的 1.22.6（130），Native 正式版更新为未发布的 1.17.3（86），schema 7 与同步协议 8 均不变。此前验收状态因源码变更失效；当前状态重新回到等待本机验收，请双击 `本机验收.command`。
 
 # 镜藏 Lite 1.22.5 / Native iPhone 1.17.1
 
@@ -805,7 +819,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8463615" type="application/octet-stream" sparkle:edSignature="zO2xCJMx5lNeDGYzvStTMDMqTvEQ6mzce556JPkfDiQID+dVhIa7KisB52CqK+tOw5sPHjeG9b+OUIVANLtABQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8465464" type="application/octet-stream" sparkle:edSignature="aAvwItAPDdLlz3eOnPHQ6HF6LusmMSNNUPmz5liqPVhYI7U8PgfEXPwas/IclcfKZ8IGV0yPBfS3j1I/86pmCw=="/>
         </item>
     </channel>
 </rss>
