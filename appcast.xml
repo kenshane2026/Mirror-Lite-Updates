@@ -3,13 +3,58 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.22.7</title>
-            <pubDate>Fri, 11 Sep 2026 09:30:53 +0800</pubDate>
-            <sparkle:version>131</sparkle:version>
-            <sparkle:shortVersionString>1.22.7</sparkle:shortVersionString>
+            <title>1.23.2</title>
+            <pubDate>Sat, 12 Sep 2026 05:46:12 +0800</pubDate>
+            <sparkle:version>136</sparkle:version>
+            <sparkle:shortVersionString>1.23.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.22.7 / Native iPhone 1.17.4
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.2 / Native iPhone 1.18.2
+
+- UX1 将 Native “播放器”升级为所有正式入口共享的 Media Workspace：Library Asset、Organize Clip、Tag Detail、Collection 与 Focus 都继续复用唯一 `NativePlaybackStore + AVPlayerPlaybackEngine`，统一呈现 Media Surface、播放控制、Clip Rail、当前 Clip/Asset Scope 与后续 UX2 精修插槽。Focus 不再打开普通 Organize Player，而是在自己的工作会话内直接嵌入同一 Workspace。
+- 正式 PlaybackContext 现在携带 origin、进入时冻结的 `PlaybackQueueSnapshot`、workspace configuration、现有 `PlaybackMode`、preheat policy 与 return anchor。Library、Organize、Tag Detail、Collection、Focus 都在进入前形成完整有序快照；播放器运行后 Previous/Next 不再重新查询数据库。Focus 使用独立 session queue，Tag、Note、Love、Reject 触发原查询刷新也不会移除或替换已经开始播放的当前 Clip。
+- 新增最小 Application Read Use Case `LoadAssetClipRail` 与轻量 `ClipRailItem` 投影；数据仍唯一来自 `SegmentQueryRepository.segments(assetID:)`。SQLite 查询只读取该 Asset 的 Segment，并按命中 SegmentID 读取 tag-set，不再装配全库 `segmentTag`。Rail 支持选中、高亮和重叠 lanes；点击 Clip 仍通过正式 `PlaybackTarget.clip` 使用同一播放器，点击 Filmstrip 时间点清除 Clip focus、回到 Asset Scope 并保留/定位资产绝对 playhead。
+- Filmstrip 采用可见单元驱动的横向时间轴：zoom 改变代表帧密度，Lazy viewport 的进入/离开负责请求与取消，派生帧生成并发上限为 3，内存与磁盘继续共用 `Cache/Previews-v2`。本地优先现有媒体 source；远程优先 Mac `/thumbnail?timeMS`，失败后才尝试 Smooth frame 与 Original fallback。`/thumbnail` 复用既有 `libraryToken + libraryID` 认证，不增加 Download、Keep Offline、AssetLocation、整文件读取或认证协议。Clip preview cache key 现在包含 SegmentID、正式 IN/OUT、source URL 签名及本地文件 revision，范围改变不会命中旧预览。
+- 架构边界保持：没有新增 Domain Entity、业务 Clip Repository、PlaybackStore、Player、Tag/Note 系统、SQLite schema、migration 或 Structured Sync wire；协议仍为 8，P1–P4、P3 transfer、Backup V2 与 Frozen Flutter 不变。Mac 更新为 1.23.2（136），Native iPhone 更新为 1.18.2（93）。三设备最终 Sync Acceptance 继续冻结；UX2–UX5 未开始。
+- 工程验证通过：完整 Shared Swift 442 项 / 54 个套件、完整 Native Simulator 83 项全部通过；Mac Release、Native Simulator、Native DeviceDebug 无签名构建、架构边界、Build Surface 与 `git diff --check` 均通过。Asset Clip Rail 的 5/50/200 单次读取实测分别为 0.83 / 1.58 / 5.08 ms，重叠区间回归 0.176 秒；没有触发 index/schema、整文件下载、第二播放器或其他 UX1 STOP 条件。Flutter 0 build、0 tests、0 product diff。当前状态：等待本机验收；请双击 `本机验收.command`，Native 真机验收仍使用独立 `install_native_iphone.command`。
+
+# 镜藏 Lite 1.23.1 / Native iPhone 1.18.1
+
+- P4 真机验收修复 Native Library 缺少照片/视频缩略图：Library Grid 与 List 现在复用 P4 已有的播放来源解析及 App 自有 preview cache，照片直接生成缩略图，视频从多个候选时间选择视觉信息量更高的代表帧；新 cache variant 会绕过此前固定 1 秒产生的纯色片头缩略图。离线或不支持的来源显示明确媒体占位，不会无限转圈，也不会自动 Download 或登记 AssetLocation。
+- Collections 首页和详情的预览图现在由父卡片给出严格尺寸、裁切和圆角，图片固有尺寸不能再撑坏双列 Grid 或把标题推出屏幕。Collection 内容读取失败继续保留内部错误诊断，后续成功刷新会清除已经失效的错误横幅。
+- Collection 播放继续只使用一个播放器，但其正式实现升级为同一 `AVQueuePlayer`：打开 Collection 后后台提前解析完整 PlaybackTarget 队列，复用所选 Original/Smooth 策略，并按顺序预准备 AVURLAsset；当前项之后的连续音视频会进入同一播放器的 forward buffer，遇到照片或不支持项时在该边界重新滚动预热。切换下一项优先复用已解析 source 与已准备 PlayerItem，不再重复连接解析和媒体元数据准备；这只是播放会话临时缓存，不创建本机 Original、不同于 Keep Offline，退出播放器或切换画质即可回收。
+- 问题归属现有 `Library/Collection View → NativeMediaPreviewProvider` 与 `Collection PlaybackContext → NativePlaybackStore → NativePlaybackReading / PlaybackEngine`。没有新增 Asset/Collection Domain、业务 Repository、第二播放器、schema、migration 或 wire；Structured SQLite、Structured Sync protocol 8、P3 传输及 Flutter 冻结边界不变。Mac 更新为 1.23.1（135），Native iPhone 更新为 1.18.1（92）。
+- 工程验证通过：完整 Shared Swift 440 项 / 54 个套件、完整 Native Simulator 75 项全部通过；Mac Release、Native Simulator test build、Native DeviceDebug 无签名构建、架构边界、Build Surface 与 `git diff --check` 均通过。Flutter 0 build、0 tests、0 product diff。当前状态重新回到等待本机验收。
+
+# 镜藏 Lite 1.23.0 / Native iPhone 1.18.0
+
+- P4-A 将现有共享 `MediaCollection` / `CollectionMember` 正式接入 Native：Collections 成为第三个主标签，提供网格首页、自动首个视觉项封面、创建/重命名/安全删除、Asset 与 Clip 混合添加、搜索筛选、分页详情、移除和拖放排序。Library、Organize 与详情选择器全部调用同一个 Collection Store，再经既有 `ManageCollections` / `QueryCollections` 与 SQLite Repository 写入；删除只移除 Collection 及成员顺序，Asset、Clip 和 Original 不变，协议 8 的既有 Collection 同步路径不变。
+- P4-B 复用唯一 `NativePlaybackStore`、`PlaybackTarget` 和 source resolver，将完整 Collection 顺序作为连续 PlaybackContext。视频、音频、正式 Clip IN/OUT 与照片可混合播放；照片默认显示约 5 秒并使用克制且遵循 Reduce Motion 的 Ken Burns，媒体自然结束后自动前进，不支持/不可用项会被安全跳过。点击任一项从该项开始但保留全队列，Previous/Next 不修改 Collection；本机 Original 仍优先，远端 Original/Smooth 沿用现有规则，播放不会自动下载。
+- P4-C 完成 Native Settings 六个简洁分区：Playback、Files & Storage、Connections & Sync、Library、Appearance、Advanced。远端播放默认 Original/Smooth、蜂窝远程串流与下载/上传分别控制，且只影响对应远端操作；设置按设备本地持久化。存储页分别统计 Managed Original、transfer staging 和 Cache，Clear Cache 只清除 App 自有派生缓存，不经过 Remove Local Copy，也不触碰 Original 或任何结构化业务实体。
+- P4-D 新增经过脱敏的支持诊断页，汇总 LAN/Remote/Offline、当前可信设备与线路、最近连接/同步结果、传输摘要、设备/资料库/Primary 身份、版本、schema/protocol 和存储；复制内容不含 token、credential、authorization、sync cursor 或外部绝对路径。Settings 保持 Library 内的次级入口，主标签仅 Library / Organize / Collections；Collection 空态、加载、失败提示、图标按钮 VoiceOver 标签、Dynamic Type 与系统/浅色/深色外观完成聚焦收尾。
+- P4 没有新增业务 Domain Entity、Use Case、业务真相 Repository、Player、设置存储系统、schema、migration 或 wire；仅新增 Native 派生预览缓存与本机存储统计 adapter。Structured SQLite 仍是运行时唯一权威，Structured Sync 保持 protocol 8，Backup V2、S1 与 Mac Collection Export 未重设。P3 Photos 真机修复保持在同一 worktree 且此前已由用户确认通过；Flutter 继续冻结。Mac 更新为 1.23.0（134），Native iPhone 更新为 1.18.0（91）。当前状态：等待本机验收；请双击 `本机验收.command`，Native 真机验收仍使用独立 `install_native_iphone.command`。
+- 工程验证通过：完整 Shared Swift 440 项 / 54 个套件、完整 Native Simulator 72 项全部通过；Mac Release、Native Simulator、Native DeviceDebug 无签名构建、架构边界、Build Surface 与 `git diff --check` 均通过。自动化只使用临时资料库与生成媒体，没有读取或修改真实 Collection、Original、身份或 sync cursor；Flutter 0 build、0 tests、0 product diff。
+
+# 镜藏 Lite 1.22.9 / Native iPhone 1.17.7
+
+- P3-F2 真机取证确认 Download / Keep Offline 的第一个失败点不是 Mac 文件访问或 `/media`：同一 Asset 可被 Remote Original 播放，但下载在发出 `/media/:AssetID` 前读取了陈旧的连接状态，未像播放一样先探测 LAN / Remote；旧 Managed / Referenced Location 又被错误要求本地副本已标记 `online + fullyVerified`，导致可由 Mac 正式提供的原片在 iPhone 侧被提前排除。现在下载与播放共用同一“远端 Managed / Referenced 原片候选”Domain 规则，下载前刷新线路并仍调用已有认证 `/media/:AssetID`；Mac 服务端验证真实文件访问并返回 SHA-256，iPhone 分块落入 staging、完整校验后才为同一 AssetID 登记本机 Managed Location，不接收或持久化 Mac 绝对路径。
+- 下载候选与原片保管证明保持严格分离：旧的 unknown/unverified Location 可以尝试下载，但不能用于 Remove Local Copy 的“另一份已确认原片”证明，也不能让 Upload to Primary 错误跳过。无结构化来源、线路均不可用、`/media` 请求时文件消失、认证失败、中断和 SHA 不匹配继续显示现有简洁分类状态；partial 可续传，失败不生成本机 AssetLocation。回归覆盖 Mac Managed、Referenced、无副本 SHA 时采用服务端 SHA、来源缺失/请求时消失、LAN→Remote 与唯一原片保护。
+- P3-F3 对真实 `test名称` 资料库只读取证确认分类为 E：Asset `B36C057A-C375-4472-820B-2D394540EC01` 已有正确 Managed Location `Device Imports/iPhone/Unfiled/《快乐起床歌》起床啦！.MP4`，Asset 的 `folder_id` 已指向 Unfiled；Device Imports、来源 iPhone、Unfiled 三层 Folder 和 source DeviceID 均存在，直系计数分别为 0 / 0 / 3，后代计数均为 3。Sidebar 旧 UI 只显示 `directAssetCount`，所以父节点稳定显示 0，并非上传 transport、关系缺失或刷新失效。
+- Folder Sidebar 现在对所有 Folder 统一显示“本节点直系 Asset + 全部后代”的递归计数，叶节点仍自然等于直系计数，没有为 Device Imports 发明特殊规则。既有 `assignDeviceImport` 继续用稳定 LibraryID + source DeviceID 复用 `Device Imports/<Source Device>`，Loose / Photos 进入 Unfiled，外层文件夹进入其最外层名称；物理路径、Folder/Asset 关系和 Structured Sync protocol 8 写入链路均未修改。回归覆盖首个/第二个 loose、outer folder、无重复来源 Folder、父子计数、重启、普通 Mac Folder、AssetID 不变及物理/业务路径一致。
+
+- P3-F1 修复 Native Photos 真机选择后无响应：第一断点位于选择回调后的 `loadTransferable` source adapter——旧实现只声明宽泛 `.data` FileRepresentation、在异步读取前立即清空 selection，并用 `try?` 吞掉 nil/error，因此真实 JPEG/HEIC/视频可能在产生临时文件前结束，正式托管导入完全未被调用。现在 PhotosPicker selection 会保留到全批读取完成，按 `.image` / `.movie` 精确请求 file representation，并在 Provider importing closure 内立即复制短生命期临时 URL；iCloud 原片继续异步等待，随后仍唯一进入 Files 共用的 `ImportNativeMedia → managed staging/SHA-256 → RegisterManagedImportedAsset → Structured SQLite → Library refresh`。
+- PhotosPicker 使用系统选择授权，不请求完整 PhotoKit Library 权限，Limited Photos 可正常选择用户明确授权的项目。取消作为非错误状态显示；权限不可用、所选项目无法读取、iCloud/网络不可用、不支持媒体、托管复制、校验和正式注册失败均给出简洁分类提示，同时 OSLog 保留 error domain/code/description。注册失败会回滚已激活的 Managed Original，staging 与 Picker 临时目录沿用现有清理策略；不会建立半 Asset、假 AssetLocation 或第二条 Photos 写入路径，也不会自动上传。
+
+- P3 Native Media In & Out 完成：Native Library 的“+”现在可从 Photos 与 Files 批量导入照片、视频和音频。原片先复制到 App 托管 staging，以 1 MiB 分块计算 SHA-256，再原子激活并在单一 SQLite transaction 中创建正式 Asset、Metadata、Folder 与本机 Managed AssetLocation；单项失败只清理该项，不产生半个 Asset，也不会自动上传。
+- iPhone 文件导入使用有界 security-scoped access；照片与散文件进入 Unfiled，整文件夹只保留最外层名称并扁平化内部层级。Mac 仍是完整 Folder 管理平台，iPhone 未加入重复管理或大型导入工作台。
+- 现有 Asset 新增显式 Download / Keep Offline：继续复用认证 `/media/:assetID` 与 HTTP Range，partial 文件保持为本机传输状态，完整 SHA-256 校验后才原子激活并为同一 AssetID 登记本机 Original。播放缓存和 Smooth proxy 从不成为 Original；重启后完整 staging 可直接复验激活，未完成项按原偏移续传。
+- Upload to Primary 通过正式 Library PrimaryDeviceID 解析目标，复用既有 `/archive/:assetID` 的 HEAD offset、续传、SHA 校验与原子完成语义；上传进度来自真实已发送字节。Primary 以同一 AssetID 接收 Location，iPhone 源文件始终保留；Mac 物理与业务 Folder 均落入 `Device Imports/<Source iPhone>/Unfiled` 或最外层来源文件夹。
+- Remove Local Copy 只移除当前 iPhone 的 Managed Original Location 与字节，不删除 Asset。文件先暂存，SQLite transaction 会重新证明另一设备存在 online、fully-verified Original；唯一原片时硬阻止，数据库失败则恢复本机文件，成功后 Asset 转为 Remote。
+- Transfer Store 统一呈现 queued、transferring、真实 progress、interrupted、failed 与 completed，并以 LibraryID 持久化最多 20 条本机 journal；App 重启把进行中项目确定性恢复为 interrupted，资料库切换不会改写传输归属或重置既有 Grid/List/Search/Filter/Sort/Organize 状态。当前网络策略沿用现状，完整 background URLSession 与 cellular Settings 明确留给后续阶段。
+- 问题归属既有 Asset Lifecycle / Structured SQLite Repository 与 Native Library Transfer 边界。调用链为 `Native Library View → NativeTransferStore → Import/Download/Upload/Remove Use Case → Managed-file/Transport adapter + StructuredLibrarySession → SQLiteAssetLifecycleCommandRepository`；Mac 继续使用既有 `/media`、`/archive`、Folder 与 Structured Sync。复用了并上移既有 lifecycle repository，没有第二套 Asset、AssetLocation、上传协议或 Legacy 运行时依赖。
+- schema 7、migration 与 Structured Sync protocol 8 均不变；Backup V2、S1、pairing 与上传 byte transport 未重设。P3-F2/F3 聚焦 Shared 17 项与 Native Media Transfer 21 项全部通过。完整 Shared 440 项首次运行有 438 项通过，2 项既有并发负载敏感的搜索时序/拓扑性能门槛失败，独占复跑 2/2 通过；完整 Native 66 项有 65 项通过，唯一既有 AVPlayer clip endpoint 两秒时序超时随后单独复跑通过。Mac Release、Native DeviceDebug 无签名构建、架构与 Build Surface 守卫及 `git diff --check` 均通过。Flutter 0 build、0 tests、0 product diff；真实资料库仅只读取证，未修改真实 Asset、Folder、Location 或原片。Mac 更新为 1.22.9（133），Native iPhone 更新为 1.17.7（90）。当前状态：等待本机验收；请双击 `本机验收.command`，Native 真机验收仍使用独立 `install_native_iphone.command`。
+
+# 镜藏 Lite 1.22.7 / Native iPhone 1.17.4
 
 - 本机验收安装阶段修复 Mac 启动竞态：旧脚本在刚替换并签名 App 后直接向 bundle identifier 发送 AppleScript `activate`，LaunchServices/AppleEvent 连接尚未稳定时会返回 `-609 连接无效`，尽管安装包、签名和 1.22.7（131）版本都已正确落盘。现在只在旧进程确实存在时请求正常退出并等待结束，随后使用系统 `open` 启动已签名 App，并以进程存在作为安装成功条件；不会强制终止进程或触碰资料库。Build Surface 增加对应退化守卫。
 - P2-F3 真机只读取证定位到现有 `The one`（LibraryID `9E7ED301-EE49-4448-9048-F44CDA3544AF`）Clip `F37B9B96-71FC-41FA-88A5-AD36DE369A41`：Asset `20FA3991-7232-49E4-921F-0BF3FC4F76D8`，11–19 秒，无 Note，2 个 Tag。Segment 与 SegmentTag 已分别写入 `sync_changes` sequence 42694 / 42695，但同一稳定 iPhone DeviceID 在 Mac 保存的旧 acknowledgement 把新安装副本的 outbound cursor 推到 1,012,441，`prepareEnvelope(sequence > cursor)` 因而发送 0；Mac 端未收到该 Clip。任务文字中的 `test名称 行不行`（`4A8B…`）不是创建时 Native 当前选中库，实际写入与 Sync Now 均使用 `The one`，因此没有修改 Library 映射。
@@ -819,7 +864,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8465464" type="application/octet-stream" sparkle:edSignature="aAvwItAPDdLlz3eOnPHQ6HF6LusmMSNNUPmz5liqPVhYI7U8PgfEXPwas/IclcfKZ8IGV0yPBfS3j1I/86pmCw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8518179" type="application/octet-stream" sparkle:edSignature="IxWJjrCuGCA+6ZkPuDydZIGPHptubwwVZJfW8Nlbfs5v1pUJamSUur6DOEAnrlIp6e9UXbpzRfC6nBF8VpYrBg=="/>
         </item>
     </channel>
 </rss>
