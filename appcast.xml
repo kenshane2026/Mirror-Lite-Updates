@@ -3,13 +3,32 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.3</title>
-            <pubDate>Sat, 12 Sep 2026 06:43:58 +0800</pubDate>
-            <sparkle:version>137</sparkle:version>
-            <sparkle:shortVersionString>1.23.3</sparkle:shortVersionString>
+            <title>1.23.5</title>
+            <pubDate>Sat, 12 Sep 2026 13:12:03 +0800</pubDate>
+            <sparkle:version>139</sparkle:version>
+            <sparkle:shortVersionString>1.23.5</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.3 / Native iPhone 1.18.3
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.5 / Native iPhone 1.18.5
+
+- UX-C 在既有 `PlaybackMode` 与唯一 `MediaWorkspace → NativePlaybackStore → PlaybackEngine → AVPlayerPlaybackEngine` 链路上正式提供 Stop at End、Repeat One、Continue。Transport 下方新增紧凑模式按钮：点击依次循环，长按直接选择；模式只决定自动结束，手动 Previous / Next 在三种模式下始终沿进入时冻结的 `PlaybackQueueSnapshot` 工作。Library、Organize、Focus、Tag Detail、Collection 与 direct item 的默认值按入口建立，不跨 Workspace 泄漏；全屏进出继续保留 scope、queue、playhead、selected Clip 与 mode。
+- Asset Scope 与 Clip Scope 共用一个集中 end-state machine：Stop 停在 Asset end / Clip OUT，Repeat One 回到 Asset start / Clip IN，Continue 从 Clip OUT 直接进入冻结队列的下一正式 `PlaybackTarget`，不会播放源 Asset 的未使用尾部。导航前仍通过既有 Structured SQLite / source resolver 读取实时对象真相，所以 tombstone、更新后的 Clip range 和 Local / Remote Original / Remote Smooth 路由切换优先于预热缓存；失败沿现有轻量错误与手动导航语义处理。
+- Collection 原有整队列 eager preheat 已收缩为有界 Sliding Preheat Window：Continue 最多 current + next 3 + previous 1，Stop / Repeat 为 next 1；Focus 与 Organize 即使 Stop 也准备 Next 1，Library Stop 不做额外网络准备，切到 Continue 后准备 next 2 + previous 1。模式降级、跳转、画质切换、离开播放器都会取消旧任务并丢弃多余 PlayerItem；预热只解析认证 URL / stream metadata / AVPlayerItem，不创建 Download、Keep Offline、AssetLocation 或 transfer。照片仍约 5 秒、Ken Burns 继续遵循 Reduce Motion，并在显示期间越过相邻照片准备下一个音视频目标。
+- 相邻目标若为同 Asset、同媒体类型且实时解析得到完全相同 URL，播放引擎复用当前 AVPlayerItem 并 seek 到新 Clip IN、更新有效 OUT；不同 Asset 或 Remote Smooth → Local Original 等来源变化自动走正常加载路径。Simulator 注入式成对测量（source resolve 5 / 35 / 60 ms，冷 item prepare 20 ms）记录：Collection Local 28.2 → 6.6 ms、Remote Smooth 59.7 → 37.7 ms、Remote Original 86.4 → 61.3 ms；Focus 手动 Next 36.3 ms，同 Asset Clip → Clip 6.6 ms。它们是调度路径对比，不宣称 AVFoundation gapless。
+- Library pull-to-sync 复用现有 Connections / Diagnostics 路径显示轻量临时状态：有变化为“✓ 已同步 · 发送 N · 接收 M”，无变化为“✓ 已是最新”，失败为“⚠︎ 同步失败 · 点击查看”；失败点击打开现有 Connections，未新增诊断系统。完整 Shared Swift 449 项 / 54 套件与完整 Native Simulator 109 项通过；Mac Release、Native Simulator Release、Native DeviceDebug 无签名、架构边界、Build Surface 与 `git diff --check` 通过。Domain Entity / Use Case / Repository 新增均为 0，Structured SQLite `user_version=7`、App data schema 10、Structured Sync protocol 8、migration / wire 不变，Flutter 0 product work。Mac 更新为 1.23.5（139），Native iPhone 更新为 1.18.5（96）；状态停在等待本机验收，未开始最终三设备 Sync Acceptance。
+
+# 镜藏 Lite 1.23.4 / Native iPhone 1.18.4
+
+- MediaWorkspace 移除独立 playback progress slider 与重复时间标签，所有共享入口统一采用 Media Surface → Clip Rail / Filmstrip → Playback Transport → Clip / Metadata Actions → Scope Context 的纵向顺序。当前时间与总时长移至 Rail 附近并保留 VoiceOver 信息；既有 Rail seek/scrub/zoom、playhead、Clip range/handles、精确编辑与 transport 行为均不变，未开始 UX-C。
+- UX-B 在 UX-A 已封存的共享 `MediaWorkspace` 上完成连续 Clip 工作流。Organize Clip 卡片以媒体预览、来源、IN/OUT、时长为主层级，并批量投影 Tag、Note 摘要、Love/Reject 与 Collection 摘要；大量 Tag/Collection 以有限项和 `+N` 呈现，空 Note 不占大块空间。页内相关元数据通过一次 page-scoped Collection join 装配，不产生逐卡 Tag/Note/Collection 查询。
+- Library Asset、MediaWorkspace Clip、Organize 与 Focus 复用原 Custom Tag Picker，并在中等高度 sheet 内明确“当前素材/当前片段”；Clip Note 复用正式 Note mutation 原位编辑。Tag、Note、Love/Reject 均不重建播放器、不改变 `PlaybackContext`，Focus 的 targets membership/order 始终冻结。
+- 新增唯一 Quick Collection Picker，统一用于新保存 Clip、MediaWorkspace、Organize、Focus 与 Clip Detail；Recent Collection IDs 只保存在 library-scoped Workspace state，成功 membership 写入后更新并轻量提示，失败保留当前上下文。Clip 保存独立完成且继续停留在当前视频/播放头，只提供可忽略的“加入收藏集”后续动作，不自动建立 membership。
+- Focus 的 Target Collection 只存在于 session context。`Add to Target` 只有在既有正式 Collection membership mutation 成功后才前进；失败停留，Skip 仅移动当前 session。Collection Detail 的 Add Content 使用新的 Application Read Query `LoadCollectionCandidates`，默认 Clip、可切 Media，支持搜索、分页、排除既有成员、共享 MediaWorkspace preview 与 Add/Skip/Next；没有新 Domain Entity、业务 Repository、Collection 写路径或 Skip/processed 状态。
+- Library、Organize、Collections 与 Candidate Browse 共用可折叠 Search 表现：空查询可随浏览收起，活动查询持续可见，搜索文字与各 Workspace 的 selection/filter/sort/segment/return anchor 不受临时 sheet 或滚动状态影响。代表性读取：50 Clip 约 3.36 ms、200 Clip 约 5.50 ms、排除 100 个既有成员的候选搜索约 8.86 ms；Focus 49 次 Add→Next 在 1 秒门槛内完成且 targets 不变。
+- Mac 覆盖更新的登录钥匙串弹窗修复归属既有 `Connectivity Repository → DeviceConnectionVault → Keychain` 与发行签名边界。所有凭证读取/更新/删除使用禁止认证 UI 的 `LAContext`，优先静默读取稳定 V2 account；旧 `trusted-devices` / `trusted-clients` ACL 无法静默读取时按缺失处理，资料库照常打开并允许一次重新配对。重新配对写入无冲突的稳定 V2 slot，Mac ad-hoc 覆盖签名保留显式稳定 designated requirement，后续覆盖更新复用配对且不解锁登录钥匙串；没有明文凭证旁路。
+- 完整 Shared Swift 449 项 / 54 个套件、完整 Native Simulator 98 项、Mac overwrite signing 回归、Mac Release、Native Simulator Release、Native DeviceDebug 无签名构建、架构边界、Build Surface 与 `git diff --check` 全部通过。Structured SQLite `user_version=7`、App data schema 10、Structured Sync protocol 8、migration 与 wire 均不变；Flutter 0 build、0 tests、0 product diff。Mac 更新为 1.23.4（138），Native iPhone 更新为 1.18.4（95）；UX-C 与最终三设备 Sync Acceptance 均未开始。
+
+# 镜藏 Lite 1.23.3 / Native iPhone 1.18.3
 
 - UX2 在已验证的 UX1 `MediaWorkspace` 上加入统一 Clip Capture / Precision Editing：`+Clip` 先建立仅存在于 `NativePlaybackStore` 的 unsaved draft，Filmstrip 原位显示橙色虚线范围、可拖动 IN/OUT handles、边界附近的现有缓存画面与精确时间；Cancel 不写数据库，Save 才创建正式 Segment。Library、Organize、Tag Detail、Collection 与 Focus 继续共享同一个 Media Workspace 和唯一 `NativePlaybackStore → AVPlayerPlaybackEngine`，没有独立编辑页或第二播放器。
 - 点击已有 Clip 会以同一 SegmentID 进入 Clip Scope 编辑；粗调、Filmstrip zoom、IN/OUT 当前播放位置、`−5 / −1 / +1 / +5` presentation-frame step、范围试听、Cancel/Save 均在当前 media item 上完成。拖动与精调期间保持暂停，始终约束 `IN < OUT`，重叠 Clip 继续合法。Save 复用既有 `UpdateSegmentRange → SegmentCommandRepository → Structured SQLite` 原子事务，只改变 IN/OUT；Tag、Note、Love、Reject、Collection membership/order 与 Segment identity 保持不变，失败时 draft 留在界面可重试。
@@ -872,7 +891,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8518930" type="application/octet-stream" sparkle:edSignature="6WJ/mI5Hgl93RJuJaMNwbvwjKORbHog5e7oK6ym54epc1EUfsMTxIpI+wDxC/1ygC/SfhvUnebDAqZX1SjHmCg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8551909" type="application/octet-stream" sparkle:edSignature="+z6iVr0vAhNIWMwXi4Eu9BdATgPlrTZ8RxSvuWv+wa4CqVAbkX36bnLz8y7UN+MHjE5DE8LqMT2ACvGl1dsZDQ=="/>
         </item>
     </channel>
 </rss>
