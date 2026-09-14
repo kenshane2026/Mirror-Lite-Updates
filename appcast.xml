@@ -3,18 +3,30 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.22</title>
-            <pubDate>Mon, 14 Sep 2026 12:39:36 +0800</pubDate>
-            <sparkle:version>156</sparkle:version>
-            <sparkle:shortVersionString>1.23.22</sparkle:shortVersionString>
+            <title>1.23.23</title>
+            <pubDate>Mon, 14 Sep 2026 14:30:32 +0800</pubDate>
+            <sparkle:version>157</sparkle:version>
+            <sparkle:shortVersionString>1.23.23</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.22 / Native iPhone 1.18.18
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.23 / Native iPhone 1.18.19
+
+- macOS 本机视频在 AVFoundation 无法直接建立可播放媒体项时，会自动复用既有 Compatibility Preview 服务生成有界 720p MP4 后继续播放；视频分类补齐 TS、MPEG、VOB、3GP / 3G2、MXF 等摄像机和旧片源容器，使其不会在进入兼容路径前被误判为普通文件。转码仍无法解码的编码会返回明确错误，不会宣称虚假的格式支持。
+- macOS 与 Native iPhone 播放器会枚举媒体内嵌音轨，默认按系统首选语言选择一条并显式静音其他语言；多音轨时在播放控制区提供语言菜单，可随时手动切换。同一 Asset 的 Clip 间复用播放器时会保留所选音轨。
+- 修复 Mac 侧边栏“设备导入”显示递归数量、列表却只查询根文件夹直属 Asset 的口径分裂：“设备导入”根筛选显式使用包含全部后代的结构化查询，因此设备 / 日期子目录中的导入内容会正确显示；普通业务文件夹仍保持既有直属内容语义。
+- Native iPhone 资料库筛选新增与 Mac 同源的文件夹树：普通文件夹保持 Mac 的直属内容语义，“设备导入”根则包含其设备 / 日期后代；筛选选择保存在本机，搜索与其他筛选只刷新 Asset 查询，不重复读取整棵文件夹树。
+- 本轮复用既有 Playback Platform → Store → View 与 Folder / Asset Query → Library Store 边界；只新增跨端共用的最小 `PlaybackAudioTrack` 值对象和共享只读 Folder Query 实现，没有第二套播放或资料库数据权威。Shared Swift 461 项 / 56 suites（含两项独占性能门槛）与 Native Simulator 158 项全部通过。Mac 更新为 1.23.23（157），Native iPhone 更新为 1.18.19（110），等待本机与真机验收。
+
+# 镜藏 Lite 1.23.22 / Native iPhone 1.18.18
 
 - macOS 与 Native iPhone 的 App Icon 统一替换为新的浅色玻璃相册图标；两端共用同一张 1254px 母版，并分别生成 macOS `.icns` 的 16–1024px 表示及 iPhone / iPad / App Store 所需的 20–1024px 无透明通道资源。
+- 修复 Mini 从已配对 Air 远程播放大体积 MP4 时长时间停在“正在解析”并最终失败：LAN 媒体服务补齐 AVPlayer 用来读取尾部 `moov` 索引的 HTTP suffix byte-range，不再把 `bytes=-N` 错当成整片请求而传输 1–5 GB 原片。远程来源失败时也改为远端设备诊断与“重试远程播放”，不再错误引导用户重新定位 Mini 本机文件。
+- “The one” 资料库当前 667 条孤儿 Asset Tag state 与 667 条孤儿 Rating state 均有正式 Asset 删除权威；启动继续在既有 SQLite Repository 修复边界内安全清理后再校验。修复事务不再为这两类状态误写无意义的 Marker tombstone；存活 Asset、媒体位置和文件均不受影响。
+- Native iPhone 的 Asset / Clip 四个操作键支持长按拖动排序，两个界面分别保存设备本地顺序。New Clip Bottom Inspector 新增独立的播放/暂停及前后 5 秒控制；打开 Clip 后立即显示 Rail IN / OUT 拖动编辑，原 Clip Scope 卡片移除，“返回完整视频”移到播放模式行。
+- Asset / Clip 标签选择器缓存已排序层级、搜索结果、选中与最近使用投影，键入或切换标签时不再为每一行重复建立整套 Tag 索引和递归计算层级，改善大标签目录下的掉帧。
 - 本轮停止继续修补前后台黑屏现象，修复播放器组合根因：`MediaWorkspace` 不再分别持有稳定的 `NativePlaybackStore` 与会随 SwiftUI View 值重建的普通 `AVPlayerPlaybackEngine`。新的 `NativePlaybackSession` 作为唯一 `@StateObject`，在同一个稳定引用对象内共同拥有 Store 与 Engine；Store、普通视频 Surface 和系统全屏都因此使用同一个 Engine / AVQueuePlayer / AVPlayerItem。
 - 删除 1.18.13–1.18.17 累积的恢复管线：Surface revision、冻结帧 poster、恢复任务、Player / PlayerItem 替换、`AVPlayerItemVideoOutput` 像素预解码、静音 `playImmediately`、`isReadyForDisplay` 等待以及重复后台 observer。ScenePhase 现在只保存播放意图并按需暂停；回到 active 时只对原会话恢复原播放意图，不 load、不 seek、不替换播放器或媒体项。
-- 新增 Session 跨 SwiftUI 重建稳定性、Store/Surface Engine 身份、播放/暂停的 inactive/background/repeated lifecycle、Clip 目标/范围/绝对时间保持，以及真实 AVPlayer / PlayerItem 暂停恢复不换实例的回归。Native Simulator 155 项、Shared Swift 460 项 / 56 suites 全部通过；没有新增 Domain、Use Case、Repository 或 Legacy 依赖。Mac 更新为 1.23.22（156），Native iPhone 更新为 1.18.18（109），等待真机验收。
+- 新增 Session 跨 SwiftUI 重建稳定性、Store/Surface Engine 身份、播放/暂停的 inactive/background/repeated lifecycle、Clip 目标/范围/绝对时间保持，以及真实 AVPlayer / PlayerItem 暂停恢复不换实例的回归。Native Simulator 156 项、Shared Swift 460 项 / 56 suites 全部通过；没有新增 Domain、Use Case、Repository 或 Legacy 依赖。Mac 更新为 1.23.22（156），Native iPhone 更新为 1.18.18（109），等待真机验收。
 
 # 镜藏 Lite 1.23.21 / Native iPhone 1.18.17
 
@@ -981,7 +993,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="9302336" type="application/octet-stream" sparkle:edSignature="3OBJJNsjQiET9TKv/7p4nxod4gRRyQvEPZjtU25MLcUNWH81p0n4j2C8IV/lMgzMhniD2l8m6RqEc812UgZLDg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="9337911" type="application/octet-stream" sparkle:edSignature="fj3IBPbn1xsbCF9ZSFOO6Q/bGXNRE8yZSqyask1LlL+K8ffszcKjrb4vmlwcQI1wY7O0fDUfzPY/qGTM3TscCQ=="/>
         </item>
     </channel>
 </rss>
