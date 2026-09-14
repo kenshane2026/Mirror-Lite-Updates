@@ -3,13 +3,103 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.5</title>
-            <pubDate>Sat, 12 Sep 2026 13:12:03 +0800</pubDate>
-            <sparkle:version>139</sparkle:version>
-            <sparkle:shortVersionString>1.23.5</sparkle:shortVersionString>
+            <title>1.23.22</title>
+            <pubDate>Mon, 14 Sep 2026 12:39:36 +0800</pubDate>
+            <sparkle:version>156</sparkle:version>
+            <sparkle:shortVersionString>1.23.22</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.5 / Native iPhone 1.18.5
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.22 / Native iPhone 1.18.18
+
+- macOS 与 Native iPhone 的 App Icon 统一替换为新的浅色玻璃相册图标；两端共用同一张 1254px 母版，并分别生成 macOS `.icns` 的 16–1024px 表示及 iPhone / iPad / App Store 所需的 20–1024px 无透明通道资源。
+- 本轮停止继续修补前后台黑屏现象，修复播放器组合根因：`MediaWorkspace` 不再分别持有稳定的 `NativePlaybackStore` 与会随 SwiftUI View 值重建的普通 `AVPlayerPlaybackEngine`。新的 `NativePlaybackSession` 作为唯一 `@StateObject`，在同一个稳定引用对象内共同拥有 Store 与 Engine；Store、普通视频 Surface 和系统全屏都因此使用同一个 Engine / AVQueuePlayer / AVPlayerItem。
+- 删除 1.18.13–1.18.17 累积的恢复管线：Surface revision、冻结帧 poster、恢复任务、Player / PlayerItem 替换、`AVPlayerItemVideoOutput` 像素预解码、静音 `playImmediately`、`isReadyForDisplay` 等待以及重复后台 observer。ScenePhase 现在只保存播放意图并按需暂停；回到 active 时只对原会话恢复原播放意图，不 load、不 seek、不替换播放器或媒体项。
+- 新增 Session 跨 SwiftUI 重建稳定性、Store/Surface Engine 身份、播放/暂停的 inactive/background/repeated lifecycle、Clip 目标/范围/绝对时间保持，以及真实 AVPlayer / PlayerItem 暂停恢复不换实例的回归。Native Simulator 155 项、Shared Swift 460 项 / 56 suites 全部通过；没有新增 Domain、Use Case、Repository 或 Legacy 依赖。Mac 更新为 1.23.22（156），Native iPhone 更新为 1.18.18（109），等待真机验收。
+
+# 镜藏 Lite 1.23.21 / Native iPhone 1.18.17
+
+- 修复 1.18.16 在系统遮挡恢复时冻结约三秒后显示“视频显示会话恢复失败”的等待死锁：新播放器完成后台像素预解码并绑定系统视频 Surface 后，会在静音且尚未安装进度观察器的状态下短暂驱动屏幕输出；`isReadyForDisplay` 确认首帧后立即暂停、精确返回原绝对时间，再安装正常进度观察器并恢复原播放意图。屏幕预热期间 Store 不进入 loading、不收到新的 ready，也不会看到内部时间推进。
+- 恢复失败时保留已取得的冻结帧，不再撤掉画面后只留下黑色错误背景。真实 AVPlayer 集成测试覆盖“绑定后主动预热、首帧确认前不发布 ready、确认后回到 2.000 秒”；Native Simulator 150 项全部通过。边界仍为 Playback Platform / Store / View，没有新增 Domain、Use Case、Repository 或 Legacy 依赖。Mac 更新为 1.23.21（155），Native iPhone 更新为 1.18.17（108）。
+
+# 镜藏 Lite 1.23.20 / Native iPhone 1.18.16
+
+- 本轮仍只处理 Native 播放页的通知中心、控制中心与 App 切换黑屏。真机反馈证明失效的不只是 SwiftUI Surface，而是旧 AVPlayer / PlayerItem 的视频解码输出会话；前台恢复现在采用双缓冲：界面保留当前时间和对应冻结帧，后台用全新的 AVURLAsset、AVPlayerItem 与 AVQueuePlayer 精确定位，必须先通过 AVPlayerItemVideoOutput 取得真实像素帧，再原子替换旧播放器；替换后还要等屏幕输出报告 `isReadyForDisplay` 才移除冻结帧并恢复原播放意图。
+- 恢复过程不进入 loading、不发布新的 ready 或零位置，Store 的正式 `PlaybackTarget`、Clip IN/OUT、绝对播放位置与 queue 均不改变，因此播放头不会闪到视频开头。普通视频 Surface 改为自有 UIViewController 容纳系统 AVPlayerViewController，移除 Apple 不支持的 inline AVPlayerViewController 继承实现。
+- 播放调用链固定为 `ScenePhase → MediaWorkspace 冻结帧 → NativePlaybackStore → PlaybackEngine 预解码替换会话 → AVPlayerViewController 首帧确认`。未修改其他产品功能，未新增 Domain、Use Case 或 Repository，也未引入 Legacy 依赖。Native Simulator 150 项通过，其中真实视频集成测试验证先解码、后替换且保持 2.000 秒。Mac 更新为 1.23.20（154），Native iPhone 更新为 1.18.16（107）。
+
+# 镜藏 Lite 1.23.19 / Native iPhone 1.18.15
+
+- 本轮仍只处理 Native 播放页的通知中心、控制中心与 App 切换黑屏。根据真机反馈撤销前台 Player / PlayerItem 重载：`.inactive` 只记录播放意图并暂停，同一个正式 `PlaybackTarget`、PlayerItem、绝对播放位置和队列全部保持不变；`.active` 只重新创建系统视频呈现控制器，等其真正显示后恢复原播放意图。播放器不会进入 loading、不会发出新的 ready/seek，因此播放头不再先回到 0 再跳回当前位置。
+- 播放调用链固定为 `ScenePhase → MediaWorkspace 重新创建 AVPlayerViewController Surface → NativePlaybackStore 恢复意图 → 原 AVQueuePlayer / AVPlayerItem`。未修改其他产品功能，未新增 Domain、Use Case 或 Repository，也未引入 Legacy 依赖。Mac 更新为 1.23.19（153），Native iPhone 更新为 1.18.15（106）。
+
+# 镜藏 Lite 1.23.18 / Native iPhone 1.18.14
+
+- 本轮只修复 Native 播放页在通知中心、控制中心和 App 切换后持续黑屏的问题。普通播放 Surface 不再直接维护裸 `AVPlayerLayer`，改由隐藏系统控件的 `AVPlayerViewController` 承担完整视频呈现生命周期；前台恢复会先销毁旧 Surface，等新系统播放器控制器真正 `viewDidAppear` 后，才重建 Player / PlayerItem、重新解析正式 `PlaybackTarget` 并恢复绝对播放位置与原播放意图。这样恢复路径与“退出播放器再进入”一样重新建立 UIKit 视频呈现上下文，同时继续保留当前页面和队列。
+- 变化只属于 `ScenePhase → MediaWorkspace View → NativePlaybackStore → PlaybackEngine → AVPlayerViewController` 播放边界；未修改 Collection、Clip、Tag、同步或数据库逻辑，未新增 Domain、Use Case 或 Repository，也未引入 Legacy 依赖。Mac 更新为 1.23.18（152），Native iPhone 更新为 1.18.14（105）。
+
+# 镜藏 Lite 1.23.17 / Native iPhone 1.18.13
+
+- Native 播放器前后台恢复改为单一、可取消且带生命周期代次校验的调用链：通知中心、控制中心或 App 切换打断时使旧恢复任务立即失效；回到前台后完整重建播放器管线并重新载入正式 `PlaybackTarget`，只有仍处于当前前台代次才恢复原播放意图。播放器实例成为可观察状态，视频 Surface 会可靠切换到新实例，同时移除会把旧实例重新绑定回来的 UIKit 并行监听，修复声音存在但画面持续黑屏、Previous / Next 仍黑屏的竞态根因。
+- Clip Rail 不再显示“这个媒体还没有 Clip”。播放模式行中央改为信息按钮，Asset / Clip 的 Tag、Collection、备注与 Clip 范围移入紧凑 Bottom Sheet，释放底部操作区高度并保证四个功能键无需先滚动即可看到。
+- Collection 选择器不再把成功提示压在底部安全区或遗留到下一次打开：添加或创建成功后直接关闭，错误提示固定在 Sheet 顶部；Collection 主界面的结果提示也移到顶部可见区域。
+- 已有 Clip 支持从播放器信息 Sheet 和 Organize 上下文菜单删除。调用链复用既有 `DeleteSegment → SegmentCommandRepository → SQLiteSegmentCommandRepository`；删除事务同时移除普通 Collection 成员关系、更新 Collection revision 并写入 Structured Sync，避免列表或其他设备残留幽灵 Clip。播放器删除当前 Clip 后会在同一 Asset 和绝对时间位置继续。
+- 本轮未新增 Domain、Use Case 或 Repository，也未引入 Legacy 运行时依赖；Mac 更新为 1.23.17（151），Native iPhone 更新为 1.18.13（104）。
+
+# 镜藏 Lite 1.23.16 / Native iPhone 1.18.12
+
+- Native MediaWorkspace 修复通知中心、控制中心和 App 切换后视频层持续黑屏：前台恢复会保留正式 `PlaybackTarget`、Clip IN/OUT、queue 与绝对播放位置，重建失效的 `AVQueuePlayer` 渲染管线并重新载入同一来源。短暂系统遮挡恢复原播放意图；真正进入后台后按约定保持暂停；Previous / Next 不再继承失效画面。
+- 播放器明确分为 Asset 与 Clip 两种工作状态。打开 Clip 或在 Rail 选择 Clip 不再自动弹出 Bottom Inspector；Clip 操作区新增手动 `Edit Clip` 入口。新建 Clip 保存后进入 Clip 状态但不自动打开 Tag/Collection sheet；Mark IN/OUT 连续采集继续留在 Asset 状态，并只在 Rail 中显示刚保存的 Clip。Asset 与 Clip 都可在播放器直接加入普通 Collection。
+- 播放页新增当前媒体信息卡，显示当前目标类型、Clip 范围、Tag、所在普通或智能 Collection 与备注；资料继续来自既有 `LoadCurrentMediaOrganization` Use Case。播放器高度改为随可用竖向空间在 300–480pt 内伸展，短视频和竖屏视频获得更大的实际画面，底部空白显著减少。
+- Collection 新增 Mac 与 Native iPhone 共用的智能类型：可按 Asset / Clip / 两者、Tag 任一/全部/排除、媒体类型、Love/未评分、排除 Reject、名称、备注、最近天数、日期、时长、文件大小、本机/远端/不可用、Clip 导出状态及排序组合规则。智能 Collection 只同步可移植的筛选规则，不同步设备绝对路径；成员由各端 Structured SQLite 自动计算。界面以 `gearshape.2` 与普通 Collection 区分，动态显示数量，禁止手动加入、移除和排序；播放器信息也会计算当前媒体命中的智能 Collection。
+- 智能 Collection 复用并扩展 `MediaCollection → ManageCollections / QueryCollections → CollectionRepository / AssetQueryRepository / ClipWorkspaceQueryRepository → SQLite`，新增 `SmartCollectionRule` Domain 值对象和 `collections.smart_rule` 加法迁移，没有第二套 Service、Manager 或运行时数据权威。为防旧端把智能规则当作空普通 Collection 回写，数据身份升级为 schema 11、Structured Sync protocol 9；Backup V2 与 Structured Sync 仍编码同一 `MediaCollection`。
+- Native 自定义 Tag 键盘恢复上一版系统 bordered QWERTY 外观与错位缩进，第三排字母保持适度横向缩小；Clear、新建 Tag 与删除键回到独立工具行。
+- Mac 更新为 1.23.16（150），Native iPhone 更新为 1.18.12（103）。Flutter 仍为 Frozen Legacy Compatibility，本轮没有修改、构建或测试 Legacy 产品面。
+
+# 镜藏 Lite 1.23.15 / Native iPhone 1.18.11
+
+- 标签系统的默认分类改用固定身份；资料库打开和 Native 标签目录读取会通过新的 `RepairDuplicateSystemTagCategories → SQLiteTagCatalogCommandRepository` 事务，把重复的“人物 / 地点 / 事件 / 动作 / 用途”合并到固定系统分类、迁移其全部标签并写入 Structured Sync authority。真实 “The one” 数据库在开发过程中保持只读，新版本首次打开时自动修复，后续初始化不会再次产生重复分类。
+- Native iPhone 的标签入口补齐分类、父级标签和子标签创建，并在目标标签选择器中创建后立即添加到当前 Asset / Clip。自定义键盘恢复正常 QWERTY 三行宽度与错位缩进；搜索恢复冻结 Flutter 的完整层级语义：命中分类显示分类内全部标签，命中父级显示全部后代，命中子级同时显示祖先路径。
+- Focus Organize 的五个操作改为手机宽度下的三列两行网格并隐藏底部主 Tab Bar，避免按钮文字被压成逐字竖排。Mark IN / OUT 保存后的“加入收藏集”只绑定当前视频中新创建的 Clip，切到下一视频、选择其他 Clip 或离开目标后立即清除，不再误操作上一个视频的片段。
+- Native 同步把 `NSURLErrorDomain -999` 识别为线路切换/任务取消：`/peer-health` 的非任务取消会自动重试一次，真正取消显示中性提示且不覆盖最近同步失败。退出系统全屏时复用同一 `AVQueuePlayer` 的既有播放意图，原先正在播放才恢复播放，原先暂停则保持暂停。
+
+- Native iPhone 从其他 App 回到正在播放的 MediaWorkspace 时会重建纯渲染 `AVPlayerLayer`，继续绑定原有 `AVQueuePlayer` 与 `PlayerItem`；不重新解析媒体、不 seek、不改变播放状态，避免声音继续但画面黑屏。
+- `+ Clip` 的初始 IN 现在正式固定为当前播放头前 5 秒并在 Asset 开头截断，初始 OUT 保持播放头后 1 秒。取消编辑只执行一次带目标位置的 range 更新，不再先显示视频开头再跳回原位置；从 Clip Scope 返回完整视频会从 Clip OUT 继续，原 Clip 已播放完时也会自动续播。
+- Mark IN / OUT 期间的 Clip Rail 仅增加两条橘色竖线，分别表示 IN 与当前播放头；不复用 `+ Clip` 的范围填充、拖动手柄、标签或 Inspector。
+- Media Surface 顶部标题、画质、AirPlay、关闭与全屏控制现在只有直接点击视频画面才会出现；`+ Clip`、Cancel、Mark、播放状态与其他工作区操作都不会主动唤出这行控制。
+- 播放模式行新增当前目标的 Asset / Clip Love 与 Reject 紧凑入口；同一目标两者互斥，再次点击已选状态可清除。Clip 复用既有 Segment Rating Use Case；Asset 新增最小 `MediaRating → Asset Rating Use Case → SQLite Repository` 边界并写入 Structured SQLite / Structured Sync 既有 ratingState 记录，不改变播放状态或媒体来源。
+
+- Mac 连接凭证增加 App 生命周期级 Keychain UI 禁止层。Apple 明确说明旧式 Keychain 即使单条查询带“禁止交互”参数仍可能延迟弹出登录钥匙串密码框；现在 App 在建立 Store 之前就全局关闭 Security UI，整个进程生命周期不再恢复，并继续使用不可交互 `LAContext` 包围每次 `trusted-devices` / `trusted-clients.v2` 读、写、删。Mac 本机验收、直接覆盖安装和正式更新包同时取消 ad-hoc 签名后备，统一使用 Team `75CG98MZ7F` 的稳定 Apple 证书与固定 designated requirement；找不到证书会停止交付，不再安装一个下次必定失去令牌访问权的版本。旧 ad-hoc ACL 无法安全静默迁移，因此本版安装后只需最后配对一次；隔离回归已验证两份内容不同的同身份 App 可无弹窗读取同一 Keychain 项，之后同团队证书覆盖更新不会再次要求配对。
+
+- 播放模式现在是整台 iPhone 共用的设备偏好：从任意资料库与任意正式入口修改 Stop at End / Repeat One / Continue，后续播放器与 App 重启都会恢复最后一次选择；旧版偏好自动采用 Stop at End，不进入 Structured SQLite 或 Structured Sync。
+- Clip 标签顺序改为先创建、后标记：Mark IN 只记录起点，Mark OUT 先生成不带预设标签的正式 Clip，再自动打开该 Clip 的标签页；`+ Clip` 也移除保存前 Tags，保存成功后再打开新 Clip 的标签页。底部按钮顺序固定为 `+ Clip`、Mark IN/OUT、Clip Tags、Asset Tags，并统一垂直居中。
+- MediaWorkspace 全屏改为绑定同一 `AVQueuePlayer` 的原生 `AVPlayerViewController`，交由 iOS 提供退出与播放控制，不再把自定义顶部控制挤入灵动岛；普通界面播放时即使正在编辑 Clip 也会自动隐藏顶部浮层。App 回到前台时只重新附着原 `AVPlayerLayer`，不替换媒体、不跳转、不改变播放状态。
+- 普通 Rail 缩略图点击现在只在当前 Asset 内定位，不重新解析来源或误切队列中的其他视频；取消 `+ Clip` 会恢复编辑前的绝对播放位置和播放/暂停状态。保存 Clip 或进入 Clip Scope 后提供明确“返回完整视频”按钮，原来无操作价值的 Asset Scope 空白区已移除。
+- Library 左上角严格恢复旧版 `sparkles.rectangle.stack.fill` 图标，不再用组合图形近似。
+
+- L1 为 Native iPhone 补齐正式 Library Management：快速 Library Switcher 继续只承担切换，并增加 New / Join / Manage 入口；独立管理页提供多资料库状态、友好身份摘要、Asset / Clip / Collection 计数、Structured Database / 托管原片 / 下载副本 / Cache / Staging 容量、最近同步、重命名、Connections & Sync 与“从此 iPhone 移除资料库”。iPhone 不暴露“Delete Library Everywhere”。
+- Create 继续使用 shared `StructuredLibraryFactory` 创建同一 Structured SQLite 格式、独立 LibraryID、干净 journal/cursor 与默认 library-scoped workspace；Join 继续复用既有 Pair/Trust、远端 `/libraries`、same-identity adopt 与 Structured Sync protocol 8。已在本机的相同 LibraryID 会直接打开，不创建重复 replica 或误同步不同身份。
+- 本机移除在确认前与执行前各做一次 Structured SQLite 风险检查。主要设备尚未确认的业务变更与主要设备缺少原片现在是强提醒而非剥夺删除权：确认页会列出具体媒体，支持封面、预览、逐项/全部上传；用户明确确认可能丢失后仍可移除无效资料库。只有正在进行或中断的 transfer/staging，以及无法取得可靠安全证明，继续作为硬阻止条件。
+- 移除流程先切走当前资料库并关闭 playback/workspace 使用，再把目标 LibraryID 目录原子移出 live namespace、更新设备本地 catalog、清除该 Library 的 workspace 与 transfer presentation state，最后清理隔离目录；失败会保留或回滚 live replica，不产生全局 tombstone、远端删除或跨 Library cache/media 清理。移除最后一个本机资料库会进入 Create / Join chooser。
+- Library 搜索、筛选、排序与视图状态现在完整按 LibraryID 持久化并恢复；新建/加入不会继承其他资料库状态。同步最近时间与 cursor 仍按 `peerDeviceID + LibraryID` 保存，新增双 Library 隔离回归；Structured SQLite schema 10 / `user_version=7` 与 Structured Sync protocol 8 均未改变，Flutter 0 product work，未开始最终三设备 Sync Acceptance。
+- Library 顶部恢复旧版资料库图标：左侧菜单只提供新建、加入、管理与设置，中间资料库名称下拉只负责切换资料库；Filter / View 保持单行稳定尺寸。资料库管理的错误与安全通知移到当前弹窗顶部可见区域，不再藏在底部屏幕外。
+- 媒体卡片封面改用稳定的 AssetID 派生预览：首次生成或从已认证设备取得后写入资料库本地 `Thumbnails`，原片暂时离线时仍可展示；可见卡片会做有限重试，避免列表首次加载竞争导致永久灰色占位。此能力不把缩略图当业务权威，不改变 Asset、Location 或同步协议。
+
+- MediaWorkspace 视觉层级完成实机打磨：普通界面的播放器标题、画质、AirPlay、关闭与全屏入口位于同一个 Media Surface Overlay Chrome；播放时短暂空闲后淡出，即使 Clip Inspector 已打开也不会长期遮挡画面，暂停时保持可见。普通与系统全屏继续共享同一 `NativePlaybackStore`、`AVPlayerPlaybackEngine` 与 `AVQueuePlayer`，全屏切换不解析来源、不替换 PlayerItem、不改变 queue、scope、mode、Clip 或播放头。
+- Clip Rail 新增纯 Presentation 的 Follow Playhead：正常播放时视窗随既有播放头推进并稳定在约 58% 位置；手动拖动、点击定位、缩放、选择 Clip 或拖 IN/OUT 时立即暂停跟随。播放重新开始会恢复跟随，离开当前位置时只显示轻量 Return to Playhead；没有第二时间轴、SQLite 逐帧读取、Filmstrip 重建或额外进度条。
+- 视频缩略图轨道缩放滑杆（Clip Rail Zoom）改为连续总览到细节范围：最小值把整条视频缩略图适配到一个屏幕，最大值保持原有详细密度，默认值位于中间；既有 Follow Playhead 行为保留。Clip Inspector 的 Use Playhead 扩为整列 44pt 点按区，Compact 状态补回 Tags 入口。
+- `+ Clip` 与已有 Clip 编辑统一改为可复用 Bottom Inspector。Compact 呈现时长、IN/OUT、各自的 Use Playhead 与 Cancel/Preview/Save；Precision 再展开活动边界、−5/−1/+1/+5、可用时的 Boundary Preview 以及 Note。新 Clip 保存前不提供预设 Tags，保存成功后才打开该正式 Clip 的标签页。Inspector 不加遮罩，Media Surface、Draft、播放头和 Filmstrip 保持可见，Rail 的 IN/OUT 仍可直接拖动并实时更新 Inspector。
+- MediaWorkspace 不再强制黑色主题：只有实际 16:9 视频画布保持黑色以正确承接宽高比与画面留黑，控制区和底部安全区跟随全局“明亮 / 黑色 / 跟随系统”；布局不会再暴露额外黑条。左边缘右滑可与左上角关闭执行同一退出流程，存在未保存 Clip 时会先确认。
+- 传输状态不再把已完成项目跨启动恢复或让成功提示长期闪现；成功状态短暂展示后自动消失，失败状态保留重试与关闭入口，而且只在对应资料库中呈现。
+- 四个 Media actions 复用固定图标框、文字区、高度与四等分网格，`Mark IN → Mark OUT` 不再改变行尺寸；Clip/Asset/连续标记名称只做 Presentation 精简，并补齐状态型 VoiceOver。Library 删除重复小标题与常驻宽搜索框：导航栏保留唯一 Library 标题、Library switcher、Import 与按需 Search；正文只呈现 item count 和 Sync/Filter/View utilities，非空查询在主动退出前持续可见。
+
+- Mac 启动钥匙串密码框最终归属 Device Identity 的错误存储边界：DeviceID 是本机标识而不是秘密凭证，不应继承 ad-hoc 覆盖签名产生的 Keychain ACL。`MirrorDeviceIdentity.current` 现在只使用既有 `MirrorLite.DeviceID` 本机持久化身份，正常覆盖更新与资料库切换保持同一 DeviceID，并且启动不再查询、新建或更新 `com.kenshane.mirrorlite.device-identity` 钥匙串项；配对和连接令牌仍由非交互 Keychain adapter 保护。
+- 重复安装失败不是 App、签名或 iPhone 安装失败，而是 20,000 Asset / 60,000 Location 性能门槛受完整测试后的瞬时系统负载影响，曾在同一源码上于 5.98 秒通过、又于验收中测得 15.64 秒。`本机验收.command` 继续保持原 8 秒/3 秒阈值，先运行其余完整回归，再独占测量；单次未达标会冷却 8 秒并按相同阈值最多重测两次，连续三次未达标才会真实阻止安装。
+- Post-UX-C Bug Fix Pass 保留普通 MediaWorkspace 的纯 `AVPlayerLayer` 视频面并继续绑定唯一 `AVQueuePlayer`；最终全屏出口改用系统 `AVPlayerViewController` 的原生控制，同一 player/item 不被替换，普通界面的 Clip Rail、自定义 Transport 与 AirPlay 路由按钮保持不变。
+- “Remove Local Copy” 的资格与安全证明回归 Structured SQLite 真相：本机 `managed` / `downloaded` 在线托管副本都可移除；远端 Mac 的 `fullyVerified + full fingerprint` 是保管证明，不再被远端位置在本机按 Structured Sync 显示为 `offline` 所否定。Repository 在删除 AssetLocation 的同一事务内再次复核共享 Domain 规则；最后一份原片仍受保护，文件 staging 失败不改 metadata，Asset、Clip、Tag、Collection 关系均保留。
+- 本地视频黑屏归属渲染 surface 生命周期：新的 `NativePlayerSurfaceView` 在 SwiftUI 普通/全屏 surface 重新挂载时只把同一个 player 重新附着到 `AVPlayerLayer`，不重启播放、不重新解析来源、不创建第二 player，也不以远端播放代替本地播放。
+- 本轮合并新增 MediaWorkspace Presentation、缩略图、L1 Library Management、Mac Device Identity、播放恢复、媒体评价与标签命令回归；完整 Native Simulator 142 项与 Shared Swift 457 项 / 56 套件通过。Mac Release、Native Simulator Release、Native DeviceDebug unsigned、架构边界、Build Surface 与 `git diff --check` 均通过。Domain Entity 新增 `MediaRating` 1 个；Asset 评价新增 2 个窄 Application Use Case 与 1 个 SQLite Repository；标签创建/重复系统分类修复新增 3 个窄 Application Use Case 与 1 个 SQLite Repository；Clip 评价和标签赋值继续复用既有 Use Case / Repository。Structured SQLite schema、Structured Sync protocol、Backup V2 与 Legacy 均未改变。Mac 更新为 1.23.15（149），Native iPhone 保持 1.18.11（102）；等待本机验收，未开始最终三设备 Sync Acceptance。
+
+# 镜藏 Lite 1.23.5 / Native iPhone 1.18.5
 
 - UX-C 在既有 `PlaybackMode` 与唯一 `MediaWorkspace → NativePlaybackStore → PlaybackEngine → AVPlayerPlaybackEngine` 链路上正式提供 Stop at End、Repeat One、Continue。Transport 下方新增紧凑模式按钮：点击依次循环，长按直接选择；模式只决定自动结束，手动 Previous / Next 在三种模式下始终沿进入时冻结的 `PlaybackQueueSnapshot` 工作。Library、Organize、Focus、Tag Detail、Collection 与 direct item 的默认值按入口建立，不跨 Workspace 泄漏；全屏进出继续保留 scope、queue、playhead、selected Clip 与 mode。
 - Asset Scope 与 Clip Scope 共用一个集中 end-state machine：Stop 停在 Asset end / Clip OUT，Repeat One 回到 Asset start / Clip IN，Continue 从 Clip OUT 直接进入冻结队列的下一正式 `PlaybackTarget`，不会播放源 Asset 的未使用尾部。导航前仍通过既有 Structured SQLite / source resolver 读取实时对象真相，所以 tombstone、更新后的 Clip range 和 Local / Remote Original / Remote Smooth 路由切换优先于预热缓存；失败沿现有轻量错误与手动导航语义处理。
@@ -891,7 +981,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="8551909" type="application/octet-stream" sparkle:edSignature="+z6iVr0vAhNIWMwXi4Eu9BdATgPlrTZ8RxSvuWv+wa4CqVAbkX36bnLz8y7UN+MHjE5DE8LqMT2ACvGl1dsZDQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="9302336" type="application/octet-stream" sparkle:edSignature="3OBJJNsjQiET9TKv/7p4nxod4gRRyQvEPZjtU25MLcUNWH81p0n4j2C8IV/lMgzMhniD2l8m6RqEc812UgZLDg=="/>
         </item>
     </channel>
 </rss>
