@@ -3,13 +3,19 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.24</title>
-            <pubDate>Tue, 15 Sep 2026 10:34:37 +0800</pubDate>
-            <sparkle:version>158</sparkle:version>
-            <sparkle:shortVersionString>1.23.24</sparkle:shortVersionString>
+            <title>1.23.25</title>
+            <pubDate>Tue, 15 Sep 2026 11:34:46 +0800</pubDate>
+            <sparkle:version>159</sparkle:version>
+            <sparkle:shortVersionString>1.23.25</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.24 / Native iPhone 1.18.20
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.25 / Native iPhone 1.18.20
+
+- Mac 兼容播放视频不再固定写入内置盘的用户 Cache，而是写入当前 `.mirrorlibrary/Cache/CompatibilityPreviews`。资料库位于外接硬盘时，本机播放和 iPhone 远程请求触发的兼容转换都会落在该外接盘；非当前资料库的局域网请求也按 LibraryID 使用各自的资料库包，不会串到当前资料库或 Mac 内置盘。
+- 首次打开本版时，旧 `~/Library/Caches/MirrorLite/CompatibilityPreviews` 中已完成的兼容视频会逐文件迁入当前资料库包；迁移失败会保留原文件，中断转换遗留的无效隐藏临时视频会清理。存储与安全中的“查看兼容播放缓存”会显示当前资料库内的实际路径，“清理”也只清理当前资料库缓存，不修改原片或任何整理资料。
+- 兼容视频继续是 5 GB 有界、可重建的衍生数据，不登记为 AssetLocation，不进入 Structured SQLite、Structured Sync 或 Backup V2；资料库搬迁会连同包内缓存一起搬迁。调用链为 `PlaybackStore / LANSyncServer → CompatibilityPreviewService → LibraryPackage.Cache`，只扩展既有 `LibraryPackageLayout` 的衍生缓存位置，没有新增 Domain 实体、Use Case、Repository 或 Legacy 依赖。Shared Swift 465 项 / 56 suites 与架构边界门禁通过；Mac 更新为 1.23.25（159），Native iPhone 维持 1.18.20（111），等待本机验收。
+
+# 镜藏 Lite 1.23.24 / Native iPhone 1.18.20
 
 - Native iPhone 新增兼容播放源适配器：MKV、RMVB、AVI、WebM、MTS / M2TS、TS、MPEG、VOB、MXF 等容器不再因为“Original”画质设置而把原始字节直接交给 AVPlayer，而是自动请求持有原片的在线 Mac 生成 `/preview` 兼容版本。即使 iPhone 已下载一份无法直接解码的本地原片，兼容策略也会绕过该文件，不让“本地优先”遮住可播放的远程版本；MP4 / MOV / M4V 等原生可播放来源仍保持原片路径。
 - iPhone 的“Download / Keep Offline”会对上述格式显示“下载兼容副本 / 离线播放”，把 Mac 生成的 MP4 保存到 5 GB 有界 Cache。兼容文件按 Asset 与原片指纹失效和替换，可由现有 Clear Cache 清除；它不会登记为 AssetLocation、不会生成第二个 Asset，也不会覆盖或删除手机与 Mac 上的原片。Mac 离线时优先使用已有兼容缓存；没有缓存时明确提示需要在线 Mac。
@@ -999,7 +1005,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19461175" type="application/octet-stream" sparkle:edSignature="UWZgGHcY04LJo1MgtlRuhoqQ9Uf7f7T0a/Nr6iB4XfWLjwHGdWcZEoyL1aBiyc1Qhpk5hlRkuC1DDExVGZ+cDg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19465240" type="application/octet-stream" sparkle:edSignature="JNe2OHWgM9S8pgM/FZTfO0f1LfrAdYeoWgEyoh3Zw3vWg58/RcCwxNU54GALhr/yEXGScQw8zySG0W7ZfVNtDw=="/>
         </item>
     </channel>
 </rss>
