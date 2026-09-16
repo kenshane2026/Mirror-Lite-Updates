@@ -3,13 +3,48 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.25</title>
-            <pubDate>Tue, 15 Sep 2026 11:34:46 +0800</pubDate>
-            <sparkle:version>159</sparkle:version>
-            <sparkle:shortVersionString>1.23.25</sparkle:shortVersionString>
+            <title>1.23.29</title>
+            <pubDate>Wed, 16 Sep 2026 13:24:40 +0800</pubDate>
+            <sparkle:version>163</sparkle:version>
+            <sparkle:shortVersionString>1.23.29</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.25 / Native iPhone 1.18.20
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.29 / Native iPhone 1.18.24
+
+- 本机验收改为只读的 Swift 格式严格检查，不再在每次验收时原地重写全部 Swift 文件并使 SwiftPM / Xcode 增量缓存失效。单独运行「本机验收.command」仍会构建 Native Simulator；「安装 Mac 与 Native iPhone.command」会跳过紧接着真机构建之前的重复 Simulator build。
+- Native iPhone 真机构建改为复用 `.release-updates/build/native-iphone-DeviceDebug` 内的持久 DerivedData，后续覆盖安装可以增量编译；临时构建工作目录仍在每次安装后清理，完整安装日志继续保留，这一缓存不进入版本库。三个性能门禁改为整组开始前只等待一次连续 15 秒主机空闲，只在失败重试或检测到外部编译争用时再次等待，正常验收减少 30 秒固定等待。
+- 变化只属于 Release / Validation / Delivery 脚本边界，调用链为「组合安装 → 本机验收 → Mac 安装 → Native 真机安装」；未新增或修改 Domain、Use Case、Repository、Store、View、Structured SQLite 或 Legacy 依赖。Mac 更新为 1.23.29（163），Native iPhone 更新为 1.18.24（115）。
+
+# 镜藏 Lite 1.23.28 / Native iPhone 1.18.23
+
+- Playback Phase 1 把 Native iPhone 既有“提示型预热”升级为 Session 内可消费的 preparation：邻近 `PlaybackTarget` 会保留已经解析的来源、`AVURLAsset` 元数据、音轨与同一个 `AVPlayerItem`；正式切换命中后不再重复 source resolve 或创建等价 Item，而是直接消费同一 `AVQueuePlayer` 队列项。Collection 仍只保留前 3 / 后 1，普通入口仍只准备 next 1，兼容转换仍最多提前 next 1；没有磁盘缓存、完整下载、Range Cache、`AVAssetResourceLoader` 或第二播放器。
+- Prepared 有明确的 Session 生命周期与失效条件：Target、画质、URL、Clip IN/OUT、本地文件大小和修改时间、远程来源 120 秒新鲜度共同参与校验；质量切换、Clip 范围更新、删除、Session 释放与内存警告都会淘汰非当前 preparation。Prepared 激活失败只允许一次正常 fresh resolve / prepare fallback；快速连续选择继续由 generation 阻止过期结果激活。
+- 普通 Surface 与系统全屏继续共享 `NativePlaybackSession` 唯一的 `AVPlayerPlaybackEngine / AVQueuePlayer`。切换 Item 时，现有 `AVPlayerViewController` 暂存旧 presentation，只有新 currentItem 的 `isReadyForDisplay` 报告首帧后才移除遮罩；transport 会立即进入 loading，超过 180ms grace 才显示 Preparing，快速 prepared 切换不闪大型 spinner。
+- 新增 DEBUG `PlaybackTrace`，按选择记录 source resolve、Asset metadata、PlayerItem 创建、readyToPlay、激活、首帧与开始播放时刻，并明确标记 prepared source / Asset / PlayerItem 复用。聚焦 Store 测试覆盖 prepared hit/miss、来源/Clip 失效、同源 Clip、窗口淘汰、Session/内存释放、loading grace 与兼容预备上限；真实 AVQueuePlayer 集成测试以对象身份验证 prepared Item 原样消费及手动跳 C 后返回 B。变化只属于 Playback Application orchestration、Presentation 与 AVFoundation Platform；未新增 Domain、Use Case、Repository、SQLite、Sync、Backup 或 Legacy 依赖。
+- iOS 27 模拟器完整 Native 回归 187 项通过；可控延迟诊断样本中，Collection local prepared transition 为 0.5ms（cold 27.7ms），Remote Smooth 为 0.6ms（cold 59.6ms），Remote Original 为 0.5ms（cold 85.2ms），同 Asset Clip 切换为 6.6ms。Native DeviceDebug 无签名真机构建、架构依赖边界、Build Surface 与 `git diff --check` 通过。Mac 更新为 1.23.28（162），Native iPhone 更新为 1.18.23（114），等待本机与真机实际画面验收。
+- 本机验收不再把 SQLite 大样本、1,000 文件扫描和 20,000 Asset / 60,000 Location topology 门禁塞进同一个并发测试进程；完整功能回归先运行，三个性能门禁随后各自独占测量，并在其他项目仍有 Xcode/Swift 编译时要求连续 15 秒空闲。拓扑门禁改用不受外部任务抢占影响的进程 CPU 时间：Swift 6.4 Debug 下往返 / 文件概览基线校准为 10 秒 / 3.5 秒，并另设 30 秒 / 12 秒墙钟熔断；测量期间若出现其他编译，本次不消耗三次重试次数。搜索 stale-result 功能测试也不再把 5 秒调度延迟误当业务失败。
+
+# 镜藏 Lite 1.23.27 / Native iPhone 1.18.22
+
+- Native iPhone 的 Collection 首页新增自定义排序，可在独立排序页拖动普通与智能 Collection；顺序属于当前设备的 Workspace UI 状态，新建 Collection 会出现在最前，删除后会自动清理失效 ID。Collection 内 Asset / Clip 的既有拖动排序仍沿用 `ManageCollections → CollectionRepository → Structured SQLite`，没有第二套成员顺序。
+- Native iPhone 的 Tag 详情补齐正式删除：删除前明确确认，删除后会从 Asset 与 Clip 的结构化标签关系中移除该 Tag；子 Tag 不被级联删除，而是提升为顶级 Tag。写入统一经过新增的窄 `DeleteMediaTag → TagCatalogCommandRepository → SQLiteTagCatalogCommandRepository`，事务与 Structured Sync tombstone 同步完成，不直接操作 View 状态或媒体文件。
+- 智能 Collection 打开后会在顶部完整显示当前匹配范围、实际 Tag 名称与其他筛选条件，不再只显示 Tag 数量；重新编辑时也先展示当前条件和已选择 Tag。规则引用已被其他设备删除或当前不可用的 Tag 时会明确标出，不会静默伪装成空条件。
+- `+ Clip` 与连续 Mark Clip 都支持“只有 IN、没有 OUT”的自然结束行为：播放真正到达整段媒体末尾时，会以精确结束时间补为 OUT 并通过既有 `CreateSegment → SegmentCommandRepository` 保存。`+ Clip` 会区分临时预设 OUT 与用户明确设置的 OUT，已经手动设置的 OUT 绝不会被末尾覆盖；预览范围结束也不会被误判成整段媒体结束。保存失败时保留草稿供用户重试，不会先切走媒体或创建半条 Clip。
+- Library、Collection 与 Organize 播放统一在当前来源可用后立即启动队列预热，不再等待 Clip Rail、评分和整理信息查询完成；Library 改为预热下一项，Collection 保持连续队列预热，播放器为当前项和预载项设置前向缓冲并允许 AVPlayer 自动等待以减少卡顿。预热仍是播放会话临时状态，不下载 Original、不建立 AssetLocation，也不改变 Structured SQLite 权威。
+- 本轮问题分别归属 Collection Workspace Store、Tag Catalog Command、Smart Collection Presentation、Clip Capture Use Case 与 Playback Platform 边界。除 `DeleteMediaTag` 和既有 Tag Repository 命令扩展外，没有新增 Domain、Repository 或并行业务路径；没有引入 `VideoItem`、`LibraryData` 或 Frozen Legacy Flutter 依赖。Shared Tag 删除聚焦测试 4 项、Native Collection / Organize / Playback / Library 聚焦测试 97 项通过；补齐 `+ Clip` 后，Native Playback Store 62 项在 iOS 27 模拟器再次全部通过。架构依赖边界、Build Surface 与 `git diff --check` 通过；版本保持在尚未发布、尚未验收的 Mac 1.23.27（161）与 Native iPhone 1.18.22（113）。
+- 完成 Xcode 27 / iOS 27 SDK 最小兼容适配：Native 播放器在 iOS 27 改用新的异步音频会话激活与停用接口，iOS 17–26 继续使用既有接口但移到后台队列，消除 Xcode 27 检出的主线程音频会话运行时警告，不改变播放业务语义。
+- 变化只属于 `WatchModeView → NativePlaybackStore → PlaybackEngine → AVPlayerPlaybackEngine` 的 Playback Platform 边界；未新增 Domain、Use Case 或 Repository，未引入 Legacy 依赖，也未修改应用标识、最低系统版本、Swift 语言模式、Structured SQLite、数据目录、同步容器或迁移逻辑。
+- Xcode 27 / Swift 6.4 / iOS 27 SDK 下 Native iPhone 无签名 DeviceDebug 构建通过；iOS 27.0 iPhone 17 模拟器 168 项测试全部通过且无运行时警告。补齐 `+ Clip` 后，真机再次用原 Bundle ID 完成 Native → Native 原位覆盖安装，已安装身份复核为 1.18.22（113），安装过程没有执行 uninstall，因此保留 Application Container；自动启动仅因 iPhone 当时锁屏被系统拒绝，解锁后需手动打开完成真实使用验收。Mac 维持 1.23.27（161），等待本机与主要页面人工验收。
+
+# 镜藏 Lite 1.23.26 / Native iPhone 1.18.21
+
+- Native iPhone 的 Tag 详情不再只能播放：每个 Clip 与 Asset 都有明确的操作菜单，可加入普通 Collection；Clip 还可在确认后删除，原始 Asset 和媒体文件不受影响。Collection 写入继续复用 `ManageCollections → SQLiteCollectionRepository`，Clip 删除继续复用既有生命周期用例与 Repository。
+- Tag 详情右上角新增编辑，可修改名称、分类与父级；已有子标签的父标签保持两级结构，只允许改名。新增最小 `UpdateMediaTag → TagCatalogCommandRepository → SQLiteTagCatalogCommandRepository` 命令边界，更新同一 Tag 身份并写入 Structured Sync authority，不依赖 Legacy Tag 管理。
+- Focus Organize 内嵌播放器不再重复显示 Edit / Tag / Note / Collection 四键区，操作由 Focus 外层的唯一按键组负责。打开 Clip、从 Rail 选择 Clip、Previous / Next 切换或重试播放时也不再自动弹出 Edit Clip Bottom Inspector；只有用户显式点击 Edit Clip 才进入编辑。
+- 调用链保持为 `Tag / Focus / MediaWorkspace View → Native Store → 现有或新增的窄 Use Case → Structured SQLite Repository`；未新增 Domain 实体，未引入 `VideoItem`、`LibraryData` 或其他 Legacy 运行时依赖。Mac 更新为 1.23.26（160），Native iPhone 更新为 1.18.21（112），等待本机验收。
+- Shared Swift 466 项 / 56 suites 通过；Native Simulator 完整回归 166 项与独立播放转场性能测量 1 项全部通过；Native DeviceDebug 无签名真机构建、Mac Release 构建、架构依赖边界、Build Surface 与 `git diff --check` 均通过。
+
+# 镜藏 Lite 1.23.25 / Native iPhone 1.18.20
 
 - Mac 兼容播放视频不再固定写入内置盘的用户 Cache，而是写入当前 `.mirrorlibrary/Cache/CompatibilityPreviews`。资料库位于外接硬盘时，本机播放和 iPhone 远程请求触发的兼容转换都会落在该外接盘；非当前资料库的局域网请求也按 LibraryID 使用各自的资料库包，不会串到当前资料库或 Mac 内置盘。
 - 首次打开本版时，旧 `~/Library/Caches/MirrorLite/CompatibilityPreviews` 中已完成的兼容视频会逐文件迁入当前资料库包；迁移失败会保留原文件，中断转换遗留的无效隐藏临时视频会清理。存储与安全中的“查看兼容播放缓存”会显示当前资料库内的实际路径，“清理”也只清理当前资料库缓存，不修改原片或任何整理资料。
@@ -1005,7 +1040,7 @@
 - 新增完整稳定版验收说明，覆盖两小时连续使用、硬盘弹出重连、文件改名、换电脑、睡眠唤醒、断网恢复、三端同时修改、强制退出、低空间、覆盖安装和旧资料升级。
 - Mac 版本更新为 1.7.0（52），iPhone 版本更新为 1.6.0（46）；同步协议和资料结构不升级，现有资料无需迁移。
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19465240" type="application/octet-stream" sparkle:edSignature="JNe2OHWgM9S8pgM/FZTfO0f1LfrAdYeoWgEyoh3Zw3vWg58/RcCwxNU54GALhr/yEXGScQw8zySG0W7ZfVNtDw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19471185" type="application/octet-stream" sparkle:edSignature="sMRBY6qclF+rX3pZuu84Acr1UxS9k6vWyPtYbCeWtKgUosxhjR245koduzpQq61OZHzagoUvtgtFv0j8DPmTBA=="/>
         </item>
     </channel>
 </rss>
