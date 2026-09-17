@@ -3,22 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.37</title>
-            <pubDate>Thu, 17 Sep 2026 20:22:05 +0800</pubDate>
-            <sparkle:version>171</sparkle:version>
-            <sparkle:shortVersionString>1.23.37</sparkle:shortVersionString>
+            <title>1.23.38</title>
+            <pubDate>Thu, 17 Sep 2026 20:36:09 +0800</pubDate>
+            <sparkle:version>172</sparkle:version>
+            <sparkle:shortVersionString>1.23.38</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.37 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.38 / Native iPhone 1.18.27
 
 - 修复 Air 已验证并保存 Mini 媒体服务地址，但 Mac Playback composition 又只按当前 Library 的 `data.devices` 过滤 endpoint，导致 Mini 作为 Toshiba 的实际 serving device 时仍不会进入 ordered endpoint candidates、最终误报离线的问题。`PlaybackRuntimeBridge` 现在读取连接层已通过 Library credential 健康检查的完整 endpoint 投影；Location owner 仍保持 Air，Mini 仅作为可服务候选。
 - 正式发布不再把完整历史 `RELEASE_NOTES.md` 发送给 GitHub。新增当前版本说明提取与 120,000 字节门禁，同一份短说明同时用于 GitHub Release 和 Sparkle appcast；发布预览也只显示当前版本，避免再次触发 GitHub 125,000 字节上限。新增自动回归覆盖版本段截取、错误版本拒绝和超长当前说明拒绝。
 - 修复更新源临时仓库没有 Git 作者身份、导致应用包上传成功后 appcast 提交失败的问题。发布流程现在从私有源码仓库复用已配置身份，并只写入临时克隆的仓库级配置，不修改全局 Git 设置；新增真实空提交回归验证。
+- 修复 GitHub 上传遇到临时网络 EOF 后可能留下草稿、重试上传成功却被误判为正式发布的问题。重试已有 Release 时会明确取消草稿和预发布状态；最终核实现在同时要求正确 tag、非草稿、非预发布和固定名称 DMG，任一条件不满足都不会写入发布成功标记。
 - 清理并忽略本地 Xcode 临时 Release 构建目录。问题分别归属既有 Playback composition 与 Release Delivery 边界；没有新增 Domain、Use Case、Repository、SQLite schema、Sync 或 Legacy 依赖，也未修改 Location、Asset、StorageRoot、FileAccessGrant、owner 或 Mini 原片。
-- Mac 更新为 1.23.37（171），Native iPhone 保持 1.18.27（118）。
+- Mac 更新为 1.23.38（172），Native iPhone 保持 1.18.27（118）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19524170" type="application/octet-stream" sparkle:edSignature="TSIBIThrFDp7S+ySgSqQOPGZtqgUn0zVd/WA0AOWXNAI3e0JrBQDy92fFWQsG9ZK4wculVpPRxbrEb9JqyHwDg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19524180" type="application/octet-stream" sparkle:edSignature="vGAuC3lC0UydcjmfdBsVxpcrh7KQxEnalmIuAH7CVfstdM2/a+rwXFc9GobhrPGJD1q5jm+l6912lA4/GlvzCw=="/>
         </item>
     </channel>
 </rss>
