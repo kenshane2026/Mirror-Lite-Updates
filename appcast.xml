@@ -3,20 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.33</title>
-            <pubDate>Thu, 17 Sep 2026 16:49:46 +0800</pubDate>
-            <sparkle:version>167</sparkle:version>
-            <sparkle:shortVersionString>1.23.33</sparkle:shortVersionString>
+            <title>1.23.34</title>
+            <pubDate>Thu, 17 Sep 2026 18:52:05 +0800</pubDate>
+            <sparkle:version>168</sparkle:version>
+            <sparkle:shortVersionString>1.23.34</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.33 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.34 / Native iPhone 1.18.27
 
-- 修复 Mac 启动时所选独立 `.mirrorlibrary` 所在磁盘未连接后陷入不可退出提示的问题。失败界面继续阻止对未打开资料库执行媒体与数据库操作，但现在可直接重试、选择其他资料库或新建资料库；无需重新连接原磁盘即可离开失败状态。外置资料库离线会明确显示“资料库所在磁盘未连接”，不再误导用户从备份恢复。
-- 问题归属既有 Library Bootstrap 边界，调用链保持为 `ContentView → LibraryStore.bootstrapState → OpenInitialLibrary → SQLiteInitialLibraryRepository`。没有新增 Domain、Use Case 或 Repository，没有修改 Location、Structured SQLite 内容、Structured Sync、Backup V2、Remote Playback 或 Frozen Legacy；Native iPhone 不受影响。
-- 聚焦 Library Bootstrap 回归 17 项全部通过，覆盖离线 portable package 错误保真，以及初始资料库打开失败后切换到另一资料库并恢复 interactive 状态；Swift 格式、架构依赖、Build Surface、差异检查与 Mac Release 编译通过。Mac 更新为 1.23.33（167），Native iPhone 保持 1.18.27（118）；等待本机验收。未提交、推送、打包、发布或执行最终安装。
+- 修复外置硬盘从 Air 移到 Mini 后，Air 虽能看到 Mini 在线，却无法打开同一 Library、因而无法进入远程播放的问题。Air 在资料库菜单选择离线 portable Library 时会直接打开设备管理；在 Mini 的远程资料库列表中，同 UUID 项会明确显示“本机磁盘离线”，可选择“改用此设备”。
+- 调用链为 `ContentView / DeviceRemoteLibrariesView → MacPeerSyncCoordinator.openRemoteLibrary → PeerSyncWorkspace → LibraryServiceRegistry.prepareRemoteReplica → Structured Sync → activate library → 既有 Mac Playback / Mini HTTP /media`。同 UUID 的 Air 本机 catalog 投影会从已离线 portable path 切换为内部轻量副本；Toshiba/Mini 上的 `.mirrorlibrary`、Asset、Location、StorageRoot、FileAccessGrant 和原片均不移动、不删除、不改 owner。
+- 新增仅属于设备本地 Library catalog 的“等待首次远程同步”可选状态，旧 catalog 可直接解码。首次 Structured Sync 成功前不会打开空副本；连接失败时保留可重试状态，新建远程副本失败仍按既有规则清理。重新显式打开真实 portable package 时会清除此状态。
+- 问题归属既有 Library Bootstrap / Remote Replica / Structured Sync 边界；只扩展 `PeerSyncWorkspace` 的准备结果与本机状态，没有新增平行 Repository、同步协议、SQLite schema 或 Legacy 依赖。Library Service Registry 7 项、Library Bootstrap 17 项及 catalog/portable 8 项回归通过，覆盖离线转换与 catalog 持久化、首次同步门禁、可用 portable 保持不变、新建远程副本、旧 catalog 解码、portable 重开及既有后台服务/Structured Sync 行为；Swift 严格格式、架构依赖、Build Surface、签名流程、差异检查与 Mac Release 编译通过。
+- Mac 更新为 1.23.34（168），Native iPhone 保持 1.18.27（118）；等待本机验收。未提交、推送、打包、发布或执行最终安装。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19512924" type="application/octet-stream" sparkle:edSignature="7JT5xvSNu75eYppVU7fITi0nINNdilO5mrQaGlgcVOWw+Ie6I4lNXJclGCgLekeSkO2qsgekV8RFunbD58BmDg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19519541" type="application/octet-stream" sparkle:edSignature="ib7IzfHM5GDCG4OdfZF+v0a2Jvbh2Ddsl220g2LkHdU8eK8OR332P6HYl//D0MipOuz7e9bRYgAIowMWOH+QBw=="/>
         </item>
     </channel>
 </rss>
