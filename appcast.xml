@@ -3,20 +3,20 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.40</title>
-            <pubDate>Fri, 18 Sep 2026 08:10:19 +0800</pubDate>
-            <sparkle:version>174</sparkle:version>
-            <sparkle:shortVersionString>1.23.40</sparkle:shortVersionString>
+            <title>1.23.41</title>
+            <pubDate>Fri, 18 Sep 2026 08:28:29 +0800</pubDate>
+            <sparkle:version>175</sparkle:version>
+            <sparkle:shortVersionString>1.23.41</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.40 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.41 / Native iPhone 1.18.27
 
-- 修复 Air 与 Mini 正在执行大型首次 Structured Sync 时，Air 每 15 秒一次、仅 4 秒期限的 `/health` 探测偶发超时，便立即把已经认证且仍在同步的 Mini 错报为离线的问题。连接层现在以成功配对、`peer-health` 和完整同步响应作为认证在线信号；普通服务超时必须连续发生且最近 90 秒没有认证通信才会转为离线，凭证失效和协议不兼容仍立即显示。
-- 问题归属既有 Connectivity Domain / DeviceConnectionRepository 边界；调用链仍为 `MacPeerSyncCoordinator → DeviceConnectionRepository → /health → DeviceManagementView`。没有修改 Location、Library、Structured SQLite、Structured Sync 协议、媒体文件或 Legacy Compatibility，也没有新增 Repository。
-- 新增连接存活策略与认证同步恢复在线状态回归。Mac 更新为 1.23.40（174），Native iPhone 保持 1.18.27（118）。
+- 修复 Air 首次打开 Mini 远程资料库时，只接收一页 Structured Sync 就提前把本地副本标记为可用，随后因片段或标记已到达、其引用的 Asset 尚在后续分页而提示“结构化关系引用了不存在的 Asset”的问题。首次远程打开现在会连续排空所有分页，并通过既有 Structured SQLite 运行时完整性校验后才切换资料库。
+- Structured Sync 的 dependency-safe 响应页现在同时物化片段、标记、评分、标签关系、标签层级与收藏集所依赖的 Asset、Tag、Category 或 Segment，保证首次副本在每一页落库后都不会暴露悬空运行时关系。已在 Mini 的 `The one` 源库确认 Asset 关系完整；本修复不删除或改写 Mini 资料库内容。
+- 问题归属既有 Remote Replica Bootstrap / Structured Sync Repository 边界；调用链为 `DeviceRemoteLibrariesView → MacPeerSyncCoordinator.openRemoteLibrary → PeerSyncLibraryWorkspace → SQLiteStructuredSyncRepository → SQLiteLibraryRepository runtime validation → activate`。只扩展既有 workspace port 的首次副本校验意图，没有新增 Domain、Use Case、Repository、SQLite schema、同步协议或 Legacy 依赖。Mac 更新为 1.23.41（175），Native iPhone 保持 1.18.27（118）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19529278" type="application/octet-stream" sparkle:edSignature="OHNwHIJQQjtTDyoqphzaBF6w92Qwx9chArw9ipIX4EHRq6ytJtr8DJnw2OPxtZaPoeqkQ26ehTrixcrXE/rYCA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19533215" type="application/octet-stream" sparkle:edSignature="qbUJb4PLoxS0/oP5LLesBEgQDO57KP648TW/lEuR2rrmycoXd9nmvZeVdQQcy207XsbN/ncba6xTKcaYh+V0DA=="/>
         </item>
     </channel>
 </rss>
