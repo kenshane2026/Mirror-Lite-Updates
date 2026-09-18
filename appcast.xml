@@ -3,20 +3,19 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.41</title>
-            <pubDate>Fri, 18 Sep 2026 08:28:29 +0800</pubDate>
-            <sparkle:version>175</sparkle:version>
-            <sparkle:shortVersionString>1.23.41</sparkle:shortVersionString>
+            <title>1.23.42</title>
+            <pubDate>Fri, 18 Sep 2026 08:34:30 +0800</pubDate>
+            <sparkle:version>176</sparkle:version>
+            <sparkle:shortVersionString>1.23.42</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.41 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.42 / Native iPhone 1.18.27
 
-- 修复 Air 首次打开 Mini 远程资料库时，只接收一页 Structured Sync 就提前把本地副本标记为可用，随后因片段或标记已到达、其引用的 Asset 尚在后续分页而提示“结构化关系引用了不存在的 Asset”的问题。首次远程打开现在会连续排空所有分页，并通过既有 Structured SQLite 运行时完整性校验后才切换资料库。
-- Structured Sync 的 dependency-safe 响应页现在同时物化片段、标记、评分、标签关系、标签层级与收藏集所依赖的 Asset、Tag、Category 或 Segment，保证首次副本在每一页落库后都不会暴露悬空运行时关系。已在 Mini 的 `The one` 源库确认 Asset 关系完整；本修复不删除或改写 Mini 资料库内容。
-- 问题归属既有 Remote Replica Bootstrap / Structured Sync Repository 边界；调用链为 `DeviceRemoteLibrariesView → MacPeerSyncCoordinator.openRemoteLibrary → PeerSyncLibraryWorkspace → SQLiteStructuredSyncRepository → SQLiteLibraryRepository runtime validation → activate`。只扩展既有 workspace port 的首次副本校验意图，没有新增 Domain、Use Case、Repository、SQLite schema、同步协议或 Legacy 依赖。Mac 更新为 1.23.41（175），Native iPhone 保持 1.18.27（118）。
+- 补全已被旧版本提前标记为 ready 的 Air 远程副本恢复路径：从设备列表打开远程资料库时，无论它是首次建立、恢复中还是既有副本，都先连续排空 Structured Sync 分页并通过运行时关系完整性校验，之后才切换。现有 `The one` 半同步副本会直接续传缺失 Asset，不要求用户删除资料库、重建 Location 或修改数据库。
+- 问题仍归属既有 Remote Replica Bootstrap / Structured Sync Repository 边界；没有新增 Domain、Use Case、Repository、SQLite schema、同步协议或 Legacy 依赖，也不改写 Mini 源库。Mac 更新为 1.23.42（176），Native iPhone 保持 1.18.27（118）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19533215" type="application/octet-stream" sparkle:edSignature="qbUJb4PLoxS0/oP5LLesBEgQDO57KP648TW/lEuR2rrmycoXd9nmvZeVdQQcy207XsbN/ncba6xTKcaYh+V0DA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19533633" type="application/octet-stream" sparkle:edSignature="MPcRwPEMXBN5Jlvj2FoONmRTHd9yH9OeHmhulzvtkIVCkZV6PvKl3ZGJZZ0IFux7vBMxt0W8pHhXyhoa+7VgAw=="/>
         </item>
     </channel>
 </rss>
