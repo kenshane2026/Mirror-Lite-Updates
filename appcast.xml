@@ -3,20 +3,20 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.39</title>
-            <pubDate>Thu, 17 Sep 2026 21:08:17 +0800</pubDate>
-            <sparkle:version>173</sparkle:version>
-            <sparkle:shortVersionString>1.23.39</sparkle:shortVersionString>
+            <title>1.23.40</title>
+            <pubDate>Fri, 18 Sep 2026 08:10:19 +0800</pubDate>
+            <sparkle:version>174</sparkle:version>
+            <sparkle:shortVersionString>1.23.40</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.39 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.40 / Native iPhone 1.18.27
 
-- 修复 Air 将离线 portable Library 转为 Mini 远程副本时仍回退复制 `Libraries/<LibraryID>.sqlite` 的严重问题。等待首次 Structured Sync 的远程副本现在只使用全新的内部 package SQLite，绝不会把 Air 残留兼容数据库作为 outgoing peer 反写 Mini。
-- 问题归属既有 Library Bootstrap / Remote Replica 数据边界；调用链保持为 `Remote Library → ensureRemotePeerSyncLibrary → prepareRemoteReplica → Structured Sync → activate`。没有新增 Domain、Use Case、Repository、SQLite schema、Sync 协议或 Legacy 运行时依赖，也没有修改 Location、StorageRoot、FileAccessGrant、LibraryID 或原片。
-- 新增真实 SQLite 回归：离线 portable 记录旁即使存在同 LibraryID 且含错误媒体的 legacy 数据库，首次远程副本仍创建零 Asset 的干净 package，旧文件保留但不会被复制。Mac 更新为 1.23.39（173），Native iPhone 保持 1.18.27（118）。
+- 修复 Air 与 Mini 正在执行大型首次 Structured Sync 时，Air 每 15 秒一次、仅 4 秒期限的 `/health` 探测偶发超时，便立即把已经认证且仍在同步的 Mini 错报为离线的问题。连接层现在以成功配对、`peer-health` 和完整同步响应作为认证在线信号；普通服务超时必须连续发生且最近 90 秒没有认证通信才会转为离线，凭证失效和协议不兼容仍立即显示。
+- 问题归属既有 Connectivity Domain / DeviceConnectionRepository 边界；调用链仍为 `MacPeerSyncCoordinator → DeviceConnectionRepository → /health → DeviceManagementView`。没有修改 Location、Library、Structured SQLite、Structured Sync 协议、媒体文件或 Legacy Compatibility，也没有新增 Repository。
+- 新增连接存活策略与认证同步恢复在线状态回归。Mac 更新为 1.23.40（174），Native iPhone 保持 1.18.27（118）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19523557" type="application/octet-stream" sparkle:edSignature="MVELRX01ylPG3C5BKjlKGpIi4anj6DhaoZVp06sarolt4XsaQDb/GpYW5TbopWWMgLGSjUPDbEuVHBtf/iG5AQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19529278" type="application/octet-stream" sparkle:edSignature="OHNwHIJQQjtTDyoqphzaBF6w92Qwx9chArw9ipIX4EHRq6ytJtr8DJnw2OPxtZaPoeqkQ26ehTrixcrXE/rYCA=="/>
         </item>
     </channel>
 </rss>
