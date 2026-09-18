@@ -3,19 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.42</title>
-            <pubDate>Fri, 18 Sep 2026 08:34:30 +0800</pubDate>
-            <sparkle:version>176</sparkle:version>
-            <sparkle:shortVersionString>1.23.42</sparkle:shortVersionString>
+            <title>1.23.43</title>
+            <pubDate>Fri, 18 Sep 2026 11:07:26 +0800</pubDate>
+            <sparkle:version>177</sparkle:version>
+            <sparkle:shortVersionString>1.23.43</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.42 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.43 / Native iPhone 1.18.27
 
-- 补全已被旧版本提前标记为 ready 的 Air 远程副本恢复路径：从设备列表打开远程资料库时，无论它是首次建立、恢复中还是既有副本，都先连续排空 Structured Sync 分页并通过运行时关系完整性校验，之后才切换。现有 `The one` 半同步副本会直接续传缺失 Asset，不要求用户删除资料库、重建 Location 或修改数据库。
-- 问题仍归属既有 Remote Replica Bootstrap / Structured Sync Repository 边界；没有新增 Domain、Use Case、Repository、SQLite schema、同步协议或 Legacy 依赖，也不改写 Mini 源库。Mac 更新为 1.23.42（176），Native iPhone 保持 1.18.27（118）。
+- 完成 Export V1：Asset 以 byte-preserving copy 导出原始文件；Clip 严格使用 Domain 已保存的 `startMS / endMS` 生成独立媒体，优先 passthrough，并在输出时长偏差超过 100ms 时自动回退最高质量导出。Asset、Clip、专注整理队列与 Collection 均可从现有工作区导出，不绑定任何剪辑软件或项目格式。
+- 独立导出保留原始文件身份且不加序号；Collection 按当前顺序加入最少三位的数字前缀。统一 filename sanitizer 处理斜杠、冒号、控制字符、空名称、冗余空白、UTF-8 超长名称及已有文件/sidecar 冲突；无标题 Clip 使用毫秒精度时间范围。
+- 每个媒体旁写入只包含现有 Domain 数据的 `.mirror.json`；Collection 额外写入 `MirrorLite Collection.json`。媒体内部 metadata 不被改写，Asset 不经 AVFoundation 重封装，Collection 当前没有 notes 字段，因此 manifest 的 `notes` 保持空字符串而不扩展业务模型。
+- 问题归属新增的 Export Domain / Application / Repository 边界；调用链为 `View → ExportStore → BuildMediaExportPlan → ExecuteMediaExportPlan → StructuredMediaExportSourceRepository / PlatformMediaExportWriter → Structured SQLite + AssetLocation/FileAccessGrant + FileManager/AVFoundation`。旧 `LibraryStore → SegmentExportService` 路径已移除；没有引入 `VideoItem`、`LibraryData`、Legacy snapshot、NLE adapter、SQLite schema、Structured Sync 或 Backup V2 变更。
+- 新增 ExportPlan 命名/顺序/1000 项序号/冲突/时间 fallback/immutable metadata、字节保持复制、sidecar 与架构依赖回归。Mac 更新为 1.23.43（177），Native iPhone 保持 1.18.27（118）；等待本机验收。未提交、推送、打包、发布或执行最终安装。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19533633" type="application/octet-stream" sparkle:edSignature="MPcRwPEMXBN5Jlvj2FoONmRTHd9yH9OeHmhulzvtkIVCkZV6PvKl3ZGJZZ0IFux7vBMxt0W8pHhXyhoa+7VgAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19663010" type="application/octet-stream" sparkle:edSignature="fNgGOY1gG145XMq3rd3CYvxZe9nvWYX4fASP3lneQtLoJAl0e7oOrVvk8JYENomHw+yyKt0DgpzZe9w6vwt6Cw=="/>
         </item>
     </channel>
 </rss>
