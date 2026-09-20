@@ -3,22 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.43</title>
-            <pubDate>Fri, 18 Sep 2026 11:07:26 +0800</pubDate>
-            <sparkle:version>177</sparkle:version>
-            <sparkle:shortVersionString>1.23.43</sparkle:shortVersionString>
+            <title>1.23.45</title>
+            <pubDate>Sun, 20 Sep 2026 08:33:51 +0800</pubDate>
+            <sparkle:version>179</sparkle:version>
+            <sparkle:shortVersionString>1.23.45</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.43 / Native iPhone 1.18.27
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.45 / Native iPhone 1.18.29
 
-- 完成 Export V1：Asset 以 byte-preserving copy 导出原始文件；Clip 严格使用 Domain 已保存的 `startMS / endMS` 生成独立媒体，优先 passthrough，并在输出时长偏差超过 100ms 时自动回退最高质量导出。Asset、Clip、专注整理队列与 Collection 均可从现有工作区导出，不绑定任何剪辑软件或项目格式。
-- 独立导出保留原始文件身份且不加序号；Collection 按当前顺序加入最少三位的数字前缀。统一 filename sanitizer 处理斜杠、冒号、控制字符、空名称、冗余空白、UTF-8 超长名称及已有文件/sidecar 冲突；无标题 Clip 使用毫秒精度时间范围。
-- 每个媒体旁写入只包含现有 Domain 数据的 `.mirror.json`；Collection 额外写入 `MirrorLite Collection.json`。媒体内部 metadata 不被改写，Asset 不经 AVFoundation 重封装，Collection 当前没有 notes 字段，因此 manifest 的 `notes` 保持空字符串而不扩展业务模型。
-- 问题归属新增的 Export Domain / Application / Repository 边界；调用链为 `View → ExportStore → BuildMediaExportPlan → ExecuteMediaExportPlan → StructuredMediaExportSourceRepository / PlatformMediaExportWriter → Structured SQLite + AssetLocation/FileAccessGrant + FileManager/AVFoundation`。旧 `LibraryStore → SegmentExportService` 路径已移除；没有引入 `VideoItem`、`LibraryData`、Legacy snapshot、NLE adapter、SQLite schema、Structured Sync 或 Backup V2 变更。
-- 新增 ExportPlan 命名/顺序/1000 项序号/冲突/时间 fallback/immutable metadata、字节保持复制、sidecar 与架构依赖回归。Mac 更新为 1.23.43（177），Native iPhone 保持 1.18.27（118）；等待本机验收。未提交、推送、打包、发布或执行最终安装。
+- 完成 Performance Phase 2B：Structured SQLite 成为生产运行时唯一完整数据权威。`LibraryStore` 收缩为 Library lifecycle/session、导航与 mutation broadcaster，不再持有 `LibraryData`、全 Asset、全 Clip、全 Marker、全 Location 或全 Asset ID Set；Asset、Clip、Tag、Collection、Search、Organize、Playback、Export 均从既有 Use Case / Repository 取得当前 working set。
+- 启动改为 `App composition → schema/migration/integrity prerequisites → lightweight LibrarySessionState → window usable → active workspace first page`，并拆分记录各阶段。真实 1k/10k/100k Asset（对应 5k/50k/500k Clip、3k/30k/300k Location）SQLite 夹具中，session open 为 2/11/113ms、Asset 首屏为 8/86/967ms，全部 0 次 full runtime load；采样 session/首屏 RSS 增量没有随实体规模 ×100。
+- 新增进程内、不可持久化的 `LibraryChangeSet`。单个 Clip rename 在三档规模中为 5/5/10ms，单 Asset rename 为 4/4/9ms，单 Location update 为 3/4/13ms；每次均只有 1 次定向 Repository transaction、1 次 ID change publication、0 次 full runtime reload。远端 Clip change 在 5k/50k/500k Clip 下均为 1 次 ephemeral publication、0 次 full load；Phase 2A wire protocol 与 journal lifecycle 未改变。
+- Feature Store 现在拥有自己的 query/page/selection；inactive workspace 只记录 revision，下一次 activation 再 bounded refetch。Segment/Marker 按 Asset 读取并限制最近 8 个 Asset，Library compatibility relation/Location/file-access hot path 统一限制 512 Asset；Library 切换会取消旧 task 并释放工作集。A↔B 50 次切换均走轻量 session，独立进程采样 resident delta 1,966,080 bytes；rapid switch 会拒绝旧 Library 的迟到结果。
+- Undo/Redo 改为最多 50 条字段级 `ReverseLibraryEdit`，不再以 before/after `LibraryData` snapshot 为基础；单 Clip ID 查询修复为 `(kind,id)` 索引读取，不再解码全 Clip。启动 legacy repair 的 UUID 对比也恢复使用主键索引，避免 Design Library 上的二次方扫描。
+- 新增 `LibraryData` production source allowlist、full-load/session/mutation/publication counters，以及真实 100k/500k/300k Design fixture smoke。Production Runtime 的 `LibraryData` 引用归零；仅 Migration、Backup V2 与 Legacy Protocol 5 compatibility 边界保留。Phase 2C/2D/2E/2F 项严格留后，完整报告见 `docs/performance-phase-2b-runtime-working-set.md`。
+- 完整 Shared Swift 524 项（Phase 2A 57、MirrorLite 453、MirrorCore 14）、Design scaling、50 次切换、Swift strict format、架构边界、Build Surface、差异检查与 Mac Release 编译通过。Structured SQLite 保持 `user_version=8`，App data schema 保持 12，Structured Sync wire protocol 保持 9。Mac 更新为 1.23.45（179），Native iPhone 更新为 1.18.29（120）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19663010" type="application/octet-stream" sparkle:edSignature="fNgGOY1gG145XMq3rd3CYvxZe9nvWYX4fASP3lneQtLoJAl0e7oOrVvk8JYENomHw+yyKt0DgpzZe9w6vwt6Cw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="19703865" type="application/octet-stream" sparkle:edSignature="K9ZkphL9YL6ikGzXbnq8WOTt4C4nFLEsbOo061gK92KGPRzJ7JYvhWnWNclBfQ6gSU0nbQOr7FuGZa4i7m88Cw=="/>
         </item>
     </channel>
 </rss>
