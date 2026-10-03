@@ -3,21 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.88</title>
-            <pubDate>Sat, 03 Oct 2026 10:12:58 +0800</pubDate>
-            <sparkle:version>222</sparkle:version>
-            <sparkle:shortVersionString>1.23.88</sparkle:shortVersionString>
+            <title>1.23.90</title>
+            <pubDate>Sat, 03 Oct 2026 11:34:19 +0800</pubDate>
+            <sparkle:version>224</sparkle:version>
+            <sparkle:shortVersionString>1.23.90</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.88 / Native iPhone 1.18.70
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.90 / Native iPhone 1.18.71
 
-- Native iPhone 移除视频画面上的缓冲大卡片。普通播放与收藏集播放统一在播放按钮下方预留轻量状态行和细进度线，快速完成的跳转不显示提示；持续等待超过 1 秒才显示已缓冲秒数与已等待时间，大字体使用两行。
-- 连续快进、快退只更新最新目标，保留同一次持续等待计时与既有防止秒数回退的处理；等待超过 10 秒只更新原状态行，播放恢复自动收起。主动暂停隐藏纯播放等待，暂停中的跳转仍可显示状态。
-- 预读目标、剩余时间无法估计及跳转中断的完整说明改为主动点击“详情”查看，不自动弹窗或暂停。系统全屏继续使用原生播放器反馈。
-- 问题归属既有 Native Playback Presentation 边界，调用链保持 `WatchModeView → NativePlaybackStore → PlaybackEngine → AVPlayer`，仅调整 Store 的可取消显示延迟与 View 的控制区布局；复用现有 Domain、Use Case 和 Repository，没有新增数据库 schema、Structured Sync、Backup V2 或 Legacy 运行时依赖。Mac 更新为 1.23.88（222），Native iPhone 更新为 1.18.70（161）。
+- Mac 设备配对、身份探测、远程资料库查询、Structured Sync 和原片下载直接通过局域网 / Tailscale 接口访问，修复系统网页代理导致设备连接超时的问题；应用更新保留原有代理行为。
+- Native iPhone 当前资料库的同步设备选择按资料库保存。选中 Mini 后，连接页的设备、线路、同步操作和最近同步时间都对应 Mini；Mini 离线时保留选择和真实原因。未选择设备时，只从实际提供当前资料库的在线设备中选取，避免空资料库的 Air 因局域网优先级而接管同步。
+- Native iPhone 同步前校验选定设备是否提供目标资料库，最近同步时间按设备和资料库共同限定；切换设备或资料库后，旧请求迟到的成功、失败与同步反馈不会覆盖当前选择。
+- Mac 首次打开的续批结果限定到当前同步请求，避免后台同步清理共享续批状态时提前结束首次接收。打开远程资料库时显示首次同步批次和校验进度，失败保留 HTTP 状态及服务端具体原因，不再统一描述为设备离线。首次同步与权威校验完成前不会将副本标记为就绪；已有待同步副本可继续重试。
+- Mac 问题归属 Connectivity HTTP adapter 与 Sync Presentation / Application 边界，沿用 `DeviceManagementView → MacPeerSyncCoordinator → Prepare/AcceptStructuredPeerSync → PeerSyncWorkspace → SQLite Repository`。Native 问题归属 Connectivity Application / Presentation 与 Workspace preference Repository 边界，沿用 `ConnectionDetailView → NativeConnectionStore → ResolveNativeLibraryConnection / SynchronizeNativeLibrary → NativeConnectivityRepository`。新增最小目标解析 Use Case，因为设备在线不等于提供当前资料库；复用现有 Workspace Repository 保存本机设备选择，没有新增 Domain 或 Repository。现有 Legacy 兼容同步分支保持原状，没有引入新的 Legacy 运行时依赖，没有更改 SQLite schema、Structured Sync 协议或 Backup V2。Mac 1.23.90（224），Native iPhone 1.18.71（162）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20739690" type="application/octet-stream" sparkle:edSignature="yLtYW8YKt5Hv+DVq9gLiPqWL98GFb+fDcRZtAOF3YZ1PXWPZCwyS0y7wHY5nI3SnYx25ZgV+iC9eQptDQFLSCQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20750594" type="application/octet-stream" sparkle:edSignature="1CevYWZwSIAzWm1iw0U0uNUAYMcKN0Jbb12ETrG7kmX50f7FGYAcZsypAhMvGK4jkTiuJBJSuXFXeXapQT4oCA=="/>
         </item>
     </channel>
 </rss>
