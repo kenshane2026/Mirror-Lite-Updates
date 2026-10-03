@@ -3,26 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.92</title>
-            <pubDate>Sat, 03 Oct 2026 16:22:49 +0800</pubDate>
-            <sparkle:version>226</sparkle:version>
-            <sparkle:shortVersionString>1.23.92</sparkle:shortVersionString>
+            <title>1.23.93</title>
+            <pubDate>Sat, 03 Oct 2026 23:22:05 +0800</pubDate>
+            <sparkle:version>227</sparkle:version>
+            <sparkle:shortVersionString>1.23.93</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.92 / Native iPhone 1.18.72
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.93 / Native iPhone 1.18.73
 
-- 完成同步边界整改：首次副本只有在全部分页、最终确认轮与 Structured SQLite 完整性校验通过后才能开放。中断可从本机接收状态和游标恢复，不登记失败的新资料库、不发布半完成副本、不误入 Legacy 迁移，也不重建已收到的数据。
-- Mac 与 Native 共用完整性规则、逐页接收与取消语义。ACK 不得超过本次实际发送范围；目录、SQLite、外键及标签业务父记录继续严格校验。密码保护和数据协议规则保持既有设计。
-- 标签删除的规范关联与同步 journal 在同一 SQLite 事务内保持一致。旧的错误 journal 投影只有在与真实结构化关联核对后才产生一次修复事件；失败回滚，重复检查不重复生成事件。删除、迟到更新和三设备同步继续遵守既有冲突顺序。
-- Mac 协议协商、准备、鉴权交换、ACK 和应用移到 Application。任务按 LibraryID、PeerID 与 scope 串行占有；不同资料库可并行，旧资料库请求在切换后停止应用。Structured 端口剥离 Legacy 快照能力，旧协议只留在明确的兼容边界。
-- 连接健康与资料库同步错误分别呈现。后台打开保留原始错误；校验失败不删除健康播放线路。LAN 与 Tailscale 并发探测，可用线路立即显示，后续成功 LAN 可接管；Bonjour 消失时保留健康 Tailscale，迟到探测不会复活已忘记的设备或覆盖更新的鉴权连接。
-- 同一设备多条地址按稳定身份合并；地址返回另一设备身份时拒绝应用。独立资料库与设备的重试窗口互不阻塞。普通修改仍先提交本机 SQLite，成功接收后仅刷新受影响的读模型，空同步与过期选择不触发整个工作区刷新。
-- 分页使用一致的 SQLite 读取快照，按行数与约 2 MiB 负载预算截断完整依赖组，游标只推进已包含的基础记录；单个超大依赖组允许独立传输以保证进展。活动同步及时续批，本机修改短延迟触发；空轮询从 15 秒逐步退至 120 秒，有变化恢复活动间隔。沿用既有 journal 压缩机制。
-- 架构归属 Structured Sync Application、Connectivity Repository 与 SQLite Repository/Lifecycle。新增最小跨平台 DrainStructuredSync Use Case、进程内任务占有值与 gate、轮询策略及 SQLite readiness / journal projection helper；没有新增 Repository、平行协议、数据源或 schema。调用链为 Presentation → ExchangeStructuredPeerSync / SynchronizeNativeLibrary → 既有 Workspace / Connectivity Repository → StructuredLibrarySession → SQLiteStructuredSyncRepository。Legacy 仅限既有迁移与明确兼容边界。
-- Mac 1.23.92（226），Native 源码 1.18.72（163）。按用户要求暂停手机安装，Native 仅做构建验证。Mac 经既有本机验收覆盖安装并正式发布后，由用户远程验收 Air 与 Mini。
+- 修复 Mac 设备已经在线，远程资料库媒体列表和播放器仍停留在离线状态的问题。设备线路变化独立执行现有资料库身份校验，及时绑定有效 LAN / Tailscale 媒体地址；资料库不匹配或设备身份不符时保持拒绝，不依赖元数据同步是否成功。
+- 媒体线路变化只更新已保留的浏览行，清除对应预读并重试失败的播放请求，不重载全库、不重置选择。已有正常播放不会因新增设备而中断；切换线路保留位置和 Clip 范围，迟到的旧请求不能覆盖新结果。普通同步超时不会清除另一条已经验证的播放线路。
+- Mac 播放器与预读缓存使用完整来源 URL 区分设备地址和资料库凭证，修复 LAN / Tailscale 路径相同却继续使用旧来源的问题。列表沿用 Asset 原片规则支持由另一台设备持有的可移动媒体；仅下载副本不会被当成原片服务权限。实际读取继续由服务端本机 AssetLocation / FileAccessGrant 校验。
+- Native iPhone 删除永久占高的缓冲状态行，临时等待信息移入播放器内部。播放器与操作区之间新增三横线 handle，仅从 handle 发起的纵向拖动连续调整高度，松手停靠 normal / expanded；展开后核心播放控制与收回 handle 始终可见。
+- Native 展开层覆盖下方工作区，业务视图始终保留，不重新创建播放会话或 AVPlayerItem，不重新解析目标。展开高度根据安全区域内的可用 viewport 扣除核心控制和 handle 计算，标准状态为短屏预留操作空间。循环、信息、喜爱、拒绝及 Clip / 收藏集操作继续调用现有 Store。
+- Mac 问题归属 Connectivity / Sync Application 与 Playback Presentation；将既有 peer-health 校验提取为共享 CheckPeerLibraryConnection Use Case，元数据同步和播放线路复用同一规则。Native 仅改 Playback Presentation 布局和交互。没有新增 Repository、平行播放引擎、Structured Sync / 数据库 schema 或 Legacy 运行时依赖，没有业务数据库写入。
+- Mac 1.23.93（227），Native iPhone 1.18.73（164）。通过既有本机验收、覆盖安装与正式更新发布流程交付，Air 的实际联网使用由用户远程验收。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20808470" type="application/octet-stream" sparkle:edSignature="cZ6ubi4RwofnKJZzA/+Vg4ludFwF2E5PWdrEMSLZxui0+Ykr0x1qiUAuhBII4g7OwVn35dmSS5P7MH5FZx4XDw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20830041" type="application/octet-stream" sparkle:edSignature="IN+l3wa770S3eOPWwW8PrVqBrbvAjyeLMsxh/N9uaFjkBKl2EFJjYM4lIJz8Rqxl0ZoEbLYZMN5Dxn7ToFpADg=="/>
         </item>
     </channel>
 </rss>
