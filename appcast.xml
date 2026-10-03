@@ -3,21 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.94</title>
-            <pubDate>Sat, 03 Oct 2026 23:37:10 +0800</pubDate>
-            <sparkle:version>228</sparkle:version>
-            <sparkle:shortVersionString>1.23.94</sparkle:shortVersionString>
+            <title>1.23.95</title>
+            <pubDate>Sun, 04 Oct 2026 00:15:04 +0800</pubDate>
+            <sparkle:version>229</sparkle:version>
+            <sparkle:shortVersionString>1.23.95</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.94 / Native iPhone 1.18.74
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.95 / Native iPhone 1.18.75
 
-- 修复 Native 播放器高度拖动松手后先回到原位置、再重新播放展开/收起动画导致闪烁的问题。拖动高度由持久的 Presentation 状态保留，停靠位置与拖动状态在同一个动画事务中提交，直接从松手位置吸附；短距离拖动和被取消的手势同样从当前高度平滑返回，减少动态效果设置继续生效。
-- 标准播放器高度按操作区的真实内容高度留出空间，缩小区块间距和底部空白，使循环、信息、喜爱、拒绝、时间轴及底部四个操作按钮在可容纳的屏幕内完整显示，无需为被遮住的按钮滚动。展开高度和核心控制/收回 handle 保持既有布局；极短屏与大字体保留可访问的滚动能力。
-- 修改仅归属 Native Playback Presentation：MediaWorkspace → NativePlayerWorkspaceLayout 的高度、手势及内容测量；播放链仍为 NativePlaybackSession → NativePlaybackStore → AVPlayerPlaybackEngine → AVQueuePlayer。没有新增 Domain、Use Case、Repository、Legacy 运行时依赖或同步/数据库写入，包含上一版 LAN / Tailscale 在线媒体恢复修复。
-- Mac 1.23.94（228），Native iPhone 1.18.74（165）。按既有规范重新验收、原位覆盖安装与发布 Mac 更新，保留用户资料库与 App Container。
+- 修复 Native 手机通过 AirPlay 投屏到 Air / Mini 时接收端无法播放的问题：原片缓存使用的 mirror-playback 自定义来源现在只用于手机读取，投屏交接改用已鉴权的 Mac HTTP 媒体来源，或经 Repository 验证完整的本机缓存文件。
+- 沿用同一个 AVQueuePlayer，交接保留绝对位置、Clip 范围和播放/暂停意图。选择设备时预先准备来源，取消选择不替换当前项目；实际路由切换后交接，断开投屏恢复缓存来源。切换媒体/关闭会话会取消旧交接，迟到结果不能覆盖新项目；排队媒体按当前路由重新校验来源。
+- 不将部分缓存或稀疏文件当作完整投屏文件，失败保持当前媒体并显示具体原因。来源继续来自现有 ResolvePlaybackTarget / AssetLocation / FileAccessGrant 与播放缓存 Repository，不增加未鉴权接口，不修改同步、资料库或业务元数据。
+- 问题归属 Native Playback Application / Platform；链路为 NativePlaybackStore → PlaybackEngine 的外部播放能力 → AVPlayerPlaybackEngine → 既有鉴权 HTTP 来源或缓存 Repository。仅扩展现有 Engine 与 Byte Cache Repository 端口，未新增平行 Domain、Use Case、Repository 或 Legacy 运行时依赖。
+- Mac 1.23.95（229），Native iPhone 1.18.75（166）。通过规范验收与原位覆盖安装，Mac 更新按既有发布流程供 Air 获取；真实 AirPlay 接收效果等待用户验收。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20830041" type="application/octet-stream" sparkle:edSignature="N2wXGOxFVoEnpndH6BcwkJ3ktkRuzP6BdKw7T/nT40NK6OOLS1CaymLMUueu855tndtmQoL4nDVVKfJsRunGAA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20830028" type="application/octet-stream" sparkle:edSignature="2FMeVqBkXsR3Zy3QviNr0ugnz/1Pdeh9GjYzMzMFpZpbuWnKpEyUvr0Kx1l/dpWVCFszak9rjnhP9ZcDyjQFAw=="/>
         </item>
     </channel>
 </rss>
