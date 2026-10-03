@@ -3,24 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.93</title>
-            <pubDate>Sat, 03 Oct 2026 23:22:05 +0800</pubDate>
-            <sparkle:version>227</sparkle:version>
-            <sparkle:shortVersionString>1.23.93</sparkle:shortVersionString>
+            <title>1.23.94</title>
+            <pubDate>Sat, 03 Oct 2026 23:37:10 +0800</pubDate>
+            <sparkle:version>228</sparkle:version>
+            <sparkle:shortVersionString>1.23.94</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.93 / Native iPhone 1.18.73
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.94 / Native iPhone 1.18.74
 
-- 修复 Mac 设备已经在线，远程资料库媒体列表和播放器仍停留在离线状态的问题。设备线路变化独立执行现有资料库身份校验，及时绑定有效 LAN / Tailscale 媒体地址；资料库不匹配或设备身份不符时保持拒绝，不依赖元数据同步是否成功。
-- 媒体线路变化只更新已保留的浏览行，清除对应预读并重试失败的播放请求，不重载全库、不重置选择。已有正常播放不会因新增设备而中断；切换线路保留位置和 Clip 范围，迟到的旧请求不能覆盖新结果。普通同步超时不会清除另一条已经验证的播放线路。
-- Mac 播放器与预读缓存使用完整来源 URL 区分设备地址和资料库凭证，修复 LAN / Tailscale 路径相同却继续使用旧来源的问题。列表沿用 Asset 原片规则支持由另一台设备持有的可移动媒体；仅下载副本不会被当成原片服务权限。实际读取继续由服务端本机 AssetLocation / FileAccessGrant 校验。
-- Native iPhone 删除永久占高的缓冲状态行，临时等待信息移入播放器内部。播放器与操作区之间新增三横线 handle，仅从 handle 发起的纵向拖动连续调整高度，松手停靠 normal / expanded；展开后核心播放控制与收回 handle 始终可见。
-- Native 展开层覆盖下方工作区，业务视图始终保留，不重新创建播放会话或 AVPlayerItem，不重新解析目标。展开高度根据安全区域内的可用 viewport 扣除核心控制和 handle 计算，标准状态为短屏预留操作空间。循环、信息、喜爱、拒绝及 Clip / 收藏集操作继续调用现有 Store。
-- Mac 问题归属 Connectivity / Sync Application 与 Playback Presentation；将既有 peer-health 校验提取为共享 CheckPeerLibraryConnection Use Case，元数据同步和播放线路复用同一规则。Native 仅改 Playback Presentation 布局和交互。没有新增 Repository、平行播放引擎、Structured Sync / 数据库 schema 或 Legacy 运行时依赖，没有业务数据库写入。
-- Mac 1.23.93（227），Native iPhone 1.18.73（164）。通过既有本机验收、覆盖安装与正式更新发布流程交付，Air 的实际联网使用由用户远程验收。
+- 修复 Native 播放器高度拖动松手后先回到原位置、再重新播放展开/收起动画导致闪烁的问题。拖动高度由持久的 Presentation 状态保留，停靠位置与拖动状态在同一个动画事务中提交，直接从松手位置吸附；短距离拖动和被取消的手势同样从当前高度平滑返回，减少动态效果设置继续生效。
+- 标准播放器高度按操作区的真实内容高度留出空间，缩小区块间距和底部空白，使循环、信息、喜爱、拒绝、时间轴及底部四个操作按钮在可容纳的屏幕内完整显示，无需为被遮住的按钮滚动。展开高度和核心控制/收回 handle 保持既有布局；极短屏与大字体保留可访问的滚动能力。
+- 修改仅归属 Native Playback Presentation：MediaWorkspace → NativePlayerWorkspaceLayout 的高度、手势及内容测量；播放链仍为 NativePlaybackSession → NativePlaybackStore → AVPlayerPlaybackEngine → AVQueuePlayer。没有新增 Domain、Use Case、Repository、Legacy 运行时依赖或同步/数据库写入，包含上一版 LAN / Tailscale 在线媒体恢复修复。
+- Mac 1.23.94（228），Native iPhone 1.18.74（165）。按既有规范重新验收、原位覆盖安装与发布 Mac 更新，保留用户资料库与 App Container。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20830041" type="application/octet-stream" sparkle:edSignature="IN+l3wa770S3eOPWwW8PrVqBrbvAjyeLMsxh/N9uaFjkBKl2EFJjYM4lIJz8Rqxl0ZoEbLYZMN5Dxn7ToFpADg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20830041" type="application/octet-stream" sparkle:edSignature="N2wXGOxFVoEnpndH6BcwkJ3ktkRuzP6BdKw7T/nT40NK6OOLS1CaymLMUueu855tndtmQoL4nDVVKfJsRunGAA=="/>
         </item>
     </channel>
 </rss>
