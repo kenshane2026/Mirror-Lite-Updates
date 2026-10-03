@@ -3,20 +3,26 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.91</title>
-            <pubDate>Sat, 03 Oct 2026 14:49:42 +0800</pubDate>
-            <sparkle:version>225</sparkle:version>
-            <sparkle:shortVersionString>1.23.91</sparkle:shortVersionString>
+            <title>1.23.92</title>
+            <pubDate>Sat, 03 Oct 2026 16:22:49 +0800</pubDate>
+            <sparkle:version>226</sparkle:version>
+            <sparkle:shortVersionString>1.23.92</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.91 / Native iPhone 1.18.71
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.92 / Native iPhone 1.18.72
 
-- 修复大型远程资料库首次同步分页接收途中，Storage Root 变更过早触发完整资料库校验，错误显示“结构化 Asset 目录尚未完成”的问题。待首次同步的副本继续按事务接收所有 Structured Sync 分页，全部接收完毕后沿用完整校验，成功后才就绪并打开。
-- 旧库打开时清理具有明确父级删除标记的残留标签关系。当前 Structured SQLite 与标签同步适配记录一致、但历史同步日志带有旧成员时，通过既有日志触发器补发一次当前状态，防止首次同步恢复已经清空的标签；重复打开不会重复补发，不修改有效成员关系。
-- 问题归属既有 Sync Application / Workspace Repository 与 Library Initial Open Repository 边界。调用链为 `MacPeerSyncCoordinator → AcceptStructuredPeerSync → PeerSyncWorkspace → SQLiteStructuredSyncRepository`，首次接收期间延后 UI 状态投影；最终仍执行 `validateInitialPeerSyncReplica → SQLiteLibraryRepository.loadStructuredSessionState`。旧状态修复沿用 `OpenInitialLibrary → SQLiteInitialLibraryRepository → SQLiteLibraryRepository`。没有新增 Domain、Use Case 或 Repository，没有引入 Legacy 运行时依赖，没有更改 schema、Structured Sync 协议、密码规则或 Backup V2。Mac 1.23.91（225），Native iPhone 版本保持 1.18.71（162）。
+- 完成同步边界整改：首次副本只有在全部分页、最终确认轮与 Structured SQLite 完整性校验通过后才能开放。中断可从本机接收状态和游标恢复，不登记失败的新资料库、不发布半完成副本、不误入 Legacy 迁移，也不重建已收到的数据。
+- Mac 与 Native 共用完整性规则、逐页接收与取消语义。ACK 不得超过本次实际发送范围；目录、SQLite、外键及标签业务父记录继续严格校验。密码保护和数据协议规则保持既有设计。
+- 标签删除的规范关联与同步 journal 在同一 SQLite 事务内保持一致。旧的错误 journal 投影只有在与真实结构化关联核对后才产生一次修复事件；失败回滚，重复检查不重复生成事件。删除、迟到更新和三设备同步继续遵守既有冲突顺序。
+- Mac 协议协商、准备、鉴权交换、ACK 和应用移到 Application。任务按 LibraryID、PeerID 与 scope 串行占有；不同资料库可并行，旧资料库请求在切换后停止应用。Structured 端口剥离 Legacy 快照能力，旧协议只留在明确的兼容边界。
+- 连接健康与资料库同步错误分别呈现。后台打开保留原始错误；校验失败不删除健康播放线路。LAN 与 Tailscale 并发探测，可用线路立即显示，后续成功 LAN 可接管；Bonjour 消失时保留健康 Tailscale，迟到探测不会复活已忘记的设备或覆盖更新的鉴权连接。
+- 同一设备多条地址按稳定身份合并；地址返回另一设备身份时拒绝应用。独立资料库与设备的重试窗口互不阻塞。普通修改仍先提交本机 SQLite，成功接收后仅刷新受影响的读模型，空同步与过期选择不触发整个工作区刷新。
+- 分页使用一致的 SQLite 读取快照，按行数与约 2 MiB 负载预算截断完整依赖组，游标只推进已包含的基础记录；单个超大依赖组允许独立传输以保证进展。活动同步及时续批，本机修改短延迟触发；空轮询从 15 秒逐步退至 120 秒，有变化恢复活动间隔。沿用既有 journal 压缩机制。
+- 架构归属 Structured Sync Application、Connectivity Repository 与 SQLite Repository/Lifecycle。新增最小跨平台 DrainStructuredSync Use Case、进程内任务占有值与 gate、轮询策略及 SQLite readiness / journal projection helper；没有新增 Repository、平行协议、数据源或 schema。调用链为 Presentation → ExchangeStructuredPeerSync / SynchronizeNativeLibrary → 既有 Workspace / Connectivity Repository → StructuredLibrarySession → SQLiteStructuredSyncRepository。Legacy 仅限既有迁移与明确兼容边界。
+- Mac 1.23.92（226），Native 源码 1.18.72（163）。按用户要求暂停手机安装，Native 仅做构建验证。Mac 经既有本机验收覆盖安装并正式发布后，由用户远程验收 Air 与 Mini。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20753774" type="application/octet-stream" sparkle:edSignature="PPDcx64I5VNxCyfGxNGIIiGDLhpmG2cgHv368/RtC0q/Pwi9vdWBRQAFCUhEIguwYymKKX3XOadS4pr2TtpqCQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20808470" type="application/octet-stream" sparkle:edSignature="cZ6ubi4RwofnKJZzA/+Vg4ludFwF2E5PWdrEMSLZxui0+Ykr0x1qiUAuhBII4g7OwVn35dmSS5P7MH5FZx4XDw=="/>
         </item>
     </channel>
 </rss>
