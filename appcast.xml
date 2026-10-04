@@ -3,22 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.95</title>
-            <pubDate>Sun, 04 Oct 2026 00:15:04 +0800</pubDate>
-            <sparkle:version>229</sparkle:version>
-            <sparkle:shortVersionString>1.23.95</sparkle:shortVersionString>
+            <title>1.23.96</title>
+            <pubDate>Sun, 04 Oct 2026 09:38:17 +0800</pubDate>
+            <sparkle:version>230</sparkle:version>
+            <sparkle:shortVersionString>1.23.96</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.95 / Native iPhone 1.18.75
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.96 / Native iPhone 1.18.76
 
-- 修复 Native 手机通过 AirPlay 投屏到 Air / Mini 时接收端无法播放的问题：原片缓存使用的 mirror-playback 自定义来源现在只用于手机读取，投屏交接改用已鉴权的 Mac HTTP 媒体来源，或经 Repository 验证完整的本机缓存文件。
-- 沿用同一个 AVQueuePlayer，交接保留绝对位置、Clip 范围和播放/暂停意图。选择设备时预先准备来源，取消选择不替换当前项目；实际路由切换后交接，断开投屏恢复缓存来源。切换媒体/关闭会话会取消旧交接，迟到结果不能覆盖新项目；排队媒体按当前路由重新校验来源。
-- 不将部分缓存或稀疏文件当作完整投屏文件，失败保持当前媒体并显示具体原因。来源继续来自现有 ResolvePlaybackTarget / AssetLocation / FileAccessGrant 与播放缓存 Repository，不增加未鉴权接口，不修改同步、资料库或业务元数据。
-- 问题归属 Native Playback Application / Platform；链路为 NativePlaybackStore → PlaybackEngine 的外部播放能力 → AVPlayerPlaybackEngine → 既有鉴权 HTTP 来源或缓存 Repository。仅扩展现有 Engine 与 Byte Cache Repository 端口，未新增平行 Domain、Use Case、Repository 或 Legacy 运行时依赖。
-- Mac 1.23.95（229），Native iPhone 1.18.75（166）。通过规范验收与原位覆盖安装，Mac 更新按既有发布流程供 Air 获取；真实 AirPlay 接收效果等待用户验收。
+- 修复 Mac 打开媒体列表、未播放时仍持续查询外置资料库的问题。列表标签摘要此前逐行调用完整片段工作集；超过八个媒体时，缓存互相挤出，异步查询完成又刷新列表，造成空闲查询循环和重复资料库书签解析。
+- 沿用 LibraryBrowserStore → LoadAssetBrowserPage → SQLiteAssetQueryRepository，分页结果直接携带 Asset 与未删除 Clip 的轻量标签名称，View 只格式化展示。查询使用既有 asset_tags / clip_tags 与索引，不加载 Segment 数组，不增加后台轮询或第二套 Repository。Clip 标签变化通过既有资料库变更通知刷新分页投影。
+- 现有 LibraryPackageAccessRepository 的设备权限适配器按路径与书签复用成功授权的解析结果。更换书签、挂载/卸载/重命名卷或结束权限会话会重新解析；解析失败和授权失败仍可重试，不缓存失败。
+- 变更归属 Library Query 的 Domain 投影 / Repository 与 Library Permission Data adapter。AssetSummary 仅增加标签展示字段；没有新增 Domain 类型、Use Case、Repository、Legacy 运行时依赖、schema、同步协议或业务数据写入。监视文件夹事件监听和十五分钟兜底扫描、正常 Structured Sync 与原片读取保持原有职责。
+- 增加超过八行的真实列表空闲回归、Clip 标签变更刷新、标签去重与删除、权限复用及失败/卷变化重试测试。Mac 1.23.96（230），Native iPhone 1.18.76（167），按既有流程验收、覆盖安装与发布 Mac 更新；持续硬盘活动改善需安装后实测。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20830028" type="application/octet-stream" sparkle:edSignature="2FMeVqBkXsR3Zy3QviNr0ugnz/1Pdeh9GjYzMzMFpZpbuWnKpEyUvr0Kx1l/dpWVCFszak9rjnhP9ZcDyjQFAw=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20841397" type="application/octet-stream" sparkle:edSignature="G4xelS1jwCCcbHjjzjqIcOZXIfSYbrrrKzTT/m53dYgsJQBfqkatboL/dkXwtCYL0NQeIgPbaZbLXXCgMOqGDQ=="/>
         </item>
     </channel>
 </rss>
