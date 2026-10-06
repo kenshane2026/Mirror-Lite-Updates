@@ -3,22 +3,24 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.96</title>
-            <pubDate>Sun, 04 Oct 2026 09:38:17 +0800</pubDate>
-            <sparkle:version>230</sparkle:version>
-            <sparkle:shortVersionString>1.23.96</sparkle:shortVersionString>
+            <title>1.23.99</title>
+            <pubDate>Tue, 06 Oct 2026 09:24:40 +0800</pubDate>
+            <sparkle:version>233</sparkle:version>
+            <sparkle:shortVersionString>1.23.99</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.96 / Native iPhone 1.18.76
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.99 / Native iPhone 1.18.79
 
-- 修复 Mac 打开媒体列表、未播放时仍持续查询外置资料库的问题。列表标签摘要此前逐行调用完整片段工作集；超过八个媒体时，缓存互相挤出，异步查询完成又刷新列表，造成空闲查询循环和重复资料库书签解析。
-- 沿用 LibraryBrowserStore → LoadAssetBrowserPage → SQLiteAssetQueryRepository，分页结果直接携带 Asset 与未删除 Clip 的轻量标签名称，View 只格式化展示。查询使用既有 asset_tags / clip_tags 与索引，不加载 Segment 数组，不增加后台轮询或第二套 Repository。Clip 标签变化通过既有资料库变更通知刷新分页投影。
-- 现有 LibraryPackageAccessRepository 的设备权限适配器按路径与书签复用成功授权的解析结果。更换书签、挂载/卸载/重命名卷或结束权限会话会重新解析；解析失败和授权失败仍可重试，不缓存失败。
-- 变更归属 Library Query 的 Domain 投影 / Repository 与 Library Permission Data adapter。AssetSummary 仅增加标签展示字段；没有新增 Domain 类型、Use Case、Repository、Legacy 运行时依赖、schema、同步协议或业务数据写入。监视文件夹事件监听和十五分钟兜底扫描、正常 Structured Sync 与原片读取保持原有职责。
-- 增加超过八行的真实列表空闲回归、Clip 标签变更刷新、标签去重与删除、权限复用及失败/卷变化重试测试。Mac 1.23.96（230），Native iPhone 1.18.76（167），按既有流程验收、覆盖安装与发布 Mac 更新；持续硬盘活动改善需安装后实测。
+- iPhone 左上角恢复原来的资料库图标，点击仍打开设置；管理资料库继续位于顶部切换菜单最下方。
+- 修复离线下载的取消只停止界面任务、实际网络仍继续传输的问题。暂停、退出和播放让出带宽会取消真实 URLSession 任务，保留已接收的暂存内容；取消后的文件不会登记为本机原片。
+- 离线下载复用同资料库、同 Asset、同原片版本的播放字节缓存，先确认远端版本与长度，只请求缺少的范围。完整缓存直接暂存为原片，继续经过 SHA-256 校验和 Structured SQLite AssetLocation 登记。登记成功后清理重复播放缓存；使用中的资源延迟到最后一个读者退出后清理，清理意图保存在本机缓存 SQLite，重启后仍能完成。
+- 修复兼容副本通过路径别名访问时，将同一文件误判成旧副本删除的问题；缓存使用锁与保留文件比较统一使用解析后的实际路径。
+- 设置、诊断和资料库管理单独显示“收藏集离线”，包含完整原片及必要的兼容副本；其他下载、可清理缓存、未完成的传输暂存分别统计，同一原片被多个收藏集保留只计一次。已有离线原片对应的重复播放缓存也会回收。清除缓存保留收藏集离线与未完成暂存。
+- 沿用现有收藏集离线 Domain、下载用例、网络 / 文件 / 播放缓存 Repository 与 UI Store；仅扩展既有端口及缓存持久清理记录，没有新增下载器、Legacy 运行时依赖或同步协议。片段离线仍保存完整原片，不同资料库继续隔离，默认原画。
+- Mac 1.23.99（233），Native iPhone 1.18.79（170）。完成回归及构建后按标准流程原位覆盖安装两端，等待真实使用验收；不提交、推送或发布。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20841397" type="application/octet-stream" sparkle:edSignature="G4xelS1jwCCcbHjjzjqIcOZXIfSYbrrrKzTT/m53dYgsJQBfqkatboL/dkXwtCYL0NQeIgPbaZbLXXCgMOqGDQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20998213" type="application/octet-stream" sparkle:edSignature="MHS2gC3QN7/SJrtJ2DYqAJ0l1KClidK3srogSaQjG9JWdj09idKMvBaEYlVT1n0Jpm4PeUka6ix6uS0YARitBA=="/>
         </item>
     </channel>
 </rss>
