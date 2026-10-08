@@ -3,24 +3,23 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.99</title>
-            <pubDate>Tue, 06 Oct 2026 09:24:40 +0800</pubDate>
-            <sparkle:version>233</sparkle:version>
-            <sparkle:shortVersionString>1.23.99</sparkle:shortVersionString>
+            <title>1.23.107</title>
+            <pubDate>Thu, 08 Oct 2026 19:04:52 +0800</pubDate>
+            <sparkle:version>241</sparkle:version>
+            <sparkle:shortVersionString>1.23.107</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.99 / Native iPhone 1.18.79
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.107 / Native iPhone 1.18.87
 
-- iPhone 左上角恢复原来的资料库图标，点击仍打开设置；管理资料库继续位于顶部切换菜单最下方。
-- 修复离线下载的取消只停止界面任务、实际网络仍继续传输的问题。暂停、退出和播放让出带宽会取消真实 URLSession 任务，保留已接收的暂存内容；取消后的文件不会登记为本机原片。
-- 离线下载复用同资料库、同 Asset、同原片版本的播放字节缓存，先确认远端版本与长度，只请求缺少的范围。完整缓存直接暂存为原片，继续经过 SHA-256 校验和 Structured SQLite AssetLocation 登记。登记成功后清理重复播放缓存；使用中的资源延迟到最后一个读者退出后清理，清理意图保存在本机缓存 SQLite，重启后仍能完成。
-- 修复兼容副本通过路径别名访问时，将同一文件误判成旧副本删除的问题；缓存使用锁与保留文件比较统一使用解析后的实际路径。
-- 设置、诊断和资料库管理单独显示“收藏集离线”，包含完整原片及必要的兼容副本；其他下载、可清理缓存、未完成的传输暂存分别统计，同一原片被多个收藏集保留只计一次。已有离线原片对应的重复播放缓存也会回收。清除缓存保留收藏集离线与未完成暂存。
-- 沿用现有收藏集离线 Domain、下载用例、网络 / 文件 / 播放缓存 Repository 与 UI Store；仅扩展既有端口及缓存持久清理记录，没有新增下载器、Legacy 运行时依赖或同步协议。片段离线仍保存完整原片，不同资料库继续隔离，默认原画。
-- Mac 1.23.99（233），Native iPhone 1.18.79（170）。完成回归及构建后按标准流程原位覆盖安装两端，等待真实使用验收；不提交、推送或发布。
+- Mac 采用与 iPhone 一致的黑白主题，统一按钮、选中高亮、视图切换、标签选择和播放器控制，自动适配浅色与深色外观。实心按钮和任务徽标使用反色文字，收藏、警告等语义状态保留清晰的状态色。
+- Mac 资料库入口、资料库切换与媒体目录换成手机同款图标。收藏集、成员和重复文件列表采用中性灰选中高亮，保留原有选择、键盘和操作行为。
+- 手机同步状态直接显示在固定尺寸的同步按钮中，修复转圈导致媒体数量、筛选栏与缩略图轻微上下跳动的问题。手动同步完成后，在标题右侧短暂显示轻提示，后台自动同步保持安静。
+- 优化原画播放与缓存供数，修复读取取消后持续等待、过期预热结果覆盖当前播放以及首帧交接状态沿用的问题。缓冲恢复复用当前播放项，播放历史改为后台串行写入，默认保留原画画质。
+- 媒体列表更准确地区分本机、远程、已下载与暂不可达状态；部分播放缓冲不会显示为已下载。修复智能收藏集编辑进入新建窗口，以及整理后“未整理”列表未及时刷新等问题。
+- 本版沿用 Structured SQLite、Structured Sync 与 Backup V2，补充播放、缓存、同步布局和浅深色主题回归。Mac 1.23.107（241），Native iPhone 1.18.87（178）。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="20998213" type="application/octet-stream" sparkle:edSignature="MHS2gC3QN7/SJrtJ2DYqAJ0l1KClidK3srogSaQjG9JWdj09idKMvBaEYlVT1n0Jpm4PeUka6ix6uS0YARitBA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="21090368" type="application/octet-stream" sparkle:edSignature="VC1tT0WQKqKDRbla3JGOvOj7ujMAhSZ7VNAk02Cidh2MAg7pOz7gKgCFX/2+NRMdrETfvZO+XeGlIq7rUVYbCQ=="/>
         </item>
     </channel>
 </rss>
