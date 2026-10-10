@@ -3,23 +3,25 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.107</title>
-            <pubDate>Thu, 08 Oct 2026 19:04:52 +0800</pubDate>
-            <sparkle:version>241</sparkle:version>
-            <sparkle:shortVersionString>1.23.107</sparkle:shortVersionString>
+            <title>1.23.113</title>
+            <pubDate>Sat, 10 Oct 2026 08:26:37 +0800</pubDate>
+            <sparkle:version>247</sparkle:version>
+            <sparkle:shortVersionString>1.23.113</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.107 / Native iPhone 1.18.87
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.113 / Native iPhone 1.18.93
 
-- Mac 采用与 iPhone 一致的黑白主题，统一按钮、选中高亮、视图切换、标签选择和播放器控制，自动适配浅色与深色外观。实心按钮和任务徽标使用反色文字，收藏、警告等语义状态保留清晰的状态色。
-- Mac 资料库入口、资料库切换与媒体目录换成手机同款图标。收藏集、成员和重复文件列表采用中性灰选中高亮，保留原有选择、键盘和操作行为。
-- 手机同步状态直接显示在固定尺寸的同步按钮中，修复转圈导致媒体数量、筛选栏与缩略图轻微上下跳动的问题。手动同步完成后，在标题右侧短暂显示轻提示，后台自动同步保持安静。
-- 优化原画播放与缓存供数，修复读取取消后持续等待、过期预热结果覆盖当前播放以及首帧交接状态沿用的问题。缓冲恢复复用当前播放项，播放历史改为后台串行写入，默认保留原画画质。
-- 媒体列表更准确地区分本机、远程、已下载与暂不可达状态；部分播放缓冲不会显示为已下载。修复智能收藏集编辑进入新建窗口，以及整理后“未整理”列表未及时刷新等问题。
-- 本版沿用 Structured SQLite、Structured Sync 与 Backup V2，补充播放、缓存、同步布局和浅深色主题回归。Mac 1.23.107（241），Native iPhone 1.18.87（178）。
+- 后台任务面板固定标题在顶部，空状态使用标题下方的内容区域，消除面板上方大块空白。
+- 移除侧边栏重复的当前资料库标题，保留工具栏的资料库名称与切换入口。
+- 修复分页行复用后可用性标签和离线遮罩没有更新的问题，直接观察现有 Browser Store 的可用性通知，保留分页、选择和缩略图。
+- 可用性刷新直接使用 SQLite Location 查询携带的存储根身份与路径，不再因存储根缓存未加载而跳过本机文件。
+- 修复挂载可移动硬盘上的本地引用已能播放、媒体列表却显示离线的问题。可用性刷新复用播放器的 LocalAssetSourceResolver，以卷身份、实际文件和 FileAccessGrant 判断当前可读性；文件缺失或硬盘断开仍显示离线，跨设备位置的所有者和原状态不被改写。
+- 修改归属 Workspace / Background Task Presentation 与现有 Media Availability Data 适配边界。调用链为 FileManagementStore → RefreshMediaAvailability → MediaAvailabilityRepository → SQLite AssetLocation 查询与 LocalAssetSourceResolver；不新增 Domain、Use Case、Repository、数据库迁移、同步或备份路径，不增加 Legacy 业务依赖，既有文件授权兼容迁移适配器沿用原边界。
+- 补充实际 SwiftUI 渲染布局和侧边栏标题回归，以及本机存储根冷缓存、跨设备位置从离线到本地、文件消失与再次可用的结构化集成和同一列表行实际渲染回归。
+- Mac 1.23.113（247），Native iPhone 1.18.93（184）。界面修复只影响 Mac；Native 随共享 SQLite 存储身份适配器重新构建，沿用原有行为。按默认流程完成检查与两端原位安装后等待真实使用验收。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="21090368" type="application/octet-stream" sparkle:edSignature="VC1tT0WQKqKDRbla3JGOvOj7ujMAhSZ7VNAk02Cidh2MAg7pOz7gKgCFX/2+NRMdrETfvZO+XeGlIq7rUVYbCQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="21149756" type="application/octet-stream" sparkle:edSignature="iyxFlGWjxOD1jj2eRzYcGWkOnCG4xss20co+d+ND7DHQ4fV+YayVWzyO/Ze2nNiXYvTOp5Oke1MMTWHWNEKICg=="/>
         </item>
     </channel>
 </rss>
