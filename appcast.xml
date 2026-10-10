@@ -3,25 +3,25 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.113</title>
-            <pubDate>Sat, 10 Oct 2026 08:26:37 +0800</pubDate>
-            <sparkle:version>247</sparkle:version>
-            <sparkle:shortVersionString>1.23.113</sparkle:shortVersionString>
+            <title>1.23.116</title>
+            <pubDate>Sat, 10 Oct 2026 13:40:14 +0800</pubDate>
+            <sparkle:version>250</sparkle:version>
+            <sparkle:shortVersionString>1.23.116</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.113 / Native iPhone 1.18.93
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.116 / Native iPhone 1.18.95
 
-- 后台任务面板固定标题在顶部，空状态使用标题下方的内容区域，消除面板上方大块空白。
-- 移除侧边栏重复的当前资料库标题，保留工具栏的资料库名称与切换入口。
-- 修复分页行复用后可用性标签和离线遮罩没有更新的问题，直接观察现有 Browser Store 的可用性通知，保留分页、选择和缩略图。
-- 可用性刷新直接使用 SQLite Location 查询携带的存储根身份与路径，不再因存储根缓存未加载而跳过本机文件。
-- 修复挂载可移动硬盘上的本地引用已能播放、媒体列表却显示离线的问题。可用性刷新复用播放器的 LocalAssetSourceResolver，以卷身份、实际文件和 FileAccessGrant 判断当前可读性；文件缺失或硬盘断开仍显示离线，跨设备位置的所有者和原状态不被改写。
-- 修改归属 Workspace / Background Task Presentation 与现有 Media Availability Data 适配边界。调用链为 FileManagementStore → RefreshMediaAvailability → MediaAvailabilityRepository → SQLite AssetLocation 查询与 LocalAssetSourceResolver；不新增 Domain、Use Case、Repository、数据库迁移、同步或备份路径，不增加 Legacy 业务依赖，既有文件授权兼容迁移适配器沿用原边界。
-- 补充实际 SwiftUI 渲染布局和侧边栏标题回归，以及本机存储根冷缓存、跨设备位置从离线到本地、文件消失与再次可用的结构化集成和同一列表行实际渲染回归。
-- Mac 1.23.113（247），Native iPhone 1.18.93（184）。界面修复只影响 Mac；Native 随共享 SQLite 存储身份适配器重新构建，沿用原有行为。按默认流程完成检查与两端原位安装后等待真实使用验收。
+- 修复 Mac 照片等媒体点击“从资料库移除”没有确认界面的问题：两种浏览器复用独立确认 Sheet，避免旧式 Alert 串联冲突。确认仍冻结资料库与媒体 ID，沿用 RemoveAssetFromLibrary；托管原片进入废纸篓，外部引用原文件保留。
+- Mac 收藏集按普通／智能分组展示；新增创建时间（最新或最早在前）与手动排序菜单，组内可拖动，顺序与排序方式沿用工作区本机偏好保存。
+- 收藏集显示真实媒体缩略图，片段显示起点代表帧；复用 Structured AssetThumbnail 查询和现有缓存，移除内容行尾的可用提示。
+- Mac 新增随机序列、重新随机与恢复原顺序。随机重排及刷新保留规则从 Native 实现提到共享 CollectionRandomSequence，两端直接复用；随机序列覆盖未载入分页，不改写同步的收藏集成员顺序。
+- 修改归属 LibraryQuery Presentation、CollectionFeature Presentation 与共享 Core 展示规则。扩展既有 QueryCollections 的全序列与缩略图读取入口，沿用 LoadAssetThumbnailDescriptors 和 SQLite Repository；不新增 Domain 实体、Use Case、Repository、Legacy 业务依赖、数据库迁移或同步/备份路径。
+- 补充不同媒体类型移除、分组排序偏好重启恢复、完整随机分页与不改写原顺序、共享随机刷新规则、实际视频缩略图及片段代表时间回归。
+- 截图回归统一使用后台串行 CPU OCR，避免 Vision 计算引擎并发编译冲突；位置和可用性测试等待实际 seek 与渲染完成，保持原行为断言。
+- Mac 1.23.116（250），Native iPhone 1.18.95（186）。按默认流程完成检查与两端原位安装后等待真实使用验收。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="21149756" type="application/octet-stream" sparkle:edSignature="iyxFlGWjxOD1jj2eRzYcGWkOnCG4xss20co+d+ND7DHQ4fV+YayVWzyO/Ze2nNiXYvTOp5Oke1MMTWHWNEKICg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="21270653" type="application/octet-stream" sparkle:edSignature="8uelLQTGm+xvImqV9YgpSuh2PgJ720IBQuV+puFmOAY5lSuaOGh48UdFOYM/KPRW6358CM08LaQ8/yvpyYeLBw=="/>
         </item>
     </channel>
 </rss>
