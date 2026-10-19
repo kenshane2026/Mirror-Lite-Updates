@@ -3,22 +3,21 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.132</title>
-            <pubDate>Sun, 18 Oct 2026 19:37:34 +0800</pubDate>
-            <sparkle:version>266</sparkle:version>
-            <sparkle:shortVersionString>1.23.132</sparkle:shortVersionString>
+            <title>1.23.135</title>
+            <pubDate>Mon, 19 Oct 2026 18:38:03 +0800</pubDate>
+            <sparkle:version>269</sparkle:version>
+            <sparkle:shortVersionString>1.23.135</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.132 / Native iPhone 1.18.106
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.135 / Native iPhone 1.18.107
 
-- 播放器功能图标按播放区居中，通知出现或消失不再挤动按钮；视频信息与通知分别使用 ⓘ 和铃铛。跳转时间、播放模式、音轨和字幕直接显示为工具栏图标。
-- 专注整理统一为播放器同款底色；第二次 M 保存片段后可在界面内连续编辑标签、备注和收藏集。
-- 设置按本机与当前资料库重新归位，资料库管理并入切换菜单。可信设备一次配对可沿用局域网及后续启用的 Tailscale 线路，并显示已授权访问的手机。
-- 同步页面显示当前资料库的设备与实际交换结果；缓存与空间提供容量、文件数、清理范围及结果，文件管理提供搜索、问题筛选和选中操作。
-- 修复分发打包时读取签名信息可能触发管道提前关闭、以退出码 141 中止的问题；保留签名、公证和 Gatekeeper 校验。Mac 1.23.132（266），Native iPhone 1.18.106（197）。
+- 修复设置内文件管理大清单布局卡顿：文件管理独立控制滚动范围，移除设置外层嵌套滚动与重复标题，列表使用按可见范围创建的布局；折叠的批量工具延后创建。
+- 新增经过真实 StorageSafetyWorkspace、FileManagementView、Use Case 和 SQLite Repository 的 1,800 项媒体布局回归，核对初始原生视图数量有界，并支持导出截图与布局耗时。
+- 本次修复仅属于 Settings / File Management Presentation；现有 Store → LoadFileManagementOverview → Repository 调用链及清理判定不变，无新增 Domain、Use Case、Repository 或 Legacy 依赖。
+- 包含此前尚未发布的错误提示、重复媒体读取与来源扫描修复。Mac 1.23.135（269），Native iPhone 功能与身份保持 1.18.107（198）。完成完整验收和两端原位安装后等待真实使用验收，不提交或发布。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="56880729" type="application/octet-stream" sparkle:edSignature="VZHqnCXv75GERHYDWrO+dnfyHsKugYak+TvgnDCzni72bsJoYhw9GB5N2Des4iwSoWysVN9352khGwwYXAFEBA=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="56908288" type="application/octet-stream" sparkle:edSignature="benjn/Ju1s9cM4bPe+Hl5onWhAiiYreeqed6vYnFwB1hvqx6EefjmuB4nfyljqy7X7X7AOsXZm7P3+qw7epXAA=="/>
         </item>
     </channel>
 </rss>
