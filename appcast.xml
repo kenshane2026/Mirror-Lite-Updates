@@ -3,22 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.174</title>
-            <pubDate>Thu, 12 Nov 2026 18:31:48 +0800</pubDate>
-            <sparkle:version>308</sparkle:version>
-            <sparkle:shortVersionString>1.23.174</sparkle:shortVersionString>
+            <title>1.23.178</title>
+            <pubDate>Mon, 16 Nov 2026 22:13:18 +0800</pubDate>
+            <sparkle:version>312</sparkle:version>
+            <sparkle:shortVersionString>1.23.178</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.174 （308）／Native iPhone 1.18.142（233）
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.178 （312）／Native iPhone 1.18.146（237）
 
-- 播放器截帧成功后，相机图标短暂变黄。截取结果在播放控制栏左侧打开，无结果时窗口紧凑收起。
-- Mac 片段删除确认可用 Return 或数字键盘 Enter。照片列表选中照片后可按 ⌘⌫ 打开废纸篓确认。片段删除保留来源视频，照片可在镜藏废纸篓恢复。
-- 视频、照片和收藏集按各自的完整队列播放。iPhone 收藏集切换播放模式时，预加载稍后更新。上下拖动播放器手柄时减少重复布局，保留当前播放位置。
-- iPhone 媒体信息的重命名和废纸篓入口并排显示。截帧与片段保存提示共用浮层，片段提示可直接打开刚保存的片段。
-- 两端快速整理期间暂停，关闭后按打开前的状态恢复。Mac 连接状态可查看设备和传输速率。iPhone 截帧可同步来源记录，Mac 用对应版本的原视频在本机重建照片。
+- Mac 操作提示改为轻量浮层，约 1.5 秒自动收起。铃铛打开通知历史，顶部工具栏、播放器和时间轴尺寸保持稳定。
+- Mac 本地 AVFoundation 视频按相邻原片帧精调片段 IN／OUT，片段播放包含选定的 OUT 帧。退出片段后从来源视频的下一帧续播。
+- Mac 用 J／L 快退或快进时，按 K 恢复 1×，再按 K 暂停。片段循环按钮和 V 键会提示开启或关闭，关闭时恢复之前的播放模式。
+- 本次 Mac 更新也包含此前本机版本的远程缩略图、远程缓冲续播、详细列表、Finder 式多选及收藏集分组和排序改进。
+- Native iPhone 以新构建号覆盖安装，便于两端一起验收。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="59860873" type="application/octet-stream" sparkle:edSignature="trhYdOTU7XCyStFyn0zW285tWEtrmvRVtI08UmGjPW9Q2J/mVvIjt/GnYBHNNZ2Z/rJs2GAnlvfYyF8+HlN8Bg=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="60084289" type="application/octet-stream" sparkle:edSignature="Nubk1DUfaggxhGbYsqZhTbZgcP4Qx7pwwdGjUFWS8bVN9lgQW7+O2DJ96CYpfX5DQjvRhstbVix08EpXm9Z9AQ=="/>
         </item>
     </channel>
 </rss>
