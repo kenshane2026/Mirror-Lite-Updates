@@ -3,22 +3,22 @@
     <channel>
         <title>镜藏 Lite</title>
         <item>
-            <title>1.23.178</title>
-            <pubDate>Mon, 16 Nov 2026 22:13:18 +0800</pubDate>
-            <sparkle:version>312</sparkle:version>
-            <sparkle:shortVersionString>1.23.178</sparkle:shortVersionString>
+            <title>1.23.182</title>
+            <pubDate>Fri, 20 Nov 2026 17:12:47 +0800</pubDate>
+            <sparkle:version>316</sparkle:version>
+            <sparkle:shortVersionString>1.23.182</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <sparkle:hardwareRequirements>arm64</sparkle:hardwareRequirements>
-            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.178 （312）／Native iPhone 1.18.146（237）
+            <description sparkle:format="markdown"><![CDATA[# 镜藏 Lite 1.23.182 （316）／Native iPhone 1.18.150（241）
 
-- Mac 操作提示改为轻量浮层，约 1.5 秒自动收起。铃铛打开通知历史，顶部工具栏、播放器和时间轴尺寸保持稳定。
-- Mac 本地 AVFoundation 视频按相邻原片帧精调片段 IN／OUT，片段播放包含选定的 OUT 帧。退出片段后从来源视频的下一帧续播。
-- Mac 用 J／L 快退或快进时，按 K 恢复 1×，再按 K 暂停。片段循环按钮和 V 键会提示开启或关闭，关闭时恢复之前的播放模式。
-- 本次 Mac 更新也包含此前本机版本的远程缩略图、远程缓冲续播、详细列表、Finder 式多选及收藏集分组和排序改进。
-- Native iPhone 以新构建号覆盖安装，便于两端一起验收。
+- Mac 修复直接进入瀑布流或自适应时内容区空白、必须先切到网格或列表才能显示的问题。图库始终保留可测量容器，并接受内容区实际宽度后重新分列，避免缩窗时用旧列宽撑挤侧边栏。
+- Mac 和 Native iPhone 的视图菜单统一按瀑布流、自适应、网格、列表排列。Mac 视频与照片浏览支持按 D 定位当前播放媒体，文本编辑时保留字母输入。
+- Native iPhone 在视频、照片、片段、标签内容和收藏集首页及详情补齐四种布局，复用现有图片、播放、选择、菜单和分页；切换布局不重载查询。编辑和手动排序继续使用原列表。
+- Mac 时间轴单击缩略图（含已保存片段区域）只定位并播放；右键对应片段的「编辑 IN／OUT…」及原有端点控件进入编辑，避免误开精调面板。
+- 本批继续包含 1.23.181 的缩略图缓存稳定性修复；锁定及真正切换资料库仍立即隐藏旧图片。
 
 ]]></description>
-            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="60084289" type="application/octet-stream" sparkle:edSignature="Nubk1DUfaggxhGbYsqZhTbZgcP4Qx7pwwdGjUFWS8bVN9lgQW7+O2DJ96CYpfX5DQjvRhstbVix08EpXm9Z9AQ=="/>
+            <enclosure url="https://github.com/kenshane2026/Mirror-Lite-Updates/releases/latest/download/Mirror-Lite-Mac.zip" length="60302150" type="application/octet-stream" sparkle:edSignature="b+iZ2C/ueap6XqjubIt+gQpYD/met3XGha0Mj8qD5d7+ZvjIxXdGYWL0Ys25kQ2RHH46LgIVg9nh4TszWJqLAA=="/>
         </item>
     </channel>
 </rss>
